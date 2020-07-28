@@ -1,0 +1,156 @@
+package Semantic.AST.DCL;
+
+import Semantic.AST.AST;
+import Semantic.SymbolTable.DSCP.DSCP;
+import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
+import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
+import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
+import Semantic.SymbolTable.Scope;
+import Semantic.SymbolTable.SymbolTable;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
+
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+
+import java.util.*;
+
+public class FunctionDCL implements AST {
+    private Type type;
+    private String name;
+    private String signature;
+    private HashMap<String, DSCP> inputArguments = new HashMap<>();
+    private ArrayList<Type> argumentTypes = new ArrayList<>();
+    private ArrayList<Return> returns = new ArrayList<Return>();
+    private Block block;
+
+    public void addReturn(Return inputReturn) {
+        returns.add(inputReturn);
+    }
+
+    public FunctionDCL(Type type, String name, HashMap<String, DSCP> inputArguments, Block block) {
+        this.type = type;
+        this.name = name;
+        this.inputArguments = inputArguments;
+        this.block = block;
+
+        if (name.equals("start")) {
+            this.signature = "()V";
+        }
+    }
+
+    public void setSignature() {
+        StringBuilder signature = new StringBuilder("(");
+        for (Type t : argumentTypes) {
+            signature.append(t.toString());
+        }
+        signature.append(")");
+        signature.append(type.toString());
+        this.signature = signature.toString();
+    }
+
+    public void addArgument(String name, DynamicLocalDSCP dscp) {
+        inputArguments.put(name, dscp);
+        if (dscp instanceof DynamicLocalVariableDSCP)
+            argumentTypes.add(dscp.getType());
+        else if (dscp instanceof DynamicLocalArrayDSCP) {
+            StringBuilder numOfDim = new StringBuilder("");
+            for (int i = 0; i < ((DynamicLocalArrayDSCP) dscp).getDimension(); i++) {
+                numOfDim.append("[");
+            }
+            argumentTypes.add(Type.getType(numOfDim.toString() + dscp.getType()));
+        }
+    }
+
+    public void declare() {
+        SymbolTable.getInstance().addFunction(this);
+    }
+
+    public boolean checkEqual(String name, List<Type> argumentTypes) {
+        if (this.name.equals(name)) {
+            if (argumentTypes.size() == this.argumentTypes.size()) {
+                for (int i = 0; i < argumentTypes.size(); i++) {
+                    if (!argumentTypes.get(i).equals(this.argumentTypes.get(i)))
+                        return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
+    public void codegen(ClassWriter cw, MethodVisitor mv) {
+        setSignature();
+        MethodVisitor methodVisitor = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, this.name, this.signature,
+                null, null);
+        SymbolTable.getInstance().addScope(Scope.FUNCTION);
+        inputArguments.forEach((s, dscp) -> {
+            SymbolTable.getInstance().addVariable(s, dscp);
+        });
+        SymbolTable.getInstance().setLastFunction(this);
+        methodVisitor.visitCode();
+        block.codegen(methodVisitor, cw);
+        if (returns.size() == 0)
+        {
+            throw new RuntimeException("There Is No Return Statement!");
+        }
+        methodVisitor.visitEnd();
+        SymbolTable.getInstance().popScope();
+        SymbolTable.getInstance().setLastFunction(null);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public HashMap<String, DSCP> getInputArguments() {
+        return inputArguments;
+    }
+
+    public void setInputArguments(HashMap<String, DSCP> inputArguments) {
+        this.inputArguments = inputArguments;
+    }
+
+    public ArrayList<Type> getArgumentTypes() {
+        return argumentTypes;
+    }
+
+    public void setArgumentTypes(ArrayList<Type> argumentTypes) {
+        this.argumentTypes = argumentTypes;
+    }
+
+    public ArrayList<Return> getReturns() {
+        return returns;
+    }
+
+    public void setReturns(ArrayList<Return> returns) {
+        this.returns = returns;
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public void setBlock(Block block) {
+        this.block = block;
+    }
+}
