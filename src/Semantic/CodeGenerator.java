@@ -31,6 +31,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(functionDcl);
                 break;
             }
+            case "addFuncDCL": {
+                FunctionDCL function = (FunctionDCL) semanticStack.pop();
+                function.declare();
+                function.setSignature();
+                semanticStack.push(function);
+                break;
+            }
     }
 
 
