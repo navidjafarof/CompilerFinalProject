@@ -167,7 +167,7 @@ public class SymbolTable {
                 int index = funcDcls.get(funcDcl.getName()).indexOf(funcDcl);
                 FunctionDCL lastfunc = funcDcls.get(funcDcl.getName()).get(index);
                 if ((lastfunc.getBlock() != null && funcDcl.getBlock() != null) ||
-                        (lastfunc.getBlock() == null && funcDcl.getBlock() == null))
+                        (lastfunc.getBlock() == null && funcDcl.getBlock() == null&& !lastfunc.getSetSignature()))
                     throw new RuntimeException("the function is duplicate!!!");
 
             } else {
@@ -184,7 +184,7 @@ public class SymbolTable {
         if (funcDcls.containsKey(name)) {
             ArrayList<FunctionDCL> funcDclMapper = funcDcls.get(name);
             for (FunctionDCL f : funcDclMapper) {
-                if (f.checkIfEqual(name, inputs)) {
+                if (f.checkEqual(name, inputs)) {
                     return f;
                 }
             }

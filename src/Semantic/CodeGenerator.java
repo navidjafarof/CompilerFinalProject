@@ -1,4 +1,6 @@
 package Semantic;
+import Semantic.AST.DCL.FunctionDCL;
+import Semantic.SymbolTable.SymbolTable;
 import Syntax.Lexical;
 import Semantic.AST.AST;
 import java.util.ArrayDeque;
@@ -21,5 +23,32 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(lexical.currentToken().getValue());
                 break;
             }
+
+            case "setSignature": {
+                FunctionDCL functionDcl = (FunctionDCL) semanticStack.pop();
+                functionDcl.setSetSignature(true);
+                SymbolTable.getInstance().getFunction(functionDcl.getName(),functionDcl.getArgumentTypes()).setSetSignature(true);
+                semanticStack.push(functionDcl);
+                break;
+            }
     }
-}}
+
+
+}
+    private void addFuncToGlobalBlock(FunctionDCL function) {
+        if (GlobalBlock.getInstance().getDeclarationList().contains(function)) {
+            int index = GlobalBlock.getInstance().getDeclarationList().indexOf(function);
+            FunctionDCL lastFunc = (FunctionDCL) GlobalBlock.getInstance().getDeclarationList().get(index);
+            if (lastFunc.getBlock() == null && function.getBlock() != null && lastFunc.getSetSignature()) {
+                GlobalBlock.getInstance().getDeclarationList().remove(lastFunc);
+                GlobalBlock.getInstance().addDeclaration(function);
+            } else if (lastFunc.getBlock() != null && lastFunc.getBlock() == null) {
+            } else
+                throw new RuntimeException("the function is duplicate!!!");
+        } else {
+
+            GlobalBlock.getInstance().addDeclaration(function);
+        }
+
+    }
+}

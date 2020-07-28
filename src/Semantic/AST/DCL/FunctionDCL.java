@@ -24,6 +24,10 @@ public class FunctionDCL implements AST {
     private ArrayList<Type> argumentTypes = new ArrayList<>();
     private ArrayList<Return> returns = new ArrayList<Return>();
     private Block block;
+    private Boolean setSignature = false;
+
+
+
 
     public void addReturn(Return inputReturn) {
         returns.add(inputReturn);
@@ -152,5 +156,12 @@ public class FunctionDCL implements AST {
 
     public void setBlock(Block block) {
         this.block = block;
+    }
+    public Boolean getSetSignature() {
+        return setSignature;
+    }
+
+    public void setSetSignature(Boolean setSignature) {
+        this.setSignature = setSignature;
     }
 }
