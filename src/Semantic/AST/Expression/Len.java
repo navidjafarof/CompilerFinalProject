@@ -24,7 +24,7 @@ public class Len extends Expression implements Operation {
         }
         else
         {
-            throw new RuntimeException("Len Argument Is Not Iterable.")
+            throw new RuntimeException("Len Argument Is Not Iterable.");
         }
     }
 }
