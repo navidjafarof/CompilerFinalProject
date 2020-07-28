@@ -26,8 +26,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
             case "setSignature": {
                 FunctionDCL functionDcl = (FunctionDCL) semanticStack.pop();
-                functionDcl.setSetSignature(true);
-                SymbolTable.getInstance().getFunction(functionDcl.getName(),functionDcl.getArgumentTypes()).setSetSignature(true);
+                functionDcl.setSignatureDeclared(true);
+                SymbolTable.getInstance().getFunction(functionDcl.getName(),functionDcl.getArgumentTypes()).setSignatureDeclared(true);
                 semanticStack.push(functionDcl);
                 break;
             }
@@ -39,7 +39,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
         if (GlobalBlock.getInstance().getDeclarationList().contains(function)) {
             int index = GlobalBlock.getInstance().getDeclarationList().indexOf(function);
             FunctionDCL lastFunc = (FunctionDCL) GlobalBlock.getInstance().getDeclarationList().get(index);
-            if (lastFunc.getBlock() == null && function.getBlock() != null && lastFunc.getSetSignature()) {
+            if (lastFunc.getBlock() == null && function.getBlock() != null && lastFunc.getSignatureDeclared()) {
                 GlobalBlock.getInstance().getDeclarationList().remove(lastFunc);
                 GlobalBlock.getInstance().addDeclaration(function);
             } else if (lastFunc.getBlock() != null && lastFunc.getBlock() == null) {
