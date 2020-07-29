@@ -1,4 +1,4 @@
-package ir.ac.sbu.semantic.AST.statement;
+package Semantic.AST.Statement;
 
 import Semantic.AST.Statement.Statement;
 import Semantic.SymbolTable.SymbolTable;
