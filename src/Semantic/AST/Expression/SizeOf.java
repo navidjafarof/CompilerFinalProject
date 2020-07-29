@@ -1,5 +1,6 @@
 package Semantic.AST.Expression;
 
+import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.AST.Operation;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
@@ -21,6 +22,6 @@ public class SizeOf extends Expression implements Operation {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        IntegerConst.storeIntValue(mv, value);
+        IntegerConstExp.storeIntValue(mv, value);
     }
 }
