@@ -47,7 +47,7 @@ public class Switch extends Statement {
             c.jump = end;
             c.codegen(cw, mv);
             labels[i] = c.StartCase;
-            keys[i++] = (int) c.exp.getValue();
+            keys[i++] = (int) c.integerConstExp.getValue();
         }
         mv.visitLabel(defaultLabel);
         if (defaultBlock != null) {
