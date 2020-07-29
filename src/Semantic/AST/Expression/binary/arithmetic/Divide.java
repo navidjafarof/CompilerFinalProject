@@ -1,4 +1,4 @@
-package Semantic.AST.Expression.binary.arithmatic;
+package Semantic.AST.Expression.binary.arithmetic;
 
 import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.binary.BinaryExpression;

@@ -1,14 +1,15 @@
-package Semantic.AST.Expression.binary.arithmatic;
+package Semantic.AST.Expression.binary.conditional;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.binary.BinaryExpression;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class Minus extends BinaryExpression {
-    public Minus(Expression expression1, Expression expression2) {
+public class BitwiseXor extends ConditionalExpression {
+
+
+    public BitwiseXor(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }
 
@@ -20,6 +21,6 @@ public class Minus extends BinaryExpression {
             throw new IllegalArgumentException("Two Operands must be of the same type");
         }
         type = expression1.getType();
-        mv.visitInsn(type.getOpcode(ISUB));
+        mv.visitInsn(type.getOpcode(IXOR));
     }
 }
