@@ -4,7 +4,7 @@ import Semantic.AST.AST;
 import org.objectweb.asm.Type;
 
 public abstract class Expression implements AST {
-    Type type;
+    public Type type;
 
     public Type getType() {
         if (type == null)
