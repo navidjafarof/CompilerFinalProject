@@ -7,8 +7,8 @@ import java.util.Set;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.DCL.RecordDCL;
-import Semantic.SymbolTable.Statement.Condition.Switch;
-import Semantic.SymbolTable.Statement.loop.Loop;
+import Semantic.AST.Statement.Condition.Switch;
+import Semantic.AST.Statement.Loop.Loop;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
 
 import org.objectweb.asm.Opcodes;
