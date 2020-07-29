@@ -25,9 +25,9 @@ public class SymbolTable {
 
     private ArrayList<Frame> scopesStack = new ArrayList<>();
 
-    private HashMap<String, ArrayList<FunctionDCL>> funcDcls = new HashMap<>();
+    private HashMap<String, ArrayList<FunctionDCL>> funcDCLs = new HashMap<>();
 
-    private HashMap<String, RecordDCL> recordDcls = new HashMap<>();
+    private HashMap<String, RecordDCL> recordDCLs = new HashMap<>();
 
     private SymbolTable() {
         Frame mainFrame = new Frame();
@@ -138,7 +138,7 @@ public class SymbolTable {
     }
 
     public Set<String> getFuncNames() {
-        return funcDcls.keySet(); // Returns All Functions Names
+        return funcDCLs.keySet(); // Returns All Functions Names
     }
 
     public void popScope() {
@@ -162,28 +162,28 @@ public class SymbolTable {
 
 
     //To declare a function add it to funcDcls
-    public void addFunction(FunctionDCL funcDcl) {
-        if (funcDcls.containsKey(funcDcl.getName())) {
-            if (funcDcls.get(funcDcl.getName()).contains(funcDcl)) {
-                int index = funcDcls.get(funcDcl.getName()).indexOf(funcDcl);
-                FunctionDCL lastfunc = funcDcls.get(funcDcl.getName()).get(index);
-                if ((lastfunc.getBlock() != null && funcDcl.getBlock() != null) ||
-                        (lastfunc.getBlock() == null && funcDcl.getBlock() == null && !lastfunc.getSignatureDeclared()))
+    public void addFunction(FunctionDCL funcDCL) {
+        if (funcDCLs.containsKey(funcDCL.getName())) {
+            if (funcDCLs.get(funcDCL.getName()).contains(funcDCL)) {
+                int index = funcDCLs.get(funcDCL.getName()).indexOf(funcDCL);
+                FunctionDCL lastFunc = funcDCLs.get(funcDCL.getName()).get(index);
+                if ((lastFunc.getBlock() != null && funcDCL.getBlock() != null) ||
+                        (lastFunc.getBlock() == null && funcDCL.getBlock() == null && !lastFunc.getSignatureDeclared()))
                     throw new RuntimeException("the function is duplicate!!!");
 
             } else {
-                funcDcls.get(funcDcl.getName()).add(funcDcl);
+                funcDCLs.get(funcDCL.getName()).add(funcDCL);
             }
         } else {
             ArrayList<FunctionDCL> funcDclList = new ArrayList<>();
-            funcDclList.add(funcDcl);
-            funcDcls.put(funcDcl.getName(), funcDclList);
+            funcDclList.add(funcDCL);
+            funcDCLs.put(funcDCL.getName(), funcDclList);
         }
     }
 
     public FunctionDCL getFunction(String name, ArrayList<Type> inputs) {
-        if (funcDcls.containsKey(name)) {
-            ArrayList<FunctionDCL> funcDclMapper = funcDcls.get(name);
+        if (funcDCLs.containsKey(name)) {
+            ArrayList<FunctionDCL> funcDclMapper = funcDCLs.get(name);
             for (FunctionDCL f : funcDclMapper) {
                 if (f.checkEqual(name, inputs)) {
                     return f;
@@ -231,17 +231,17 @@ public class SymbolTable {
     }
 
     public void addRecord(RecordDCL record) {
-        if (recordDcls.containsKey(record.getName()))
+        if (recordDCLs.containsKey(record.getName()))
             throw new RuntimeException("The record was declared early!");
-        recordDcls.put(record.getName(), record);
+        recordDCLs.put(record.getName(), record);
     }
 
 
     private RecordDCL getRecord(String name) {
-        if (recordDcls.containsKey(name))
+        if (recordDCLs.containsKey(name))
             throw new RuntimeException("Record not Found");
 
-        return recordDcls.get(name);
+        return recordDCLs.get(name);
     }
 
     public boolean isRecordDefined(String name) {
