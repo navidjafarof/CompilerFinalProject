@@ -2,6 +2,7 @@ package Semantic.AST.DCL;
 
 import Semantic.AST.AST;
 import Semantic.AST.Block.Block;
+import Semantic.AST.Statement.FunctionReturn;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
@@ -23,14 +24,14 @@ public class FunctionDCL implements Declaration {
     private String signature;
     private HashMap<String, DSCP> inputArguments = new HashMap<>();
     private ArrayList<Type> argumentTypes = new ArrayList<>();
-    private ArrayList<Return> returns = new ArrayList<Return>();
+    private ArrayList<FunctionReturn> returns = new ArrayList<FunctionReturn>();
     private Block block;
     private Boolean signatureDeclared = false;
 
 
 
 
-    public void addReturn(Return inputReturn) {
+    public void addReturn(FunctionReturn inputReturn) {
         returns.add(inputReturn);
     }
 
@@ -143,11 +144,11 @@ public class FunctionDCL implements Declaration {
         this.argumentTypes = argumentTypes;
     }
 
-    public ArrayList<Return> getReturns() {
+    public ArrayList<FunctionReturn> getReturns() {
         return returns;
     }
 
-    public void setReturns(ArrayList<Return> returns) {
+    public void setReturns(ArrayList<FunctionReturn> returns) {
         this.returns = returns;
     }
 
