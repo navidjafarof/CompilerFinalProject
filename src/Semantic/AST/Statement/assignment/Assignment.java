@@ -1,6 +1,8 @@
 package Semantic.AST.Statement.assignment;
 
 import Semantic.AST.Expression.Expression;
+import Semantic.AST.Expression.InitialExpression;
+import Semantic.AST.Expression.StepExpression;
 import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.AST.Statement.Statement;
@@ -9,7 +11,7 @@ import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
 import Semantic.SymbolTable.DSCP.StaticGlobalVariableDSCP;
 import Semantic.SymbolTable.SymbolTable;
 
-public abstract class Assignment extends Statement implements InitExpression, StepExpression{
+public abstract class Assignment extends Statement implements InitialExpression, StepExpression {
     protected Variable variable;
     protected Expression expression;
 
@@ -17,6 +19,7 @@ public abstract class Assignment extends Statement implements InitExpression, St
         this.variable = variable;
         this.expression = expression;
     }
+
     protected void checkIsConst() {
         boolean isConst = false;
         if (variable instanceof SimpleVariable) {
