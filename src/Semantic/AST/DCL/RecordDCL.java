@@ -4,7 +4,7 @@ import Semantic.AST.AST;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
-public class RecordDCL implements AST {
+public class RecordDCL implements Declaration {
     String name;
 
     @Override

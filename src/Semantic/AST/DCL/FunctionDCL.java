@@ -1,6 +1,7 @@
 package Semantic.AST.DCL;
 
 import Semantic.AST.AST;
+import Semantic.AST.Block.Block;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
@@ -16,7 +17,7 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 import java.util.*;
 
-public class FunctionDCL implements AST {
+public class FunctionDCL implements Declaration {
     private Type type;
     private String name;
     private String signature;
@@ -96,7 +97,7 @@ public class FunctionDCL implements AST {
         });
         SymbolTable.getInstance().setLastFunction(this);
         methodVisitor.visitCode();
-        block.codegen(methodVisitor, cw);
+        block.codegen(cw ,methodVisitor);
         if (returns.size() == 0)
         {
             throw new RuntimeException("There Is No Return Statement!");

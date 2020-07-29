@@ -1,8 +1,8 @@
 package Semantic.AST.DCL.VarDCL;
 
+import Semantic.AST.Expression.Expression;
 import Semantic.SymbolTable.DSCP.*;
 import Semantic.SymbolTable.SymbolTable;
-import com.sun.org.apache.bcel.internal.generic.ISTORE;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -78,7 +78,7 @@ public class SimpleVarDCL extends VarDCL {
         try {
             SymbolTable.getInstance().getDescriptor(name);
         }
-        catch (Expression e)
+        catch (Exception e)
         {
             declare();
         }

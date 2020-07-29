@@ -5,6 +5,7 @@ import Syntax.Lexical;
 import Semantic.AST.AST;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import Semantic.AST.Block.GlobalBlock;
 
 public class CodeGenerator implements Syntax.CodeGenerator {
     private Lexical lexical;
@@ -43,11 +44,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
 }
     private void addFuncToGlobalBlock(FunctionDCL function) {
-        if (GlobalBlock.getInstance().getDeclarationList().contains(function)) {
-            int index = GlobalBlock.getInstance().getDeclarationList().indexOf(function);
-            FunctionDCL lastFunc = (FunctionDCL) GlobalBlock.getInstance().getDeclarationList().get(index);
+        if (GlobalBlock.getInstance().getDeclarations().contains(function)) {
+            int index = GlobalBlock.getInstance().getDeclarations().indexOf(function);
+            FunctionDCL lastFunc = (FunctionDCL) GlobalBlock.getInstance().getDeclarations().get(index);
             if (lastFunc.getBlock() == null && function.getBlock() != null && lastFunc.getSignatureDeclared()) {
-                GlobalBlock.getInstance().getDeclarationList().remove(lastFunc);
+                GlobalBlock.getInstance().getDeclarations().remove(lastFunc);
                 GlobalBlock.getInstance().addDeclaration(function);
             } else if (lastFunc.getBlock() != null && lastFunc.getBlock() == null) {
             } else
