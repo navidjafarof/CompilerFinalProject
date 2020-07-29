@@ -264,4 +264,8 @@ public class SymbolTable {
     public Loop getInnerLoop() {
         return innerLoop;
     }
+
+    public void setInnerLoop(Loop innerLoop) {
+        this.innerLoop = innerLoop;
+    }
 }
