@@ -7,8 +7,8 @@ import java.util.Set;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.DCL.RecordDCL;
-import Semantic.SymbolTable.statement.Condition.Switch;
-import Semantic.SymbolTable.statement.loop.Loop;
+import Semantic.SymbolTable.Statement.Condition.Switch;
+import Semantic.SymbolTable.Statement.loop.Loop;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
 
 import org.objectweb.asm.Opcodes;
@@ -22,9 +22,11 @@ public class SymbolTable {
 
     private Loop innerLoop;
     private Switch lastSwitch;
+
     private ArrayList<Frame> scopesStack = new ArrayList<>();
 
     private HashMap<String, ArrayList<FunctionDCL>> funcDcls = new HashMap<>();
+
     private HashMap<String, RecordDCL> recordDcls = new HashMap<>();
 
     private SymbolTable() {
@@ -160,14 +162,13 @@ public class SymbolTable {
 
 
     //To declare a function add it to funcDcls
-
     public void addFunction(FunctionDCL funcDcl) {
         if (funcDcls.containsKey(funcDcl.getName())) {
             if (funcDcls.get(funcDcl.getName()).contains(funcDcl)) {
                 int index = funcDcls.get(funcDcl.getName()).indexOf(funcDcl);
                 FunctionDCL lastfunc = funcDcls.get(funcDcl.getName()).get(index);
                 if ((lastfunc.getBlock() != null && funcDcl.getBlock() != null) ||
-                        (lastfunc.getBlock() == null && funcDcl.getBlock() == null&& !lastfunc.getSignatureDeclared()))
+                        (lastfunc.getBlock() == null && funcDcl.getBlock() == null && !lastfunc.getSignatureDeclared()))
                     throw new RuntimeException("the function is duplicate!!!");
 
             } else {
@@ -192,8 +193,8 @@ public class SymbolTable {
         throw new RuntimeException("Function " + name + " " + inputs + " Was Not Declared.");
     }
 
-    //declare a variable to the last symbol table
 
+    //declare a variable to the last symbol table
     public void addVariable(String name, DSCP dscp) {
         if (getLastScope().containsKey(name)) {
             throw new RuntimeException("Variable " + name + " Was Declared Previously.");
@@ -254,5 +255,13 @@ public class SymbolTable {
 
     public int getIndex() {
         return getLastScope().getIndex();
+    }
+
+    public ArrayList<Frame> getScopesStack() {
+        return scopesStack;
+    }
+
+    public Loop getInnerLoop() {
+        return innerLoop;
     }
 }
