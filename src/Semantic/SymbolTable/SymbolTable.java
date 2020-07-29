@@ -7,7 +7,7 @@ import java.util.Set;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.DCL.RecordDCL;
-import Semantic.AST.Statement.Condition.Switch;
+import Semantic.AST.Statement.condition.Switch;
 import Semantic.AST.Statement.Loop.Loop;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
 
@@ -19,6 +19,7 @@ public class SymbolTable {
     private static SymbolTable instance = new SymbolTable();
 
     private FunctionDCL LastFunction;
+
 
     private Loop innerLoop;
     private Switch lastSwitch;
@@ -268,4 +269,12 @@ public class SymbolTable {
     public void setInnerLoop(Loop innerLoop) {
         this.innerLoop = innerLoop;
     }
+    public Switch getLastSwitch() {
+        return lastSwitch;
+    }
+
+    public void setLastSwitch(Switch lastSwitch) {
+        this.lastSwitch = lastSwitch;
+    }
+
 }
