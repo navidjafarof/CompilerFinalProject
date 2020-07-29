@@ -1,6 +1,8 @@
 package Semantic.AST.Expression.unary;
 
 import Semantic.AST.Expression.Expression;
+import Semantic.AST.Expression.variable.SimpleVariable;
+import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
 import Semantic.SymbolTable.DSCP.StaticGlobalVariableDSCP;
@@ -23,7 +25,7 @@ public abstract class UnaryExpression extends Expression {
     }
     protected void checkIsConstant(Variable variable) {
         boolean isConstant = false;
-        if (variable instanceof SimpleVar) {
+        if (variable instanceof SimpleVariable) {
             DSCP dscp = SymbolTable.getInstance().getDescriptor(variable.getName());
                 isConstant = dscp.isConstant();
         }

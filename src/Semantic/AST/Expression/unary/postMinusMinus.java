@@ -2,6 +2,8 @@ package Semantic.AST.Expression.unary;
 
 import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.constant.IntegerConstExp;
+import Semantic.AST.Expression.variable.SimpleVariable;
+import Semantic.AST.Expression.variable.Variable;
 import Semantic.AST.Operation;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -19,7 +21,7 @@ public class postMinusMinus extends UnaryExpression implements InitExpression, S
             throw new RuntimeException("the operand is wrong");
         Variable var = (Variable)expression;
         checkIsConstant(var);
-        new SimpleVar(var.getName(),var.getType()).codegen(cw, mv);
+        new SimpleVariable(var.getName(),var.getType()).codegen(cw, mv);
         new MinAssign(new IntegerConstExp(1), var).codegen(cw , mv);
     }
 }

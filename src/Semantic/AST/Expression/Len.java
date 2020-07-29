@@ -1,5 +1,6 @@
 package Semantic.AST.Expression;
 
+import Semantic.AST.Expression.variable.Array;
 import Semantic.AST.Operation;
 import static org.objectweb.asm.Opcodes.ARRAYLENGTH;
 import org.objectweb.asm.ClassWriter;
@@ -18,7 +19,7 @@ public class Len extends Expression implements Operation {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         this.expression.codegen(cw, mv);
         type = expression.getType();
-        if (expression instanceof ArrayVariable)
+        if (expression instanceof Array)
         {
             mv.visitInsn(ARRAYLENGTH);
         }

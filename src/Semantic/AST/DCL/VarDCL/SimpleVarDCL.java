@@ -1,6 +1,8 @@
 package Semantic.AST.DCL.VarDCL;
 
 import Semantic.AST.Expression.Expression;
+import Semantic.AST.Expression.variable.SimpleVariable;
+import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.*;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
@@ -50,7 +52,7 @@ public class SimpleVarDCL extends VarDCL {
         }
         if (dscp instanceof DynamicLocalDSCP) {
             int idx = ((DynamicLocalDSCP) dscp).getIndex();
-            mv.visitVarInsn(v.getType.getOpcode(ISTORE), idx);
+            mv.visitVarInsn(v.getType().getOpcode(ISTORE), idx);
         } else {
             mv.visitFieldInsn(PUTSTATIC, "Code", v.getName(), dscp.getType().toString());
         }
