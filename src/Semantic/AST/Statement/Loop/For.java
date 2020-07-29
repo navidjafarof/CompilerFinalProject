@@ -6,10 +6,10 @@ import Semantic.AST.Expression.InitialExpression;
 import Semantic.AST.Expression.StepExpression;
 import Semantic.AST.Expression.binary.conditional.NotEqual;
 import Semantic.AST.Expression.constant.IntegerConstExp;
-import Semantic.AST.Expression.unary.postMinusMinus;
-import Semantic.AST.Expression.unary.postPlusPlus;
-import Semantic.AST.Expression.unary.preMinusMinus;
-import Semantic.AST.Expression.unary.prePlusPlus;
+import Semantic.AST.Expression.unary.PostMinusMinus;
+import Semantic.AST.Expression.unary.PostPlusPlus;
+import Semantic.AST.Expression.unary.PreMinusMinus;
+import Semantic.AST.Expression.unary.PrePlusPlus;
 import Semantic.SymbolTable.Scope;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
@@ -42,8 +42,8 @@ public class For extends Loop {
         // ST init
         if (init != null) {
             init.codegen(cw, mv);
-            if (init instanceof postPlusPlus || init instanceof prePlusPlus
-                    || init instanceof postMinusMinus || init instanceof preMinusMinus)
+            if (init instanceof PostPlusPlus || init instanceof PrePlusPlus
+                    || init instanceof PostMinusMinus || init instanceof PreMinusMinus)
                 mv.visitInsn(POP);
         }
         // Boolean Expression
@@ -61,8 +61,8 @@ public class For extends Loop {
         mv.visitLabel(startLoop);
         if (step != null) {
             step.codegen(cw, mv);
-            if (step instanceof postPlusPlus || step instanceof prePlusPlus
-                    || step instanceof postMinusMinus || step instanceof preMinusMinus)
+            if (step instanceof PostPlusPlus || step instanceof PrePlusPlus
+                    || step instanceof PostMinusMinus || step instanceof PreMinusMinus)
                 mv.visitInsn(POP);
         }
 

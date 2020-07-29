@@ -1,19 +1,19 @@
 package Semantic.AST.Expression.unary;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.InitialExpression;
-import Semantic.AST.Expression.StepExpression;
 import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
+import Semantic.AST.Expression.InitialExpression;
+import Semantic.AST.Expression.StepExpression;
 import Semantic.AST.Operation;
-import Semantic.AST.Statement.assignment.PlusAssign;
+import Semantic.AST.Statement.assignment.MinusAssign;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-public class prePlusPlus extends UnaryExpression implements InitialExpression, StepExpression, Operation {
-    public prePlusPlus(Expression expression) {
+public class PostMinusMinus extends UnaryExpression implements InitialExpression, StepExpression, Operation {
+    public PostMinusMinus(Expression expression) {
         super(expression);
     }
 
@@ -24,7 +24,7 @@ public class prePlusPlus extends UnaryExpression implements InitialExpression, S
             throw new RuntimeException("the operand is wrong");
         Variable var = (Variable) expression;
         checkIsConstant(var);
-        new PlusAssign(var, new IntegerConstExp(1)).codegen(cw, mv);
         new SimpleVariable(var.getName(), var.getType()).codegen(cw, mv);
+        new MinusAssign(var, new IntegerConstExp(1)).codegen(cw, mv);
     }
 }
