@@ -30,6 +30,7 @@ public class SimpleVarDCL extends VarDCL {
         this.strType = strType;
         this.constant = constant;
         this.global = global;
+        this.expression = expression;
         if (!strType.equals("auto")) {
             this.type = SymbolTable.getTypeFromVarName(strType);
         } else {
@@ -88,10 +89,19 @@ public class SimpleVarDCL extends VarDCL {
         {
             Expression val = null;
             int access = ACC_STATIC + (constant ? ACC_FINAL : 0);
-            cw.visitField(access, this.name, this.type.getDescriptor(), null, val);
+            cw.visitField(access, this.name, this.type.getDescriptor(), null, val).visitEnd();
+            if (expression != null) {
+                globalExpressionExecution(cw, mv);
+            }
 
-
-
+        }
+        else if (expression != null) {
+            expression.codegen(cw, mv);
+            if (!expression.getType().equals(type))
+                throw new RuntimeException("the type of variable and expression doesn't match" +
+                        "   " + "the type of var " + type + "   " + "the type of exp " + expression.getType());
+            DynamicLocalVariableDSCP dscp = (DynamicLocalVariableDSCP) SymbolTable.getInstance().getDescriptor(name);
+            mv.visitVarInsn(type.getOpcode(ISTORE), dscp.getIndex());
         }
     }
 
