@@ -59,6 +59,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
+                System.out.println(lexical.currentToken().getValue());
                 break;
             }
             case "pop": {
@@ -97,12 +98,9 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 Block block = (Block) semanticStack.pop();
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
                 function.setBlock(block);
-                System.out.println(function.getReturns());
-                semanticStack.push(function);
-                FunctionDCL f = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
-                System.out.println(f.getReturns());
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setBlock(block);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setReturns(function.getReturns());
+                semanticStack.push(function);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setSignatureDeclared(false);
                 SymbolTable.getInstance().setLastFunction(null);
                 SymbolTable.getInstance().popScope();
@@ -110,8 +108,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "addFunctionDCL": {
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
-                function.declare();
                 function.setSignature();
+                function.declare();
                 semanticStack.push(function);
                 break;
             }
@@ -121,8 +119,10 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 if (semanticStack.peek() instanceof GlobalBlock)
                     SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
                 else {
+
                     SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
                             SymbolTable.getInstance().getIndex(), false));
+
                 }
                 semanticStack.push(new NOP(name));
                 break;
@@ -153,7 +153,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
                 function.setSignatureDeclared(true);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setSignatureDeclared(true);
-                semanticStack.push(function);
+                semanticStack.push(new NOP(function.getName()));
                 SymbolTable.getInstance().popScope();
                 break;
             }
@@ -439,11 +439,14 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     semanticStack.push(name);
                     break;
                 }
+                System.out.println(name);
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                System.out.println(dscp.getType());
                 if (dscp instanceof StaticGlobalVariableDSCP || dscp instanceof DynamicLocalVariableDSCP)
                     semanticStack.push(new SimpleVariable(name, dscp.getType()));
                 else if (dscp instanceof StaticGlobalArrayDSCP || dscp instanceof DynamicLocalArrayDSCP)
                     semanticStack.push(new Array(name, new ArrayList<>(), dscp.getType()));
+
                 break;
             }
             case "flagIncrement": {
@@ -469,6 +472,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "assign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
+                System.out.println(var.getName());
                 checkAssign(var);
                 semanticStack.push(new Assign(var, exp));
                 break;
@@ -712,6 +716,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 else {
                     SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
                             SymbolTable.getInstance().getIndex(), false));
+                    System.out.println(SymbolTable.getInstance().getDescriptor(name).getType());
+                    System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
                 }
                 semanticStack.push(new NOP(name));
                 break;
@@ -760,7 +766,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 }
 
 
-class NOP implements Operation {
+class NOP implements Operation,Declaration {
 
     String name;
 
