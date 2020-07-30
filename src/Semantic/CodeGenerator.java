@@ -55,11 +55,9 @@ public class CodeGenerator implements Syntax.CodeGenerator {
     String lastSeenType = "";
     @Override
     public void doSemantic(String sem) {
-        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
-                System.out.println(lexical.currentToken().getValue());
                 break;
             }
             case "pop": {
@@ -439,9 +437,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     semanticStack.push(name);
                     break;
                 }
-                System.out.println(name);
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-                System.out.println(dscp.getType());
                 if (dscp instanceof StaticGlobalVariableDSCP || dscp instanceof DynamicLocalVariableDSCP)
                     semanticStack.push(new SimpleVariable(name, dscp.getType()));
                 else if (dscp instanceof StaticGlobalArrayDSCP || dscp instanceof DynamicLocalArrayDSCP)
@@ -472,7 +468,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "assign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
-                System.out.println(var.getName());
                 checkAssign(var);
                 semanticStack.push(new Assign(var, exp));
                 break;
@@ -716,8 +711,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 else {
                     SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
                             SymbolTable.getInstance().getIndex(), false));
-                    System.out.println(SymbolTable.getInstance().getDescriptor(name).getType());
-                    System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
                 }
                 semanticStack.push(new NOP(name));
                 break;

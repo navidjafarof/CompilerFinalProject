@@ -76,6 +76,7 @@ public class FunctionDCL implements Declaration {
     public boolean checkEqual(String name, List<Type> argumentTypes) {
         if (this.name.equals(name)) {
             if (argumentTypes.size() == this.argumentTypes.size()) {
+
                 for (int i = 0; i < argumentTypes.size(); i++) {
                     if (!argumentTypes.get(i).equals(this.argumentTypes.get(i)))
                         return false;
@@ -99,7 +100,6 @@ public class FunctionDCL implements Declaration {
         SymbolTable.getInstance().setLastFunction(this);
         methodVisitor.visitCode();
         this.block.codegen(cw, methodVisitor);
-        System.out.println(name);
         if (returns.size() == 0) {
             throw new RuntimeException("There Is No Return Statement!");
         }
