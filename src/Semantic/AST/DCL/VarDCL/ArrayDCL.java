@@ -2,6 +2,9 @@ package Semantic.AST.DCL.VarDCL;
 
 import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.constant.IntegerConstExp;
+import Semantic.SymbolTable.DSCP.DSCP;
+import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
+import Semantic.SymbolTable.DSCP.StaticGlobalArrayDSCP;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -72,5 +75,13 @@ public class ArrayDCL extends VarDCL{
             }
             mv.visitVarInsn(ASTORE, SymbolTable.getInstance().getIndex());
         }
+    }
+    public static void declare(String name, Type type, List<Expression> dimensions, int dimNum, boolean global) {
+        DSCP dscp;
+        if (!global)
+            dscp = new DynamicLocalArrayDSCP(type, true, SymbolTable.getInstance().getIndex(), dimNum, dimensions);
+        else
+            dscp = new StaticGlobalArrayDSCP(type, true, dimNum, dimensions);
+        SymbolTable.getInstance().addVariable(name, dscp);
     }
 }
