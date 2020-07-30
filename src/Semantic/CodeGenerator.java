@@ -1,26 +1,31 @@
 package Semantic;
+
 import Semantic.AST.Block.Block;
 import Semantic.AST.DCL.Declaration;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.DCL.VarDCL.ArrayDCL;
 import Semantic.AST.DCL.VarDCL.SimpleVarDCL;
-import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.Input;
-import Semantic.AST.Expression.Len;
-import Semantic.AST.Expression.SizeOf;
+import Semantic.AST.Expression.*;
 import Semantic.AST.Expression.binary.arithmetic.*;
 import Semantic.AST.Expression.binary.conditional.*;
-import Semantic.AST.Expression.unary.Cast;
-import Semantic.AST.Expression.unary.Negative;
-import Semantic.AST.Expression.unary.Not;
+import Semantic.AST.Expression.constant.*;
+import Semantic.AST.Expression.unary.*;
+import Semantic.AST.Expression.variable.Array;
+import Semantic.AST.Expression.variable.Record;
+import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.AST.Operation;
+import Semantic.AST.Statement.Break;
+import Semantic.AST.Statement.Continue;
 import Semantic.AST.Statement.FunctionReturn;
+import Semantic.AST.Statement.Loop.For;
+import Semantic.AST.Statement.Loop.Repeat;
 import Semantic.AST.Statement.Println;
-import Semantic.SymbolTable.DSCP.DSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
-import Semantic.SymbolTable.DSCP.StaticGlobalVariableDSCP;
+import Semantic.AST.Statement.assignment.*;
+import Semantic.AST.Statement.condition.Case;
+import Semantic.AST.Statement.condition.If;
+import Semantic.AST.Statement.condition.Switch;
+import Semantic.SymbolTable.DSCP.*;
 import Semantic.SymbolTable.Scope;
 import Semantic.SymbolTable.SymbolTable;
 import Syntax.Lexical;
@@ -36,17 +41,21 @@ import org.objectweb.asm.Type;
 public class CodeGenerator implements Syntax.CodeGenerator {
     private Lexical lexical;
     private Deque<Object> semanticStack;
+
     public CodeGenerator(Lexical lexical) {
         this.lexical = lexical;
         semanticStack = new ArrayDeque<>();
     }
+
     public AST getResult() {
         return (AST) semanticStack.getFirst();
     }
+
+    String lastSeenType = "";
     @Override
     public void doSemantic(String sem) {
-        switch (sem){
-            case "push":{
+        switch (sem) {
+            case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
                 break;
             }
@@ -78,7 +87,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 DynamicLocalDSCP dscp = (DynamicLocalDSCP) SymbolTable.getInstance().getDescriptor(name);
                 dscp.setValid(true);
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
-                function.addArgument(name,dscp);
+                function.addArgument(name, dscp);
                 semanticStack.push(function);
                 break;
             }
@@ -98,23 +107,15 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(function);
                 break;
             }
-            case "setSignature": {
-                FunctionDCL function = (FunctionDCL) semanticStack.pop();
-                function.setSignatureDeclared(true);
-                SymbolTable.getInstance().getFunction(function.getName(),function.getArgumentTypes()).setSignatureDeclared(true);
-                semanticStack.push(function);
-
-                SymbolTable.getInstance().popScope();
-                break;
-            }
             case "makeSimpleVarDCL": {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
                 if (semanticStack.peek() instanceof GlobalBlock)
-                    SymbolTable.getInstance().addVariable(name,new StaticGlobalVariableDSCP(type,false,false));
-                else{
-                    SymbolTable.getInstance().addVariable(name,new DynamicLocalVariableDSCP(type,false,
-                            SymbolTable.getInstance().getIndex(),false));}
+                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
+                else {
+                    SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
+                            SymbolTable.getInstance().getIndex(), false));
+                }
                 semanticStack.push(new NOP(name));
                 break;
             }
@@ -125,11 +126,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new NOP(varName));
                 break;
             }
-            case "pushBlock": {  //begin
-                semanticStack.push(new Block(new ArrayList<>()));
-                break;
-            }
-            case "addBlock": { //fill function's block
+            case "addToBlock": { //fill function's block
                 Operation operation = (Operation) semanticStack.pop();
                 Block block = (Block) semanticStack.pop();
                 block.addOperation(operation);
@@ -145,18 +142,19 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 break;
             }
             case "setSignature": {
-                FunctionDCL functionDcl = (FunctionDCL) semanticStack.pop();
-                functionDcl.setSignatureDeclared(true);
-                SymbolTable.getInstance().getFunction(functionDcl.getName(),functionDcl.getArgumentTypes()).setSignatureDeclared(true);
-                semanticStack.push(functionDcl);
+                FunctionDCL function = (FunctionDCL) semanticStack.pop();
+                function.setSignatureDeclared(true);
+                SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setSignatureDeclared(true);
+                semanticStack.push(function);
+                SymbolTable.getInstance().popScope();
                 break;
             }
-            case "setValueToVar": {
+            case "assignValueToVar": {
                 Expression exp = (Expression) semanticStack.pop();
                 String name = ((NOP) semanticStack.pop()).name;
-                DSCP dscp = SymbolTableHandler.getInstance().getDescriptor(name);
-                SimpleVarDcl varDcl = new SimpleVarDcl(name,dscp.getType(),dscp.isConstant(),dscp instanceof GlobalDSCP);
-                varDcl.setExp(exp);
+                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                SimpleVarDCL varDcl = new SimpleVarDCL(name, dscp.getType(), dscp.isConstant(), dscp instanceof StaticGlobalDSCP);
+                varDcl.setExpression(exp);
                 semanticStack.push(varDcl);
                 break;
             }
@@ -186,54 +184,60 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new NOP(name));
                 break;
             }
-            case "mkArrayVarDCL": {
+            case "arrayDCLUsingLastType": {
+                String name = (String) lexical.currentToken().getValue();
                 Byte flag = (Byte) semanticStack.pop();
-                List<Expression> expressionList = new ArrayList<>();
+                Type type = SymbolTable.getTypeFromVarName(lastSeenType);
+                ArrayDCL.declare(name, type, new ArrayList<>(), flag, semanticStack.peek() instanceof GlobalBlock);
+                semanticStack.push(new NOP(name));
+                break;
+            }
+            case "makeArrayVarDCL": {
+                Byte flag = (Byte) semanticStack.pop();
+                ArrayList<Expression> expressionList = new ArrayList<>();
                 int i = flag;
                 while (i > 0) {
                     expressionList.add((Expression) semanticStack.pop());
                     i--;
                 }
-                Type type = SymbolTableHandler.getTypeFromName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
                 String name = ((NOP) semanticStack.pop()).name;
-                DSCP dscp = SymbolTableHandler.getInstance().getDescriptor(name);
-                if(!dscp.getType().equals(type))
+                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                if (!dscp.getType().equals(type))
                     throw new RuntimeException("Types don't match");
-                ArrDcl arrDcl;
-                if (semanticStack.peek() instanceof GlobalBlock){
-                    if(((GlobalArrDSCP)dscp).getDimNum() != flag)
+                ArrayDCL arrDcl;
+                if (semanticStack.peek() instanceof GlobalBlock) {
+                    if (((StaticGlobalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
-                    arrDcl = new ArrDcl(name, type, true, flag);
-                    ((GlobalArrDSCP)dscp).setDimList(expressionList);
-                }
-                else{
-                    if(((LocalArrDSCP)dscp).getDimNum() != flag)
+                    arrDcl = new ArrayDCL(name, type, true, flag);
+                    ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
+                } else {
+                    if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
-                    arrDcl = new ArrDcl(name, type, false, flag);
-                    ((LocalArrDSCP)dscp).setDimList(expressionList);
+                    arrDcl = new ArrayDCL(name, type, false, flag);
+                    ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
                 }
                 semanticStack.push(arrDcl);
                 break;
             }
-            case "mkAutoArrVarDCL": {
+            case "makeAutoArrVarDCL": {
                 Byte flag = (Byte) semanticStack.pop();
-                List<Expression> expressionList = new ArrayList<>();
+                ArrayList<Expression> expressionList = new ArrayList<>();
                 while (flag > 0) {
                     expressionList.add((Expression) semanticStack.pop());
                     flag--;
                 }
-                Type type = SymbolTableHandler.getTypeFromName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
                 String name = (String) semanticStack.pop();
-                ArrDcl arrDcl;
-                if (semanticStack.peek() instanceof GlobalBlock){
-                    arrDcl = new ArrDcl(name, type, true, expressionList.size());
-                    arrDcl.declare(name,type,expressionList,expressionList.size(),true);
+                ArrayDCL arrDcl;
+                if (semanticStack.peek() instanceof GlobalBlock) {
+                    arrDcl = new ArrayDCL(name, type, true, expressionList.size());
+                    arrDcl.declare(name, type, expressionList, expressionList.size(), true);
+                } else {
+                    arrDcl = new ArrayDCL(name, type, false, expressionList.size());
+                    arrDcl.declare(name, type, expressionList, expressionList.size(), false);
                 }
-                else{
-                    arrDcl = new ArrDcl(name, type, false, expressionList.size());
-                    arrDcl.declare(name,type,expressionList,expressionList.size(),false);
-                }
-                arrDcl.setDimensions(expressionList);
+                arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
                 break;
             }
@@ -358,83 +362,83 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Not(exp));
                 break;
             }
-            case "postmm": {
+            case "postMinusMinus": {
                 Variable var = (Variable) semanticStack.pop();
-                if (var instanceof RecordVar)
+                if (var instanceof Record)
                     throw new RuntimeException("Undefined operand for record type");
                 checkAssign(var);
-                semanticStack.push(new PostMM(var));
+                semanticStack.push(new PostMinusMinus(var));
                 break;
             }
-            case "postpp": {
+            case "postPlusPlus": {
                 Variable var = (Variable) semanticStack.pop();
-                if (var instanceof RecordVar)
+                if (var instanceof Record)
                     throw new RuntimeException("Undefined operand for record type");
                 checkAssign(var);
-                semanticStack.push(new PostPP(var));
+                semanticStack.push(new PostPlusPlus(var));
                 break;
             }
-            case "premm": {
+            case "preMinusMinus": {
                 Variable var = (Variable) semanticStack.pop();
-                if (var instanceof RecordVar)
+                if (var instanceof Record)
                     throw new RuntimeException("Undefined operand for record type");
                 checkAssign(var);
-                semanticStack.push(new PreMM(var));
+                semanticStack.push(new PreMinusMinus(var));
                 break;
             }
-            case "prepp": {
+            case "prePlusPlus": {
                 Variable var = (Variable) semanticStack.pop();
-                if (var instanceof RecordVar)
+                if (var instanceof Record)
                     throw new RuntimeException("Undefined operand for record type");
                 checkAssign(var);
-                semanticStack.push(new PrePP(var));
+                semanticStack.push(new PrePlusPlus(var));
                 break;
             }
             /* -------------------------- Const ---------------------------- */
             case "pushReal": {
                 Object realNum = lexical.currentToken().getValue();
                 if (realNum instanceof Float)
-                    semanticStack.push(new FloatConst((Float) realNum));
+                    semanticStack.push(new FloatConstExp((Float) realNum));
                 else
-                    semanticStack.push(new DoubleConst((Double) realNum));
+                    semanticStack.push(new DoubleConstExp((Double) realNum));
                 break;
             }
-            case "pushInt": {
+            case "pushDec": {
                 Object integerNum = lexical.currentToken().getValue();
                 if (integerNum instanceof Integer)
-                    semanticStack.push(new IntegerConst((Integer) integerNum));
+                    semanticStack.push(new IntegerConstExp((Integer) integerNum));
                 else
-                    semanticStack.push(new LongConst((Long) integerNum));
+                    semanticStack.push(new LongConstExp((Long) integerNum));
                 break;
             }
             case "pushBool": {
                 Object value = lexical.currentToken().getValue();
-                semanticStack.push(new BooleanConst((Boolean) value));
+                semanticStack.push(new BooleanConstExp((Boolean) value));
                 break;
             }
             case "pushChar": {
-                semanticStack.push(new CharConst((Character) lexical.currentToken().getValue()));
+                semanticStack.push(new CharConstExp((Character) lexical.currentToken().getValue()));
                 break;
             }
             case "pushString": {
-                semanticStack.push(new StringConst((String) lexical.currentToken().getValue()));
+                semanticStack.push(new StringConstExp((String) lexical.currentToken().getValue()));
                 break;
             }
             /* -------------------------- variable ---------------------------- */
-            case "pushVar": {
+            case "pushVariable": {
                 String name = (String) lexical.currentToken().getValue();
-                if(SymbolTableHandler.getInstance().getFuncNames().contains(name)){
+                if (SymbolTable.getInstance().getFuncNames().contains(name)) {
                     semanticStack.push(name);
                     break;
                 }
-                DSCP dscp = SymbolTableHandler.getInstance().getDescriptor(name);
-                if (dscp instanceof GlobalVarDSCP || dscp instanceof LocalVarDSCP)
-                    semanticStack.push(new SimpleVar(name, dscp.getType()));
-                else if (dscp instanceof GlobalArrDSCP || dscp instanceof LocalArrDSCP)
-                    semanticStack.push(new ArrayVar(name, new ArrayList<>(), dscp.getType()));
+                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                if (dscp instanceof StaticGlobalVariableDSCP || dscp instanceof DynamicLocalVariableDSCP)
+                    semanticStack.push(new SimpleVariable(name, dscp.getType()));
+                else if (dscp instanceof StaticGlobalArrayDSCP || dscp instanceof DynamicLocalArrayDSCP)
+                    semanticStack.push(new Array(name, new ArrayList<>(), dscp.getType()));
                 break;
             }
-            case "flagpp": {
+            case "flagIncrement": {
                 Expression exp = (Expression) semanticStack.pop();
                 Byte flag = (Byte) semanticStack.pop();
                 flag++;
@@ -444,13 +448,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "pushArrayVar": {
                 Byte flag = (Byte) semanticStack.pop();
-                List<Expression> expressionList = new ArrayList<>();
+                ArrayList<Expression> expressionList = new ArrayList<>();
                 while (flag > 0) {
                     expressionList.add((Expression) semanticStack.pop());
                     flag--;
                 }
-                ArrayVar var = (ArrayVar) semanticStack.pop();
-                semanticStack.push(new ArrayVar(var.getName(), expressionList, var.getType()));
+                Array var = (Array) semanticStack.pop();
+                semanticStack.push(new Array(var.getName(), expressionList, var.getType()));
                 break;
             }
             /* -------------------------- Assignment -------------------------- */
@@ -458,70 +462,70 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new Assign(exp, var));
+                semanticStack.push(new Assign(var, exp));
                 break;
             }
-            case "sumAssign": {
+            case "plusAssign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new SumAssign(exp, var));
+                semanticStack.push(new PlusAssign(var, exp));
                 break;
             }
-            case "minAssign": {
+            case "minusAssign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new MinAssign(exp, var));
+                semanticStack.push(new MinusAssign(var, exp));
                 break;
             }
-            case "divAssign": {
+            case "divideAssign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new DivAssign(exp, var));
+                semanticStack.push(new DivideAssign(var, exp));
                 break;
             }
-            case "mulAssign": {
+            case "multAssign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new MulAssign(exp, var));
+                semanticStack.push(new MultAssign(var, exp));
                 break;
             }
-            case "rmnAssign": {
+            case "modAssign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new RmnAssign(exp, var));
+                semanticStack.push(new ModeAssign(var, exp));
                 break;
             }
             case "check2types": {
-                Type type = SymbolTableHandler.getTypeFromName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
                 Variable variable = (Variable) semanticStack.pop();
-                if (!(variable instanceof ArrayVar))
+                if (!(variable instanceof Array))
                     throw new RuntimeException("You can't new a simple variable");
                 if (variable.getType() != null && !type.equals(variable.getType()))
                     throw new RuntimeException("types don't match");
                 semanticStack.push(variable);
                 break;
             }
-            case "setCheckDim": {
+            case "checkDimNum": {
                 Byte flag = (Byte) semanticStack.pop();
-                List<Expression> expressionList = new ArrayList<>();
+                ArrayList<Expression> expressionList = new ArrayList<>();
                 int i = flag;
                 while (i > 0) {
                     expressionList.add((Expression) semanticStack.pop());
                     i--;
                 }
-                ArrayVar var = (ArrayVar) semanticStack.pop();
-                if (var.getDSCP() instanceof GlobalArrDSCP)
-                    if (((GlobalArrDSCP) var.getDSCP()).getDimNum() != flag)
+                Array var = (Array) semanticStack.pop();
+                if (var.getDSCP() instanceof StaticGlobalArrayDSCP)
+                    if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
-                if (var.getDSCP() instanceof LocalArrDSCP)
-                    if (((LocalArrDSCP) var.getDSCP()).getDimNum() != flag)
+                if (var.getDSCP() instanceof DynamicLocalArrayDSCP)
+                    if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
-                var.setDimensions(expressionList);
+                var.setIndexesExpression(expressionList);
                 semanticStack.push(new NOP());
                 break;
             }
@@ -553,17 +557,17 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Continue());
                 break;
             }
-            case "funcCall": {
-                String  name = (String) semanticStack.pop();
+            case "functionCall": {
+                String name = (String) semanticStack.pop();
                 System.out.println(name);
-                semanticStack.push(new FuncCall(name, new ArrayList<>()));
+                semanticStack.push(new FunctionCall(name, new ArrayList<>()));
                 break;
             }
-            case "addParam": {
+            case "addArgForFuncCall": {
                 Expression exp = (Expression) semanticStack.pop();
                 System.out.println(exp.getClass());
-                FuncCall funcCall = (FuncCall) semanticStack.pop();
-                funcCall.addParam(exp);
+                FunctionCall funcCall = (FunctionCall) semanticStack.pop();
+                funcCall.addArgument(exp);
                 semanticStack.push(funcCall);
                 break;
             }
@@ -576,8 +580,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(flag);
                 break;
             }
-            case "trueInitFlag": {
-                InitExp initExp = (InitExp) semanticStack.pop();
+            case "trueInitialFlag": {
+                InitialExpression initExp = (InitialExpression) semanticStack.pop();
                 semanticStack.pop();
                 Byte flag = 1;
                 semanticStack.push(initExp);
@@ -585,7 +589,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 break;
             }
             case "trueStepFlag": {
-                StepExp stepExp = (StepExp) semanticStack.pop();
+                StepExpression stepExp = (StepExpression) semanticStack.pop();
                 Byte flag = (Byte) semanticStack.pop();
                 if (flag == 0)
                     flag = 2;
@@ -598,21 +602,21 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "for": {
                 Block block = (Block) semanticStack.pop();
                 Byte flag = (Byte) semanticStack.pop();
-                InitExp initExp = null;
-                Expression exp = null;
-                StepExp stepExp = null;
+                InitialExpression initExp = null;
+                Expression exp;
+                StepExpression stepExp = null;
                 if (flag == 0) {
                     exp = (Expression) semanticStack.pop();
                 } else if (flag == 1) {
                     exp = (Expression) semanticStack.pop();
-                    initExp = (InitExp) semanticStack.pop();
+                    initExp = (InitialExpression) semanticStack.pop();
                 } else if (flag == 2) {
-                    stepExp = (StepExp) semanticStack.pop();
+                    stepExp = (StepExpression) semanticStack.pop();
                     exp = (Expression) semanticStack.pop();
                 } else {
-                    stepExp = (StepExp) semanticStack.pop();
+                    stepExp = (StepExpression) semanticStack.pop();
                     exp = (Expression) semanticStack.pop();
-                    initExp = (InitExp) semanticStack.pop();
+                    initExp = (InitialExpression) semanticStack.pop();
                 }
                 semanticStack.push(new For(block, initExp, exp, stepExp));
                 break;
@@ -647,7 +651,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "addCase": {
                 Block block = (Block) semanticStack.pop();
-                IntegerConst intConst = (IntegerConst) semanticStack.pop();
+                IntegerConstExp intConst = (IntegerConstExp) semanticStack.pop();
                 Switch switchSt = (Switch) semanticStack.pop();
                 Case caseSt = new Case(intConst, block);
                 switchSt.addCase(caseSt);
@@ -690,6 +694,23 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new SizeOf(baseType));
                 break;
             }
+            case "setLastSeenType": {
+                lastSeenType = (String) semanticStack.pop();
+                break;
+            }
+            case "makeSimpleVarUsingLastType": {
+                String name = (String) lexical.currentToken().getValue();
+                Type type = SymbolTable.getTypeFromVarName(lastSeenType);
+                if (semanticStack.peek() instanceof GlobalBlock)
+                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
+                else {
+                    SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
+                            SymbolTable.getInstance().getIndex(), false));
+                }
+                semanticStack.push(new NOP(name));
+                break;
+            }
+
             default:
                 throw new RuntimeException("Illegal semantic function: " + sem);
 
@@ -714,25 +735,23 @@ public class CodeGenerator implements Syntax.CodeGenerator {
         }
 
     }
+
     private void checkAssign(Variable variable) {
-        if (variable instanceof ArrayVar) {
-            ArrayVar var = (ArrayVar) variable;
-            int numberOfExp = var.getDimensions().size();
-            DSCP dscp = SymbolTableHandler.getInstance().getDescriptor(var.getName());
-            if (dscp instanceof GlobalArrDSCP) {
-                if (((GlobalArrDSCP) dscp).getDimNum() != numberOfExp)
+        if (variable instanceof Array) {
+            Array var = (Array) variable;
+            int numberOfExp = var.getIndexesExpression().size();
+            DSCP dscp = SymbolTable.getInstance().getDescriptor(var.getName());
+            if (dscp instanceof StaticGlobalArrayDSCP) {
+                if (((StaticGlobalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
             }
-            if (dscp instanceof LocalArrDSCP) {
-                if (((LocalArrDSCP) dscp).getDimNum() != numberOfExp)
+            if (dscp instanceof DynamicLocalArrayDSCP) {
+                if (((DynamicLocalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
             }
         }
     }
 }
-
-
-
 
 
 class NOP implements Operation {

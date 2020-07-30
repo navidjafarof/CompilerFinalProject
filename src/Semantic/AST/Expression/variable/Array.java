@@ -60,4 +60,12 @@ public class Array extends Variable{
         mv.visitInsn(ATHROW);
         mv.visitLabel(endLabel);
     }
+
+    public void setIndexesExpression(ArrayList<Expression> indexesExpression) {
+        this.indexesExpression = indexesExpression;
+    }
+
+    public ArrayList<Expression> getIndexesExpression() {
+        return indexesExpression;
+    }
 }

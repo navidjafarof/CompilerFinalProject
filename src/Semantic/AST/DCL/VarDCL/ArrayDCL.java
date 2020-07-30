@@ -11,23 +11,24 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Opcodes.ASTORE;
 
 public class ArrayDCL extends VarDCL{
     private ArrayList<Expression> dimensionsExpression;
+
     private int dimensionNum;
 
     public ArrayDCL(String name, Type type, boolean global, int dimensionNum) {
         this.name = name;
         this.type = type;
         this.global = global;
-        dimensionsExpression = new ArrayList<>(dimensionNum);
+        this.dimensionsExpression = new ArrayList<>(dimensionNum);
         this.dimensionNum = dimensionNum;
     }
     //injaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasopjegfghir
+
     public ArrayDCL(String name, String stringType, boolean global, Integer dimensionNum, Type type, ArrayList<Expression> dimensionsExpression) {
         this.name = name;
         if (!stringType.equals("auto")) {
@@ -44,9 +45,9 @@ public class ArrayDCL extends VarDCL{
         this.global = global;
         this.dimensionsExpression = dimensionsExpression;
     }
-
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
+
         for (Expression dim : dimensionsExpression) {
             dim.codegen(cw, mv);
         }
@@ -57,9 +58,6 @@ public class ArrayDCL extends VarDCL{
             cw.visitField(ACC_STATIC, name, arrayType.getDescriptor(), null, null).visitEnd();
         }
         else {
-            if(dimensionsExpression.size() == 0){
-                new IntegerConstExp(1000).codegen(cw, mv);
-            }
             if (dimensionNum == 1) {
                 if (type.getDescriptor().startsWith("L"))
                     mv.visitTypeInsn(ANEWARRAY, type.getDescriptor());
@@ -76,12 +74,17 @@ public class ArrayDCL extends VarDCL{
             mv.visitVarInsn(ASTORE, SymbolTable.getInstance().getIndex());
         }
     }
-    public static void declare(String name, Type type, List<Expression> dimensions, int dimNum, boolean global) {
+
+    public static void declare(String name, Type type, ArrayList<Expression> dimensions, int dimNum, boolean global) {
         DSCP dscp;
         if (!global)
             dscp = new DynamicLocalArrayDSCP(type, true, SymbolTable.getInstance().getIndex(), dimNum, dimensions);
         else
             dscp = new StaticGlobalArrayDSCP(type, true, dimNum, dimensions);
         SymbolTable.getInstance().addVariable(name, dscp);
+    }
+
+    public void setDimensionsExpression(ArrayList<Expression> dimensionsExpression) {
+        this.dimensionsExpression = dimensionsExpression;
     }
 }

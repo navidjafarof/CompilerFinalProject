@@ -17,7 +17,10 @@ import static org.objectweb.asm.Opcodes.IFEQ;
 public class If extends Statement {
 
     private Expression expression;
-    private Block ifBlock, elseBlock;
+    private Block ifBlock;
+
+    private Block elseBlock;
+
     private Label startElse = new Label();
     private Label endElse = new Label();
 
@@ -41,9 +44,12 @@ public class If extends Statement {
             mv.visitLabel(startElse);
             elseBlock.codegen(cw, mv);
             SymbolTable.getInstance().popScope();
-        }
-        else
+        } else
             mv.visitLabel(startElse);
         mv.visitLabel(endElse);
+    }
+
+    public void setElseBlock(Block elseBlock) {
+        this.elseBlock = elseBlock;
     }
 }

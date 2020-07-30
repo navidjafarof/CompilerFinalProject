@@ -3,7 +3,7 @@ package Semantic.SymbolTable.DSCP;
 import Semantic.AST.Expression.Expression;
 import org.objectweb.asm.Type;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class DynamicLocalArrayDSCP extends DynamicLocalDSCP{
 
@@ -16,9 +16,15 @@ public class DynamicLocalArrayDSCP extends DynamicLocalDSCP{
     }
 
     int dimension;
-    List<Expression> dimensionList;
 
-    public DynamicLocalArrayDSCP(Type type, boolean isValid, int index, int dimension, List<Expression> dimensionList) {
+
+    public void setDimensionList(ArrayList<Expression> dimensionList) {
+        this.dimensionList = dimensionList;
+    }
+
+    ArrayList<Expression> dimensionList;
+
+    public DynamicLocalArrayDSCP(Type type, boolean isValid, int index, int dimension, ArrayList<Expression> dimensionList) {
         super(type, isValid, index);
         this.dimension = dimension;
         this.dimensionList = dimensionList;
