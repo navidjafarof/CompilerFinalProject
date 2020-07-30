@@ -99,7 +99,6 @@ public class FunctionDCL implements Declaration {
         SymbolTable.getInstance().setLastFunction(this);
         methodVisitor.visitCode();
         this.block.codegen(cw, methodVisitor);
-        System.out.println(name);
         if (returns.size() == 0) {
             throw new RuntimeException("There Is No Return Statement!");
         }

@@ -219,11 +219,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, true, flag);
                     ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
+                    arrDcl.setDimensionsExpression(expressionList);
                 } else {
                     if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
+                    arrDcl.setDimensionsExpression(expressionList);
                 }
                 semanticStack.push(arrDcl);
                 break;
