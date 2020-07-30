@@ -45,6 +45,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
     public CodeGenerator(Lexical lexical) {
         this.lexical = lexical;
         semanticStack = new ArrayDeque<>();
+        semanticStack.push(GlobalBlock.getInstance());
     }
 
     public AST getResult() {
@@ -54,6 +55,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
     String lastSeenType = "";
     @Override
     public void doSemantic(String sem) {
+        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
@@ -95,7 +97,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 Block block = (Block) semanticStack.pop();
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
                 function.setBlock(block);
+                System.out.println(function.getReturns());
                 semanticStack.push(function);
+                FunctionDCL f = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
+                System.out.println(f.getReturns());
+                SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setBlock(block);
+                SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setReturns(function.getReturns());
+                SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setSignatureDeclared(false);
                 SymbolTable.getInstance().setLastFunction(null);
                 SymbolTable.getInstance().popScope();
                 break;
@@ -559,13 +567,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "functionCall": {
                 String name = (String) semanticStack.pop();
-                System.out.println(name);
                 semanticStack.push(new FunctionCall(name, new ArrayList<>()));
                 break;
             }
             case "addArgForFuncCall": {
                 Expression exp = (Expression) semanticStack.pop();
-                System.out.println(exp.getClass());
                 FunctionCall funcCall = (FunctionCall) semanticStack.pop();
                 funcCall.addArgument(exp);
                 semanticStack.push(funcCall);

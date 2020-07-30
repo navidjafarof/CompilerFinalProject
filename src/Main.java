@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(new FileReader("src/Code.txt"));
         CodeGenerator codeGenerator = new CodeGenerator(lexicalAnalyzer);
-        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/syntax/table.npt", true);
+        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/Syntax/table.npt", false);
         AST result;
         try {
             parser.parse();
@@ -25,7 +25,7 @@ public class Main {
             return;
         }
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-        classWriter.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER, "Test",
+        classWriter.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER, "Main",
                 null, "java/lang/Object", null);
         MethodVisitor methodVisitor = classWriter.visitMethod(Opcodes.ACC_STATIC | Opcodes.ACC_PUBLIC,
                 "main", "([Ljava/lang/String;)V", null, null);
@@ -34,9 +34,9 @@ public class Main {
         methodVisitor.visitInsn(Opcodes.RETURN);
         methodVisitor.visitMaxs(0, 0);
         methodVisitor.visitEnd();
-
+        System.out.println("kir");
         // Generate class file
-        try (FileOutputStream fos = new FileOutputStream("Test.class")) {
+        try (FileOutputStream fos = new FileOutputStream("Main.class")) {
             fos.write(classWriter.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();

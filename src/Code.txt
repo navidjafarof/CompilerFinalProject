@@ -1,0 +1,20 @@
+function int f(int n);
+
+function void start()
+{
+    int k = 4;
+    int[] m = new int[0];
+    println(f(4));
+    return;
+}
+
+function int f(int n)
+{
+    if (n == 1)
+    {
+        return 1;
+    }
+    return f(n);
+}
+
+

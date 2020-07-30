@@ -5,6 +5,7 @@ public class Symbol {
     private Object value;
     public Symbol(String token) {
         this.token = token;
+        this.value = token;
     }
 
     public Symbol(String token, Object value) {

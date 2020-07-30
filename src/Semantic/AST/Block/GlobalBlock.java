@@ -45,7 +45,7 @@ public class GlobalBlock implements AST {
         mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
         mv.visitCode();
         for (AST declaration : declarations) {
-            declaration.codegen(cw ,mv );
+            declaration.codegen(cw, mv);
         }
         mv.visitMaxs(1, 1);
         mv.visitEnd();
