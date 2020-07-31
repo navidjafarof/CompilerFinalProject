@@ -1,12 +1,16 @@
-
-function int a()
-{
-    return 1;
-}
-
+int a = 1;
 function void start()
 {
+    int a = 2;
 
-    println(a());
+    int b = 3;
+    int c = a + b;
+    println(c);
     return;
 }
+function void pr()
+{
+
+    return;
+}
+

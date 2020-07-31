@@ -708,8 +708,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "makeSimpleVarUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromVarName(lastSeenType);
-                if (semanticStack.peek() instanceof GlobalBlock)
-                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
+                if (semanticStack.peek() instanceof GlobalBlock){
+                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));}
                 else {
                     SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
                             SymbolTable.getInstance().getIndex(), false));
