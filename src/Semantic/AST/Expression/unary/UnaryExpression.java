@@ -4,8 +4,6 @@ import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.DSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
-import Semantic.SymbolTable.DSCP.StaticGlobalVariableDSCP;
 import Semantic.SymbolTable.SymbolTable;
 
 

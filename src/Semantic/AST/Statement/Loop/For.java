@@ -20,12 +20,12 @@ import static org.objectweb.asm.Opcodes.*;
 
 public class For extends Loop {
 
-    private InitialExpression init;
-    private Expression expression;
-    private StepExpression step;
-    private Label expLabel = new Label();
-    private Label stepLabel = new Label();
-    private Label blockLabel = new Label();
+    private final InitialExpression init;
+    private final Expression expression;
+    private final StepExpression step;
+    private final Label expLabel = new Label();
+    private final Label stepLabel = new Label();
+    private final Label blockLabel = new Label();
 
 
     public For(Block block, InitialExpression init, Expression expression, StepExpression step) {

@@ -5,7 +5,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 public class StringConstExp extends Constant{
-    private String value;
+    private final String value;
 
     public StringConstExp(String value){
         this.value = value.substring(1,value.length() -1);

@@ -12,7 +12,6 @@ import org.objectweb.asm.Type;
 import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.Opcodes.ASTORE;
 
 public class ArrayDCL extends VarDCL{
     private ArrayList<Expression> dimensionsExpression;
@@ -26,7 +25,6 @@ public class ArrayDCL extends VarDCL{
         this.dimensionsExpression = new ArrayList<>(dimensionNum);
         this.dimensionNum = dimensionNum;
     }
-    //injaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasopjegfghir
 
     public ArrayDCL(String name, String stringType, boolean global, Integer dimensionNum, Type type, ArrayList<Expression> dimensionsExpression) {
         this.name = name;
@@ -37,7 +35,7 @@ public class ArrayDCL extends VarDCL{
             throw new RuntimeException("auto variables must have been initialized");
         if (dimensionNum != null) {
             if (dimensionNum != dimensionsExpression.size())
-                throw new RuntimeException("dimensions are't correct");
+                throw new RuntimeException("Dimensions Are Not Correct");
             this.dimensionNum = dimensionNum;
         }
         this.type = type;
@@ -62,13 +60,13 @@ public class ArrayDCL extends VarDCL{
                     mv.visitTypeInsn(ANEWARRAY, type.getDescriptor());
                 else
                     mv.visitIntInsn(NEWARRAY, SymbolTable.getTType(type));
-            } else{
-                String t = "";
+            } else {
+                StringBuilder t = new StringBuilder();
                 for (int i = 0; i < dimensionNum; i++) {
-                    t += "[";
+                    t.append("[");
                 }
-                t += type.getDescriptor();
-                mv.visitMultiANewArrayInsn(t, dimensionsExpression.size());
+                t.append(type.getDescriptor());
+                mv.visitMultiANewArrayInsn(t.toString(), dimensionsExpression.size());
             }
             mv.visitVarInsn(ASTORE, SymbolTable.getInstance().getIndex());
         }

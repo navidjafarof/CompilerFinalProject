@@ -1,8 +1,9 @@
 package Lexical;
 
 public class Symbol {
-    private String token;
-    private Object value;
+    private final String token;
+    private final Object value;
+
     public Symbol(String token) {
         this.token = token;
         this.value = token;

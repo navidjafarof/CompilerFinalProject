@@ -1,6 +1,5 @@
 package Semantic.AST.DCL;
 
-import Semantic.AST.AST;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 

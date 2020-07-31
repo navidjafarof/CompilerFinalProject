@@ -6,7 +6,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class Println extends Statement {
-    private Expression expression;
+    private final Expression expression;
 
     public Println(Expression expression) {
         this.expression = expression;

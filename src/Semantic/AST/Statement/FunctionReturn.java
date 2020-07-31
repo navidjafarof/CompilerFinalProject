@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.*;
 
 public class FunctionReturn extends Statement {
 
-    private Expression expression;
+    private final Expression expression;
     private Frame scope;
 
     public FunctionReturn(Expression expression, FunctionDCL functionDCL) {

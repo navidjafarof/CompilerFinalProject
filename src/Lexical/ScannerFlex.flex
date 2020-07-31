@@ -18,8 +18,8 @@ import java.io.IOException;
     StringBuilder stringBuilder = new StringBuilder();
     boolean record_dcl = false;
     boolean record_id_dcl = false;
-    LinkedHashSet<String> record_ids = new LinkedHashSet<String>();
-    LinkedHashSet<String> record_types = new LinkedHashSet<String>();
+    LinkedHashSet<String> record_ids = new LinkedHashSet<>();
+    LinkedHashSet<String> record_types = new LinkedHashSet<>();
     private Symbol currentSymbol = null;
     public Symbol currentToken() {
             return currentSymbol;

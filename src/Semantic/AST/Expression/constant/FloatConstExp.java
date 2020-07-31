@@ -9,7 +9,7 @@ import static org.objectweb.asm.Opcodes.FCONST_1;
 
 public class FloatConstExp extends Constant{
 
-    private Float value;
+    private final Float value;
 
     public FloatConstExp(Float value){
         this.value = value;

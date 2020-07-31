@@ -13,7 +13,6 @@ import org.objectweb.asm.Type;
 import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.Opcodes.ATHROW;
 
 
 public class Array extends Variable{

@@ -9,7 +9,7 @@ import static org.objectweb.asm.Opcodes.ICONST_1;
 
 
 public class BooleanConstExp extends Constant{
-    private Boolean value;
+    private final Boolean value;
 
     public BooleanConstExp(Boolean value) {
         this.value = value;

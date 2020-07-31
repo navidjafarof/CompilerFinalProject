@@ -5,7 +5,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 public class CharConstExp extends Constant{
-    private Character value;
+    private final Character value;
 
     public CharConstExp(Character value){
         this.value = value;

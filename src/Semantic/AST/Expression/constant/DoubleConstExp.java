@@ -8,7 +8,7 @@ import static org.objectweb.asm.Opcodes.DCONST_0;
 import static org.objectweb.asm.Opcodes.DCONST_1;
 
 public class DoubleConstExp extends Constant{
-    private Double value;
+    private final Double value;
 
     public DoubleConstExp(Double value){
         this.value = value;

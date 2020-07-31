@@ -7,7 +7,7 @@ import org.objectweb.asm.Type;
 import static org.objectweb.asm.Opcodes.*;
 
 public class IntegerConstExp extends Constant{
-    private Integer value;
+    private final Integer value;
 
     public IntegerConstExp(Integer value) {
         type = Type.INT_TYPE;

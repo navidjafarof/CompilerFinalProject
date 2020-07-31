@@ -3,7 +3,6 @@ package Semantic.AST.Expression;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.Operation;
 import Semantic.SymbolTable.SymbolTable;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;

@@ -12,17 +12,16 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.Opcodes.IFEQ;
 
 public class If extends Statement {
 
-    private Expression expression;
-    private Block ifBlock;
+    private final Expression expression;
+    private final Block ifBlock;
 
     private Block elseBlock;
 
-    private Label startElse = new Label();
-    private Label endElse = new Label();
+    private final Label startElse = new Label();
+    private final Label endElse = new Label();
 
     public If(Expression expression, Block ifBlock, Block elseBlock) {
         this.expression = expression;

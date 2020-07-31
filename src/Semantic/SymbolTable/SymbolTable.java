@@ -15,13 +15,13 @@ import org.objectweb.asm.Type;
 
 public class SymbolTable {
 
-    private static SymbolTable instance = new SymbolTable();
+    private static final SymbolTable instance = new SymbolTable();
     private FunctionDCL LastFunction;
     private Loop innerLoop;
     private Switch lastSwitch;
-    private ArrayList<Frame> scopesStack = new ArrayList<>();
-    private HashMap<String, ArrayList<FunctionDCL>> funcDCLs = new HashMap<>();
-    private HashMap<String, RecordDCL> recordDCLs = new HashMap<>();
+    private final ArrayList<Frame> scopesStack = new ArrayList<>();
+    private final HashMap<String, ArrayList<FunctionDCL>> funcDCLs = new HashMap<>();
+    private final HashMap<String, RecordDCL> recordDCLs = new HashMap<>();
 
     private SymbolTable() {
         Frame mainFrame = new Frame();

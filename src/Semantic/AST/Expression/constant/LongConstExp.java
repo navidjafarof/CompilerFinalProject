@@ -8,7 +8,7 @@ import static org.objectweb.asm.Opcodes.LCONST_0;
 import static org.objectweb.asm.Opcodes.LCONST_1;
 
 public class LongConstExp extends Constant{
-    private Long value;
+    private final Long value;
 
     public LongConstExp(Long value) {
         this.value = value;

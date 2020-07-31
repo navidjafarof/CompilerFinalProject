@@ -1,6 +1,5 @@
 package Semantic.AST.DCL;
 
-import Semantic.AST.AST;
 import Semantic.AST.Block.Block;
 import Semantic.AST.Statement.FunctionReturn;
 import Semantic.SymbolTable.DSCP.DSCP;
@@ -22,9 +21,9 @@ public class FunctionDCL implements Declaration {
     private Type type;
     private String name;
     private String signature;
-    private HashMap<String, DSCP> inputArguments = new HashMap<>();
+    private HashMap<String, DSCP> inputArguments;
     private ArrayList<Type> argumentTypes = new ArrayList<>();
-    private ArrayList<FunctionReturn> returns = new ArrayList<FunctionReturn>();
+    private ArrayList<FunctionReturn> returns = new ArrayList<>();
     private Block block;
     private Boolean signatureDeclared = false;
 
@@ -59,10 +58,8 @@ public class FunctionDCL implements Declaration {
         if (dscp instanceof DynamicLocalVariableDSCP)
             argumentTypes.add(dscp.getType());
         else if (dscp instanceof DynamicLocalArrayDSCP) {
-            StringBuilder numOfDim = new StringBuilder("");
-            for (int i = 0; i < ((DynamicLocalArrayDSCP) dscp).getDimension(); i++) {
-                numOfDim.append("[");
-            }
+            StringBuilder numOfDim = new StringBuilder();
+            numOfDim.append("[".repeat(Math.max(0, ((DynamicLocalArrayDSCP) dscp).getDimension())));
             argumentTypes.add(Type.getType(numOfDim.toString() + dscp.getType()));
         }
     }
@@ -91,9 +88,7 @@ public class FunctionDCL implements Declaration {
         MethodVisitor methodVisitor = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, this.name, this.signature,
                 null, null);
         SymbolTable.getInstance().addScope(Scope.FUNCTION);
-        inputArguments.forEach((s, dscp) -> {
-            SymbolTable.getInstance().addVariable(s, dscp);
-        });
+        inputArguments.forEach((s, dscp) -> SymbolTable.getInstance().addVariable(s, dscp));
         SymbolTable.getInstance().setLastFunction(this);
         methodVisitor.visitCode();
         this.block.codegen(cw, methodVisitor);

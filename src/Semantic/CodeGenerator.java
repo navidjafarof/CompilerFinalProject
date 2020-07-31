@@ -38,8 +38,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 public class CodeGenerator implements Syntax.CodeGenerator {
-    private Lexical lexical;
-    private Deque<Object> semanticStack;
+    private final Lexical lexical;
+    private final Deque<Object> semanticStack;
 
     public CodeGenerator(Lexical lexical) {
         this.lexical = lexical;
@@ -110,7 +110,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 FunctionDCL dupFunc = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
                 if (dupFunc == null) {
                     function.declare();
-                } else if (dupFunc.getSignatureDeclared() == false) {
+                } else if (!dupFunc.getSignatureDeclared()) {
                     throw new RuntimeException("Duplicate Function Declaration.");
                 }
                 semanticStack.push(function);
@@ -222,14 +222,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, true, flag);
                     ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
-                    arrDcl.setDimensionsExpression(expressionList);
                 } else {
                     if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
-                    arrDcl.setDimensionsExpression(expressionList);
                 }
+                arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
                 break;
             }
@@ -245,10 +244,10 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 ArrayDCL arrDcl;
                 if (semanticStack.peek() instanceof GlobalBlock) {
                     arrDcl = new ArrayDCL(name, type, true, expressionList.size());
-                    arrDcl.declare(name, type, expressionList, expressionList.size(), true);
+                    ArrayDCL.declare(name, type, expressionList, expressionList.size(), true);
                 } else {
                     arrDcl = new ArrayDCL(name, type, false, expressionList.size());
-                    arrDcl.declare(name, type, expressionList, expressionList.size(), false);
+                    ArrayDCL.declare(name, type, expressionList, expressionList.size(), false);
                 }
                 arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
@@ -511,7 +510,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
                 checkAssign(var);
-                semanticStack.push(new ModeAssign(var, exp));
+                semanticStack.push(new ModAssign(var, exp));
                 break;
             }
             case "check2types": {

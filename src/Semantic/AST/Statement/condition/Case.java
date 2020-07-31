@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.GOTO;
 
 public class Case extends Statement {
     IntegerConstExp integerConstExp;
-    private Block block;
+    private final Block block;
     Label StartCase = new Label();
     Label jump;
     public Case(IntegerConstExp integerConstExp, Block block){

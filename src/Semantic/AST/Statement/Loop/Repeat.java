@@ -12,7 +12,7 @@ import org.objectweb.asm.MethodVisitor;
 import static org.objectweb.asm.Opcodes.IFNE;
 
 public class Repeat extends Loop {
-    private Expression expression;
+    private final Expression expression;
 
     public Repeat(Block block, Expression expression) {
         super(block);

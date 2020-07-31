@@ -87,9 +87,8 @@ public class SimpleVarDCL extends VarDCL {
         }
         if (global)
         {
-            Expression val = null;
             int access = ACC_STATIC + (constant ? ACC_FINAL : 0);
-            cw.visitField(access, this.name, this.type.getDescriptor(), null, val).visitEnd();
+            cw.visitField(access, this.name, this.type.getDescriptor(), null, null).visitEnd();
             if (expression != null) {
                 globalExpressionExecution(cw, mv);
             }

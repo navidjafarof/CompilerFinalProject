@@ -9,8 +9,8 @@ import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class ModeAssign extends Assignment{
-    public ModeAssign(Variable variable, Expression expression) {
+public class ModAssign extends Assignment {
+    public ModAssign(Variable variable, Expression expression) {
         super(variable, expression);
     }
 
