@@ -1,11 +1,19 @@
-
+function int sammak(int m)
+{
+    return 2;
+}
 function void start()
 {
     bool a = true , b = false , c = true;
     bool d= a and b and c;
     bool f= a or b or c;
-
+    float kazem = 5.6f;
+    kazem *= 20f;
     println(d);
     println(f);
     return;
+}
+function int sammak(int m)
+{
+    return 2;
 }

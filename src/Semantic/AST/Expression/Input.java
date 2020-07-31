@@ -23,7 +23,7 @@ public class Input extends Expression implements Operation {
         mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Scanner", "<init>", "(Ljava/io/InputStream;)V", false);
         if (this.type == null)
         {
-            this.type = SymbolTable.getTypeFromVarName("String");
+            this.type = SymbolTable.getTypeFromStr("String");
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Scanner", "nextLine", "()Ljava/lang/String;", false);
         }
         else

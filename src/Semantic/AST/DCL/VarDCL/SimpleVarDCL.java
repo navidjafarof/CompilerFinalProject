@@ -32,7 +32,7 @@ public class SimpleVarDCL extends VarDCL {
         this.global = global;
         this.expression = expression;
         if (!strType.equals("auto")) {
-            this.type = SymbolTable.getTypeFromVarName(strType);
+            this.type = SymbolTable.getTypeFromStr(strType);
         } else {
             if (expression == null) {
                 throw new RuntimeException("There Is No Expression For Auto Variable.");

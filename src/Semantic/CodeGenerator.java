@@ -75,7 +75,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
             /* --------------------- declarations --------------------- */
             case "makeFunctionDCL": {
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 FunctionDCL functionDCL = new FunctionDCL(type, (String) lexical.currentToken().getValue(), new HashMap<>(), null);
                 semanticStack.push(functionDCL);
                 SymbolTable.getInstance().setLastFunction(functionDCL);
@@ -112,7 +112,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "makeSimpleVarDCL": {
                 String name = (String) lexical.currentToken().getValue();
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 if (semanticStack.peek() instanceof GlobalBlock)
                     SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
                 else {
@@ -184,7 +184,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "arrayDCL": {
                 String name = (String) lexical.currentToken().getValue();
                 Byte flag = (Byte) semanticStack.pop();
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 ArrayDCL.declare(name, type, new ArrayList<>(), flag, semanticStack.peek() instanceof GlobalBlock);
                 semanticStack.push(new NOP(name));
                 break;
@@ -192,7 +192,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "arrayDCLUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
                 Byte flag = (Byte) semanticStack.pop();
-                Type type = SymbolTable.getTypeFromVarName(lastSeenType);
+                Type type = SymbolTable.getTypeFromStr(lastSeenType);
                 ArrayDCL.declare(name, type, new ArrayList<>(), flag, semanticStack.peek() instanceof GlobalBlock);
                 semanticStack.push(new NOP(name));
                 break;
@@ -205,7 +205,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     expressionList.add((Expression) semanticStack.pop());
                     i--;
                 }
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 String name = ((NOP) semanticStack.pop()).name;
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
                 if (!dscp.getType().equals(type))
@@ -234,7 +234,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     expressionList.add((Expression) semanticStack.pop());
                     flag--;
                 }
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 String name = (String) semanticStack.pop();
                 ArrayDCL arrDcl;
                 if (semanticStack.peek() instanceof GlobalBlock) {
@@ -355,7 +355,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "cast": {
                 Expression exp = (Expression) semanticStack.pop();
-                Type newType = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type newType = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 semanticStack.push(new Cast(exp, newType));
                 break;
             }
@@ -509,7 +509,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 break;
             }
             case "check2types": {
-                Type type = SymbolTable.getTypeFromVarName((String) semanticStack.pop());
+                Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 Variable variable = (Variable) semanticStack.pop();
                 if (!(variable instanceof Array))
                     throw new RuntimeException("You can't new a simple variable");
@@ -683,7 +683,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "inputAndCast": {
                 String type = (String) lexical.currentToken().getValue();
-                semanticStack.push(new Input(SymbolTable.getTypeFromVarName(type)));
+                semanticStack.push(new Input(SymbolTable.getTypeFromStr(type)));
                 break;
             }
             case "input": {
@@ -706,7 +706,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "makeSimpleVarUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
-                Type type = SymbolTable.getTypeFromVarName(lastSeenType);
+                Type type = SymbolTable.getTypeFromStr(lastSeenType);
                 if (semanticStack.peek() instanceof GlobalBlock){
                     SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));}
                 else {

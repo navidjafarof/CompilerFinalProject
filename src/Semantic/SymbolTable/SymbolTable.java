@@ -10,24 +10,17 @@ import Semantic.AST.DCL.RecordDCL;
 import Semantic.AST.Statement.condition.Switch;
 import Semantic.AST.Statement.Loop.Loop;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
-
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 public class SymbolTable {
 
     private static SymbolTable instance = new SymbolTable();
-
     private FunctionDCL LastFunction;
-
-
     private Loop innerLoop;
     private Switch lastSwitch;
-
     private ArrayList<Frame> scopesStack = new ArrayList<>();
-
     private HashMap<String, ArrayList<FunctionDCL>> funcDCLs = new HashMap<>();
-
     private HashMap<String, RecordDCL> recordDCLs = new HashMap<>();
 
     private SymbolTable() {
@@ -42,86 +35,64 @@ public class SymbolTable {
     }
 
     public static int getSize(String name) {
-        int size;
         switch (name) {
-            case "int":
-                size = Integer.SIZE;
-                break;
-            case "long":
-                size = Long.SIZE;
-                break;
-            case "float":
-                size = Float.SIZE;
-                break;
-            case "double":
-                size = Double.SIZE;
-                break;
-            case "char":
-                size = Character.SIZE;
-                break;
             case "string":
-                size = Integer.SIZE;
-                break;
+            case "int":
+                return Integer.SIZE;
+            case "long":
+                return Long.SIZE;
+            case "float":
+                return Float.SIZE;
+            case "double":
+                return Double.SIZE;
+            case "char":
+                return Character.SIZE;
             case "bool":
-                size = 1;
-                break;
+                return 1;
             default:
                 throw new IllegalArgumentException("Undefined Type.");
-
         }
-        return size;
     }
 
-    public static Type getTypeFromVarName(String varType) {
-        Type type;
-        switch (varType) {
+    public static Type getTypeFromStr(String str) {
+        switch (str) {
             case "Integer":
             case "int":
             case "I":
-                type = Type.INT_TYPE;
-                break;
+                return Type.INT_TYPE;
             case "Long":
             case "long":
             case "J":
-                type = Type.LONG_TYPE;
-                break;
+                return Type.LONG_TYPE;
             case "Float":
             case "float":
             case "F":
-                type = Type.FLOAT_TYPE;
-                break;
+                return Type.FLOAT_TYPE;
             case "Double":
             case "double":
             case "D":
-                type = Type.DOUBLE_TYPE;
-                break;
+                return Type.DOUBLE_TYPE;
             case "Character":
             case "char":
             case "C":
-                type = Type.CHAR_TYPE;
-                break;
+                return Type.CHAR_TYPE;
             case "String":
             case "string":
             case "Ljava/lang/String;":
-                type = Type.getType(String.class);
-                break;
+                return Type.getType(String.class);
             case "Boolean":
             case "bool":
             case "Z":
-                type = Type.BOOLEAN_TYPE;
-                break;
+                return Type.BOOLEAN_TYPE;
             case "void":
             case "V":
-                type = Type.VOID_TYPE;
-                break;
+                return Type.VOID_TYPE;
             default:
-                type = Type.getType("L" + varType + ";");
+                return Type.getType("L" + str + ";");
         }
-        return type;
     }
 
     public static int getTType(Type type) {
-
         if (type == Type.INT_TYPE)
             return Opcodes.T_INT;
         else if (type == Type.LONG_TYPE)
@@ -135,11 +106,11 @@ public class SymbolTable {
         else if (type == Type.BOOLEAN_TYPE)
             return Opcodes.T_BOOLEAN;
         else
-            throw new RuntimeException(type + " is Not correct");
+            throw new RuntimeException(type + " Is Not Correct.");
     }
 
     public Set<String> getFuncNames() {
-        return funcDCLs.keySet(); // Returns All Functions Names
+        return funcDCLs.keySet();
     }
 
     public void popScope() {
@@ -156,21 +127,20 @@ public class SymbolTable {
 
     public Frame getLastScope() {
         if (scopesStack.size() == 0)
-            throw new RuntimeException("Scopes Stacks is Empty.");
-
+            throw new RuntimeException("Scopes Stacks Is Empty.");
         return scopesStack.get(scopesStack.size() - 1);
     }
 
-
-    //To declare a function add it to funcDcls
     public void addFunction(FunctionDCL funcDCL) {
         if (funcDCLs.containsKey(funcDCL.getName())) {
             if (funcDCLs.get(funcDCL.getName()).contains(funcDCL)) {
                 int index = funcDCLs.get(funcDCL.getName()).indexOf(funcDCL);
                 FunctionDCL lastFunc = funcDCLs.get(funcDCL.getName()).get(index);
+                System.out.println(lastFunc);
+                System.out.println(funcDCL);
                 if ((lastFunc.getBlock() != null && funcDCL.getBlock() != null) ||
                         (lastFunc.getBlock() == null && funcDCL.getBlock() == null && !lastFunc.getSignatureDeclared()))
-                    throw new RuntimeException("the function is duplicate!!!");
+                    throw new RuntimeException("Duplicate Function Declaration.");
 
             } else {
                 funcDCLs.get(funcDCL.getName()).add(funcDCL);
@@ -269,6 +239,7 @@ public class SymbolTable {
     public void setInnerLoop(Loop innerLoop) {
         this.innerLoop = innerLoop;
     }
+
     public Switch getLastSwitch() {
         return lastSwitch;
     }

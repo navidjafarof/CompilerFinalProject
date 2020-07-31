@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(new FileReader("src/Code.txt"));
         CodeGenerator codeGenerator = new CodeGenerator(lexicalAnalyzer);
-        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/Syntax/table.npt", true);
+        Parser parser = new Parser(lexicalAnalyzer, codeGenerator, "src/Syntax/table.npt", false);
         AST result;
         try {
             parser.parse();

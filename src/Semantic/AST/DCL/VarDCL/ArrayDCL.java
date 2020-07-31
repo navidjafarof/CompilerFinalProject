@@ -1,7 +1,6 @@
 package Semantic.AST.DCL.VarDCL;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
 import Semantic.SymbolTable.DSCP.StaticGlobalArrayDSCP;
@@ -32,7 +31,7 @@ public class ArrayDCL extends VarDCL{
     public ArrayDCL(String name, String stringType, boolean global, Integer dimensionNum, Type type, ArrayList<Expression> dimensionsExpression) {
         this.name = name;
         if (!stringType.equals("auto")) {
-            if (!SymbolTable.getTypeFromVarName(stringType).equals(type))
+            if (!SymbolTable.getTypeFromStr(stringType).equals(type))
                 throw new RuntimeException("the types of array doesn't match");
         } else if (dimensionsExpression == null)
             throw new RuntimeException("auto variables must have been initialized");
