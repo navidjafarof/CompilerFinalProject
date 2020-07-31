@@ -106,7 +106,12 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "addFunctionDCL": {
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
                 function.setSignature();
-                function.declare();
+                FunctionDCL dupFunc = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
+                if (dupFunc == null) {
+                    function.declare();
+                } else if (dupFunc.getSignatureDeclared() == false) {
+                    throw new RuntimeException("Duplicate Function Declaration.");
+                }
                 semanticStack.push(function);
                 break;
             }

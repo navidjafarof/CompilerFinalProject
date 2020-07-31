@@ -1,7 +1,5 @@
-function int sammak(int m)
-{
-    return 2;
-}
+function int sammak(int m);
+function int sammak(int m);
 function void start()
 {
     bool a = true , b = false , c = true;
@@ -17,3 +15,6 @@ function int sammak(int m)
 {
     return 2;
 }
+
+
+

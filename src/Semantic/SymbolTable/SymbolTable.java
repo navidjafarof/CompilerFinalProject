@@ -132,24 +132,23 @@ public class SymbolTable {
     }
 
     public void addFunction(FunctionDCL funcDCL) {
-        if (funcDCLs.containsKey(funcDCL.getName())) {
-            if (funcDCLs.get(funcDCL.getName()).contains(funcDCL)) {
-                int index = funcDCLs.get(funcDCL.getName()).indexOf(funcDCL);
-                FunctionDCL lastFunc = funcDCLs.get(funcDCL.getName()).get(index);
-                System.out.println(lastFunc);
-                System.out.println(funcDCL);
-                if ((lastFunc.getBlock() != null && funcDCL.getBlock() != null) ||
-                        (lastFunc.getBlock() == null && funcDCL.getBlock() == null && !lastFunc.getSignatureDeclared()))
-                    throw new RuntimeException("Duplicate Function Declaration.");
-
-            } else {
-                funcDCLs.get(funcDCL.getName()).add(funcDCL);
-            }
-        } else {
-            ArrayList<FunctionDCL> funcDclList = new ArrayList<>();
-            funcDclList.add(funcDCL);
-            funcDCLs.put(funcDCL.getName(), funcDclList);
-        }
+//        if (funcDCLs.containsKey(funcDCL.getName())) {
+//            if (funcDCLs.get(funcDCL.getName()).contains(funcDCL)) {
+//                int index = funcDCLs.get(funcDCL.getName()).indexOf(funcDCL);
+//                FunctionDCL lastFunc = funcDCLs.get(funcDCL.getName()).get(index);
+//                if ((lastFunc.getBlock() != null && funcDCL.getBlock() != null && lastFunc.getSignatureDeclared()) ||
+//                        (lastFunc.getBlock() == null && funcDCL.getBlock() == null && !lastFunc.getSignatureDeclared()))
+//                    throw new RuntimeException("Duplicate Function Declaration.");
+//
+//            } else {
+//                System.out.println("wait what?");
+//                funcDCLs.get(funcDCL.getName()).add(funcDCL);
+//            }
+//        } else {
+        ArrayList<FunctionDCL> funcDclList = new ArrayList<>();
+        funcDclList.add(funcDCL);
+        funcDCLs.put(funcDCL.getName(), funcDclList);
+//        }
     }
 
     public FunctionDCL getFunction(String name, ArrayList<Type> inputs) {
@@ -161,7 +160,7 @@ public class SymbolTable {
                 }
             }
         }
-        throw new RuntimeException("Function " + name + " " + inputs + " Was Not Declared.");
+        return null;
     }
 
 
