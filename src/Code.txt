@@ -1,5 +1,13 @@
-function int sammak(int m);
-function int sammak(int m);
+function int sammak(int m)
+{
+ return 1;
+}
+function int sammak()
+{
+    return 2;
+}
+
+
 function void start()
 {
     bool a = true , b = false , c = true;
@@ -8,13 +16,7 @@ function void start()
     float kazem = 5.6f;
     kazem *= 20f;
     println(d);
-    println(f);
+    println(sammak(5));
     return;
 }
-function int sammak(int m)
-{
-    return 2;
-}
-
-
 

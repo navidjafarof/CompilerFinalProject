@@ -94,6 +94,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "completeFunctionDCL": {
                 Block block = (Block) semanticStack.pop();
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
+                System.out.println(function.getArgumentTypes());
                 function.setBlock(block);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setBlock(block);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setReturns(function.getReturns());
@@ -108,6 +109,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 function.setSignature();
                 FunctionDCL dupFunc = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
                 if (dupFunc == null) {
+                    System.out.println("declare");
                     function.declare();
                 } else if (dupFunc.getSignatureDeclared() == false) {
                     throw new RuntimeException("Duplicate Function Declaration.");

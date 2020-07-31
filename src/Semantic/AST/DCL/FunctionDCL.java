@@ -74,7 +74,6 @@ public class FunctionDCL implements Declaration {
     public boolean checkEqual(String name, List<Type> argumentTypes) {
         if (this.name.equals(name)) {
             if (argumentTypes.size() == this.argumentTypes.size()) {
-
                 for (int i = 0; i < argumentTypes.size(); i++) {
                     if (!argumentTypes.get(i).equals(this.argumentTypes.get(i)))
                         return false;
