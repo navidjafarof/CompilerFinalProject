@@ -30,6 +30,7 @@ import Semantic.SymbolTable.Scope;
 import Semantic.SymbolTable.SymbolTable;
 import Syntax.Lexical;
 import Semantic.AST.AST;
+
 import java.util.*;
 
 import Semantic.AST.Block.GlobalBlock;
@@ -52,6 +53,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
     }
 
     String lastSeenType = "";
+
     @Override
     public void doSemantic(String sem) {
         switch (sem) {
@@ -712,9 +714,9 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "makeSimpleVarUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromStr(lastSeenType);
-                if (semanticStack.peek() instanceof GlobalBlock){
-                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));}
-                else {
+                if (semanticStack.peek() instanceof GlobalBlock) {
+                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
+                } else {
                     SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
                             SymbolTable.getInstance().getIndex(), false));
 
@@ -766,7 +768,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 }
 
 
-class NOP implements Operation,Declaration {
+class NOP implements Operation, Declaration {
 
     String name;
 

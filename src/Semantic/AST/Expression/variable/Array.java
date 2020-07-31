@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import static org.objectweb.asm.Opcodes.*;
 
 
-public class Array extends Variable{
+public class Array extends Variable {
     private ArrayList<Expression> indexesExpression;
 
 
@@ -28,14 +28,14 @@ public class Array extends Variable{
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        new SimpleVariable(name,type).codegen(cw, mv);
+        new SimpleVariable(name, type).codegen(cw, mv);
         Label exceptionLabel = new Label();
         Label endLabel = new Label();
 
         for (int i = 0; i < indexesExpression.size() - 1; i++) {
             indexesExpression.get(i).codegen(cw, mv);
             DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-            if (dscp instanceof StaticGlobalArrayDSCP){
+            if (dscp instanceof StaticGlobalArrayDSCP) {
                 GreaterThanOrEqualTo greaterThanOrEqualTo = new GreaterThanOrEqualTo(indexesExpression.get(i), ((StaticGlobalArrayDSCP) dscp).getDimensionList().get(i));
                 greaterThanOrEqualTo.codegen(cw, mv);
                 mv.visitJumpInsn(IFGE, exceptionLabel);
@@ -46,7 +46,7 @@ public class Array extends Variable{
         }
         // must load the last index separately
         indexesExpression.get(indexesExpression.size() - 1).codegen(cw, mv);
-        if(type.getDescriptor().endsWith(";")) // we have array of records
+        if (type.getDescriptor().endsWith(";")) // we have array of records
             mv.visitInsn(AALOAD);
         else
             mv.visitInsn(type.getOpcode(IALOAD));

@@ -4,10 +4,10 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-public class CharConstExp extends Constant{
+public class CharConstExp extends Constant {
     private final Character value;
 
-    public CharConstExp(Character value){
+    public CharConstExp(Character value) {
         this.value = value;
         type = Type.CHAR_TYPE;
     }

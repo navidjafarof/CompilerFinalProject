@@ -11,7 +11,7 @@ public class Continue extends Statement {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        if(SymbolTable.getInstance().getInnerLoop() != null)
+        if (SymbolTable.getInstance().getInnerLoop() != null)
             mv.visitJumpInsn(GOTO, SymbolTable.getInstance().getInnerLoop().getStartLoop());
         else
             throw new RuntimeException("Continue Not In Switch Or Loop.");

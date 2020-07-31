@@ -22,28 +22,28 @@ public class Switch extends Statement {
     private Label end = new Label();
 
 
-
-    public Switch(Expression expression, ArrayList<Case> cases, Block defaultBlock){
+    public Switch(Expression expression, ArrayList<Case> cases, Block defaultBlock) {
         this.expression = expression;
         this.cases = cases;
         this.defaultBlock = defaultBlock;
     }
 
-    public void addCase(Case caseSt){
-        if(cases == null)
+    public void addCase(Case caseSt) {
+        if (cases == null)
             cases = new ArrayList<>();
         cases.add(caseSt);
     }
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         SymbolTable.getInstance().addScope(Scope.SWITCH);
         SymbolTable.getInstance().setLastSwitch(this);
-        Label [] labels = new Label[cases.size()];
-        int [] keys = new int[cases.size()];
-        int i = 0 ;
-        expression.codegen(cw ,mv);
+        Label[] labels = new Label[cases.size()];
+        int[] keys = new int[cases.size()];
+        int i = 0;
+        expression.codegen(cw, mv);
         mv.visitJumpInsn(GOTO, lookUpTable);
-        for(Case c : cases){
+        for (Case c : cases) {
             c.jump = end;
             c.codegen(cw, mv);
             labels[i] = c.StartCase;

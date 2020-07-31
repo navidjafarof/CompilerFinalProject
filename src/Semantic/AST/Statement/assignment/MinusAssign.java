@@ -11,7 +11,7 @@ import org.objectweb.asm.Opcodes;
 import static org.objectweb.asm.Opcodes.ISTORE;
 import static org.objectweb.asm.Opcodes.PUTSTATIC;
 
-public class MinusAssign extends Assignment{
+public class MinusAssign extends Assignment {
     public MinusAssign(Variable variable, Expression expression) {
         super(variable, expression);
     }
@@ -28,11 +28,10 @@ public class MinusAssign extends Assignment{
 
         mv.visitInsn(variable.getType().getOpcode(Opcodes.ISUB));
 
-        if(dscp instanceof DynamicLocalDSCP) {
+        if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        }
-        else
+        } else
             mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
     }
 }

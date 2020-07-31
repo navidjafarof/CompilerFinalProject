@@ -8,7 +8,7 @@ import static org.objectweb.asm.Opcodes.ICONST_0;
 import static org.objectweb.asm.Opcodes.ICONST_1;
 
 
-public class BooleanConstExp extends Constant{
+public class BooleanConstExp extends Constant {
     private final Boolean value;
 
     public BooleanConstExp(Boolean value) {
@@ -23,6 +23,6 @@ public class BooleanConstExp extends Constant{
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        mv.visitInsn(value ? ICONST_1:ICONST_0);
+        mv.visitInsn(value ? ICONST_1 : ICONST_0);
     }
 }

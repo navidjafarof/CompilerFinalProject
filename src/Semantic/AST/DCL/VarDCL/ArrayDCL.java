@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class ArrayDCL extends VarDCL{
+public class ArrayDCL extends VarDCL {
     private ArrayList<Expression> dimensionsExpression;
 
     private int dimensionNum;
@@ -42,19 +42,17 @@ public class ArrayDCL extends VarDCL{
         this.global = global;
         this.dimensionsExpression = dimensionsExpression;
     }
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-
         for (Expression dim : dimensionsExpression) {
             dim.codegen(cw, mv);
         }
-        if (global){
-
+        if (global) {
             String repeatedArray = new String(new char[dimensionsExpression.size()]).replace("\0", "[");
             Type arrayType = Type.getType(repeatedArray + type.getDescriptor());
             cw.visitField(ACC_STATIC, name, arrayType.getDescriptor(), null, null).visitEnd();
-        }
-        else {
+        } else {
             if (dimensionNum == 1) {
                 if (type.getDescriptor().startsWith("L"))
                     mv.visitTypeInsn(ANEWARRAY, type.getDescriptor());

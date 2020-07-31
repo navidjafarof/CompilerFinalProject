@@ -21,15 +21,11 @@ public class Input extends Expression implements Operation {
         mv.visitInsn(DUP);
         mv.visitFieldInsn(GETSTATIC, "java/lang/System", "in", "Ljava/io/InputStream;");
         mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Scanner", "<init>", "(Ljava/io/InputStream;)V", false);
-        if (this.type == null)
-        {
+        if (this.type == null) {
             this.type = SymbolTable.getTypeFromStr("String");
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Scanner", "nextLine", "()Ljava/lang/String;", false);
-        }
-        else
-        {
-            switch (this.type.getDescriptor())
-            {
+        } else {
+            switch (this.type.getDescriptor()) {
                 case "I":
                     mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/Scanner", "nextInt", "()" + type.getDescriptor(), false);
                     break;

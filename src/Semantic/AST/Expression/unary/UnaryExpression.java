@@ -21,11 +21,12 @@ public abstract class UnaryExpression extends Expression {
     public UnaryExpression(Expression expression) {
         this.expression = expression;
     }
+
     protected void checkIsConstant(Variable variable) {
         boolean isConstant = false;
         if (variable instanceof SimpleVariable) {
             DSCP dscp = SymbolTable.getInstance().getDescriptor(variable.getName());
-                isConstant = dscp.isConstant();
+            isConstant = dscp.isConstant();
         }
         if (isConstant)
             throw new RuntimeException("Can Not Assign To Constant Variable.");

@@ -5,18 +5,13 @@ import org.objectweb.asm.Type;
 
 import java.util.ArrayList;
 
-public class DynamicLocalArrayDSCP extends DynamicLocalDSCP{
+public class DynamicLocalArrayDSCP extends DynamicLocalDSCP {
+
+    int dimension;
 
     public int getDimension() {
         return dimension;
     }
-
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
-    }
-
-    int dimension;
-
 
     public void setDimensionList(ArrayList<Expression> dimensionList) {
         this.dimensionList = dimensionList;

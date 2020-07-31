@@ -14,24 +14,17 @@ public class Block implements AST {
     public Block(ArrayList<Operation> operations) {
         this.operations = operations;
     }
-    public void addOperation(Operation operation){
+
+    public void addOperation(Operation operation) {
         operations.add(operation);
-    }
-
-    public ArrayList<Operation> getOperations() {
-        return operations;
-    }
-
-    public void setOperations(ArrayList<Operation> operations) {
-        this.operations = operations;
     }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        if(operations == null)
+        if (operations == null)
             throw new RuntimeException("This Block Has No Expression.");
         for (Operation op : operations) {
-            op.codegen(cw ,mv );
+            op.codegen(cw, mv);
         }
     }
 }

@@ -34,35 +34,33 @@ public class Cast extends UnaryExpression {
         mv.visitInsn(getOpcode(from, castType));
         type = castType;
     }
-    public static int getOpcode(Type from,Type to){
+
+    public static int getOpcode(Type from, Type to) {
         int opcode;
-        if(from == Type.INT_TYPE){
-            if(to == Type.LONG_TYPE)
+        if (from == Type.INT_TYPE) {
+            if (to == Type.LONG_TYPE)
                 opcode = Opcodes.I2L;
-            else if(to == Type.FLOAT_TYPE)
+            else if (to == Type.FLOAT_TYPE)
                 opcode = Opcodes.I2F;
             else
                 opcode = Opcodes.I2D;
-        }
-        else if(from == Type.LONG_TYPE){
-            if(to == Type.INT_TYPE)
+        } else if (from == Type.LONG_TYPE) {
+            if (to == Type.INT_TYPE)
                 opcode = Opcodes.L2I;
-            else if(to == Type.DOUBLE_TYPE)
+            else if (to == Type.DOUBLE_TYPE)
                 opcode = Opcodes.L2D;
             else
                 opcode = Opcodes.L2F;
 
-        }
-        else if(from == Type.DOUBLE_TYPE){
-            if(to == Type.INT_TYPE)
+        } else if (from == Type.DOUBLE_TYPE) {
+            if (to == Type.INT_TYPE)
                 opcode = Opcodes.D2I;
-            else if(to == Type.LONG_TYPE)
+            else if (to == Type.LONG_TYPE)
                 opcode = Opcodes.D2L;
             else
                 opcode = Opcodes.D2F;
-        }
-        else{
-            if(to == Type.LONG_TYPE)
+        } else {
+            if (to == Type.LONG_TYPE)
                 opcode = Opcodes.F2L;
             else if (to == Type.INT_TYPE)
                 opcode = Opcodes.F2I;

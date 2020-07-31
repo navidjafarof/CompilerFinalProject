@@ -4,11 +4,11 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-public class StringConstExp extends Constant{
+public class StringConstExp extends Constant {
     private final String value;
 
-    public StringConstExp(String value){
-        this.value = value.substring(1,value.length() -1);
+    public StringConstExp(String value) {
+        this.value = value.substring(1, value.length() - 1);
         type = Type.getType(String.class);
     }
 

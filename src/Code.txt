@@ -1,13 +1,5 @@
-
-
 function void start()
 {
-    int d = 3;
-    int q = -4;
-    d = q + d;
-
-//    int [] zamen = new int[6];
-  //  zamen[5] = 5;
 
     return;
 }

@@ -17,7 +17,6 @@ public class ModAssign extends Assignment {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         checkIsConst();
-
         DSCP dscp = variable.getDSCP();
         variable.codegen(cw, mv);
         expression.codegen(cw, mv);
@@ -27,11 +26,10 @@ public class ModAssign extends Assignment {
 
         mv.visitInsn(variable.getType().getOpcode(IREM));
 
-        if(dscp instanceof DynamicLocalDSCP) {
+        if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        }
-        else
+        } else
             mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
     }
 }

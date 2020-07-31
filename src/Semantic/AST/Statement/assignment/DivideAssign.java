@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class DivideAssign extends Assignment{
+public class DivideAssign extends Assignment {
     public DivideAssign(Variable variable, Expression expression) {
         super(variable, expression);
     }
@@ -26,11 +26,10 @@ public class DivideAssign extends Assignment{
 
         mv.visitInsn(variable.getType().getOpcode(IDIV));
 
-        if(dscp instanceof DynamicLocalDSCP) {
+        if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        }
-        else
+        } else
             mv.visitFieldInsn(PUTSTATIC, "Test", variable.getName(), dscp.getType().toString());
     }
 }

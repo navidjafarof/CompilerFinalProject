@@ -7,11 +7,11 @@ import org.objectweb.asm.Type;
 import static org.objectweb.asm.Opcodes.FCONST_0;
 import static org.objectweb.asm.Opcodes.FCONST_1;
 
-public class FloatConstExp extends Constant{
+public class FloatConstExp extends Constant {
 
     private final Float value;
 
-    public FloatConstExp(Float value){
+    public FloatConstExp(Float value) {
         this.value = value;
         type = Type.FLOAT_TYPE;
     }

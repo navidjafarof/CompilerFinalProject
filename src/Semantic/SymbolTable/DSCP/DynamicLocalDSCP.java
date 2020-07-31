@@ -2,7 +2,7 @@ package Semantic.SymbolTable.DSCP;
 
 import org.objectweb.asm.Type;
 
-public abstract class DynamicLocalDSCP extends DSCP{
+public abstract class DynamicLocalDSCP extends DSCP {
     int index;
 
     public DynamicLocalDSCP(Type type, boolean isValid, int index) {

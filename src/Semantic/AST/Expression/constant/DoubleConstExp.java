@@ -7,10 +7,10 @@ import org.objectweb.asm.Type;
 import static org.objectweb.asm.Opcodes.DCONST_0;
 import static org.objectweb.asm.Opcodes.DCONST_1;
 
-public class DoubleConstExp extends Constant{
+public class DoubleConstExp extends Constant {
     private final Double value;
 
-    public DoubleConstExp(Double value){
+    public DoubleConstExp(Double value) {
         this.value = value;
         type = Type.DOUBLE_TYPE;
     }

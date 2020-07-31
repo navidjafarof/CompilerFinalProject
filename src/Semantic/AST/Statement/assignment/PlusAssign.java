@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class PlusAssign extends Assignment{
+public class PlusAssign extends Assignment {
     public PlusAssign(Variable variable, Expression expression) {
         super(variable, expression);
     }
@@ -18,19 +18,18 @@ public class PlusAssign extends Assignment{
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         checkIsConst();
         DSCP dscp = variable.getDSCP();
-        variable.codegen(cw ,mv);
-        expression.codegen(cw ,mv);
+        variable.codegen(cw, mv);
+        expression.codegen(cw, mv);
 
         if (variable.getType() != expression.getType())
             throw new RuntimeException("Mismatching Type In Assignment.");
 
         mv.visitInsn(variable.getType().getOpcode(IADD));
 
-        if(dscp instanceof DynamicLocalDSCP) {
+        if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        }
-        else
+        } else
             mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
     }
 }

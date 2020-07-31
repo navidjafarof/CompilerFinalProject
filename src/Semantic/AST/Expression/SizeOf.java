@@ -10,8 +10,7 @@ import org.objectweb.asm.Type;
 public class SizeOf extends Expression implements Operation {
     Integer value;
 
-    public SizeOf(String type)
-    {
+    public SizeOf(String type) {
         value = SymbolTable.getSize(type);
         this.type = Type.INT_TYPE;
     }

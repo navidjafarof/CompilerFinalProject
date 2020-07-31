@@ -16,16 +16,18 @@ public class Case extends Statement {
     private final Block block;
     Label StartCase = new Label();
     Label jump;
-    public Case(IntegerConstExp integerConstExp, Block block){
+
+    public Case(IntegerConstExp integerConstExp, Block block) {
         this.integerConstExp = integerConstExp;
         this.block = block;
     }
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         mv.visitLabel(StartCase);
         SymbolTable.getInstance().addScope(Scope.SWITCH);
         block.codegen(cw, mv);
         SymbolTable.getInstance().popScope();
-        mv.visitJumpInsn(GOTO,jump);
+        mv.visitJumpInsn(GOTO, jump);
     }
 }

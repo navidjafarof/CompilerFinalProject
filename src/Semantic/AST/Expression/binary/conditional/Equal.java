@@ -14,6 +14,6 @@ public class Equal extends ConditionalExpression {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        compare(IFNE, IF_ICMPNE, cw , mv);
+        compare(IFNE, IF_ICMPNE, cw, mv);
     }
 }

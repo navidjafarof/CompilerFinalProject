@@ -71,7 +71,6 @@ public class SimpleVarDCL extends VarDCL {
         SymbolTable.getInstance().addVariable(name, dscp);
     }
 
-
     public void globalExpressionExecution(ClassWriter cw, MethodVisitor mv) {
         assign(new SimpleVariable(this.name, this.type), this.expression, cw, mv);
     }
@@ -80,30 +79,25 @@ public class SimpleVarDCL extends VarDCL {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         try {
             SymbolTable.getInstance().getDescriptor(name);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             declare();
         }
-        if (global)
-        {
+        if (global) {
             int access = ACC_STATIC + (constant ? ACC_FINAL : 0);
             cw.visitField(access, this.name, this.type.getDescriptor(), null, null).visitEnd();
             if (expression != null) {
                 globalExpressionExecution(cw, mv);
             }
 
-        }
-        else if (expression != null) {
+        } else if (expression != null) {
             expression.codegen(cw, mv);
             if (!expression.getType().equals(type))
-                throw new RuntimeException("the type of variable and expression doesn't match" +
-                        "   " + "the type of var " + type + "   " + "the type of exp " + expression.getType());
+                throw new RuntimeException("The Type Of Variable And Expression Does Not Match" +
+                        "  " + "Type Of Variable: " + type + " Type Of Expression: " + expression.getType());
             DynamicLocalVariableDSCP dscp = (DynamicLocalVariableDSCP) SymbolTable.getInstance().getDescriptor(name);
             mv.visitVarInsn(type.getOpcode(ISTORE), dscp.getIndex());
         }
     }
-
 
     public boolean isConstant() {
         return constant;
@@ -120,14 +114,6 @@ public class SimpleVarDCL extends VarDCL {
     public void setExpression(Expression expression) {
         this.expression = expression;
         SymbolTable.getInstance().getDescriptor(name).setValid(true);
-    }
-
-    public String getStrType() {
-        return strType;
-    }
-
-    public void setStrType(String strType) {
-        this.strType = strType;
     }
 }
 

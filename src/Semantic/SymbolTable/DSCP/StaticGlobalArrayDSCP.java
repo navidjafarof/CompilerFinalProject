@@ -2,6 +2,7 @@ package Semantic.SymbolTable.DSCP;
 
 import org.objectweb.asm.Type;
 import Semantic.AST.Expression.Expression;
+
 import java.util.List;
 
 public class StaticGlobalArrayDSCP extends StaticGlobalDSCP {
@@ -17,10 +18,6 @@ public class StaticGlobalArrayDSCP extends StaticGlobalDSCP {
 
     public int getDimension() {
         return dimension;
-    }
-
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
     }
 
     public List<Expression> getDimensionList() {

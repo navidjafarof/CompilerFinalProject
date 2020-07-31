@@ -15,6 +15,7 @@ public abstract class Variable extends Expression {
     public void setName(String name) {
         this.name = name;
     }
+
     @Override
     public Type getType() {
         return getDSCP().getType();

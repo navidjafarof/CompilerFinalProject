@@ -6,7 +6,7 @@ import org.objectweb.asm.Type;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class IntegerConstExp extends Constant{
+public class IntegerConstExp extends Constant {
     private final Integer value;
 
     public IntegerConstExp(Integer value) {
@@ -21,9 +21,10 @@ public class IntegerConstExp extends Constant{
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        storeIntValue(mv,value);
+        storeIntValue(mv, value);
     }
-    public static void storeIntValue(MethodVisitor mv,Integer value){
+
+    public static void storeIntValue(MethodVisitor mv, Integer value) {
         if (value >= -1 && value <= 5) {
             switch (value) {
                 case -1:

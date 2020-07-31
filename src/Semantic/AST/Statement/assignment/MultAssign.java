@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class MultAssign extends Assignment{
+public class MultAssign extends Assignment {
     public MultAssign(Variable variable, Expression expression) {
         super(variable, expression);
     }
@@ -18,7 +18,7 @@ public class MultAssign extends Assignment{
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         checkIsConst();
         DSCP dscp = variable.getDSCP();
-        variable.codegen(cw ,mv);
+        variable.codegen(cw, mv);
         expression.codegen(cw, mv);
 
         if (variable.getType() != expression.getType())
@@ -26,11 +26,10 @@ public class MultAssign extends Assignment{
 
         mv.visitInsn(variable.getType().getOpcode(IMUL));
 
-        if(dscp instanceof DynamicLocalDSCP) {
+        if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        }
-        else
+        } else
             mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
     }
 }

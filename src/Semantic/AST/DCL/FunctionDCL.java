@@ -93,7 +93,7 @@ public class FunctionDCL implements Declaration {
         methodVisitor.visitCode();
         this.block.codegen(cw, methodVisitor);
         if (returns.size() == 0) {
-            throw new RuntimeException("There Is No Return Statement!");
+            throw new RuntimeException("There Is No Return Statement.");
         }
         methodVisitor.visitEnd();
         SymbolTable.getInstance().popScope();
@@ -124,16 +124,8 @@ public class FunctionDCL implements Declaration {
         return inputArguments;
     }
 
-    public void setInputArguments(HashMap<String, DSCP> inputArguments) {
-        this.inputArguments = inputArguments;
-    }
-
     public ArrayList<Type> getArgumentTypes() {
         return argumentTypes;
-    }
-
-    public void setArgumentTypes(ArrayList<Type> argumentTypes) {
-        this.argumentTypes = argumentTypes;
     }
 
     public ArrayList<FunctionReturn> getReturns() {

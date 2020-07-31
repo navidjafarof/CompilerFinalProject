@@ -4,7 +4,7 @@ import Semantic.AST.Expression.Expression;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
-public class Or extends ConditionalExpression{
+public class Or extends ConditionalExpression {
     public Or(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }

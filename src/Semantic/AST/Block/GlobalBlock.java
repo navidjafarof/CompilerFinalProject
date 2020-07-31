@@ -12,36 +12,33 @@ import java.util.ArrayList;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 public class GlobalBlock implements AST {
-    public ArrayList<AST> getDeclarations() {
-        return declarations;
-    }
 
-    public void setDeclarations(ArrayList<AST> declarations) {
-        this.declarations = declarations;
+    private ArrayList<AST> declarations;
+    private static GlobalBlock instance = new GlobalBlock();
+
+    private GlobalBlock() {
+        this.declarations = new ArrayList<>();
     }
 
     public static void setInstance(GlobalBlock instance) {
         GlobalBlock.instance = instance;
     }
 
-    private ArrayList<AST> declarations;
-    private static GlobalBlock instance = new GlobalBlock();
-
-
-    public static GlobalBlock getInstance(){
+    public static GlobalBlock getInstance() {
         return instance;
     }
 
-    private GlobalBlock() {
-        this.declarations = new ArrayList<>();
+    public ArrayList<AST> getDeclarations() {
+        return declarations;
     }
 
-    public void addDeclaration(Declaration declaration){
+    public void addDeclaration(Declaration declaration) {
         declarations.add(declaration);
     }
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        new FunctionCall("start",new ArrayList<>()).codegen(cw ,mv );
+        new FunctionCall("start", new ArrayList<>()).codegen(cw, mv);
         mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
         mv.visitCode();
         for (AST declaration : declarations) {
@@ -49,6 +46,5 @@ public class GlobalBlock implements AST {
         }
         mv.visitMaxs(1, 1);
         mv.visitEnd();
-
     }
 }

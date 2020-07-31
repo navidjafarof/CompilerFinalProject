@@ -9,7 +9,7 @@ import org.objectweb.asm.Type;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.ILOAD;
 
-public class SimpleVariable extends Variable{
+public class SimpleVariable extends Variable {
     public SimpleVariable(String name, Type type) {
         this.type = type;
         this.name = name;
@@ -18,13 +18,13 @@ public class SimpleVariable extends Variable{
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         DSCP dscp = getDSCP();
-        if(!dscp.isValid())
+        if (!dscp.isValid())
             throw new RuntimeException("Variable Does Not Have Any Initial Value.");
         if (dscp instanceof DynamicLocalVariableDSCP) {
             int index = ((DynamicLocalVariableDSCP) dscp).getIndex();
             mv.visitVarInsn(type.getOpcode(ILOAD), index);
         } else {
-            mv.visitFieldInsn(GETSTATIC,"Main" , name, type.getDescriptor());
+            mv.visitFieldInsn(GETSTATIC, "Main", name, type.getDescriptor());
         }
     }
 }

@@ -5,7 +5,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class LessThan extends ConditionalExpression{
+public class LessThan extends ConditionalExpression {
     public LessThan(Expression expression1, Expression expression2) {
         super(expression1, expression2);
     }

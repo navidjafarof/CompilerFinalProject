@@ -13,7 +13,6 @@ public abstract class Loop extends Statement {
         this.block = block;
     }
 
-
     public Label getStartLoop() {
         return startLoop;
     }
