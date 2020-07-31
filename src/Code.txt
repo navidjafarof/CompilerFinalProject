@@ -1,32 +1,11 @@
-int a = 1;
+
 function void start()
 {
-    //int a = 2;
+    bool a = true , b = false , c = true;
+    bool d= a and b and c;
+    bool f= a or b or c;
 
-    int b = 3;
-    int c = a + b;
-    println(c);
+    println(d);
+    println(f);
     return;
 }
-function void pr()
-{
-    int kan = 0;
-    kan -= 6;
-    for(; kan != 8; ++kan)
-    {
-        println("hahahahahaha");
-    }
-
-    long charez = 6394l;
-    charez = charez - 5l;
-    float kashef = 6f;
-
-    repeat
-    {
-        println("hohohohoho");
-    }
-    until(kan != 54 * 6);
-
-    return;
-}
-

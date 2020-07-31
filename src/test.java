@@ -1,20 +1,13 @@
 
 public class test {
     public static void main(String[] var0) {
-        start();
+        String a = "ano";
+        String b = "23";
+        System.out.println(Float.valueOf(b));
+        System.out.println(a.substring(0,a.length()-1));
     }
 
-    static {
-    }
 
-    public static int f(int var0) {
-        return var0 == 1 ? 1 : f(var0 - 1) * var0;
-    }
-
-    public static void start() {
-        byte var0 = 3;
-        System.out.println(f(var0));
-    }
 
 
 }
