@@ -30,7 +30,6 @@ import Semantic.SymbolTable.Scope;
 import Semantic.SymbolTable.SymbolTable;
 import Syntax.Lexical;
 import Semantic.AST.AST;
-
 import java.util.*;
 
 import Semantic.AST.Block.GlobalBlock;

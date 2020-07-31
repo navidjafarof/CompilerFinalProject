@@ -4,17 +4,22 @@
 
 package Lexical;
 import java.util.LinkedHashSet;
+
 import Syntax.Lexical;
 import java.io.IOException;
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
-public class LexicalAnalyzer implements Lexical{
+public class LexicalAnalyzer implements Lexical {
 
-  /** This character denotes the end of file. */
+  /**
+   * This character denotes the end of file.
+   */
   public static final int YYEOF = -1;
 
-  /** Initial size of the lookahead buffer. */
+  /**
+   * Initial size of the lookahead buffer.
+   */
   private static final int ZZ_BUFFERSIZE = 16384;
 
   // Lexical states.
@@ -1439,28 +1444,34 @@ public class LexicalAnalyzer implements Lexical{
             }
             // fall through
           case 133: break;
-          case 43:
-            { return (new Symbol("/="));
-            }
-            // fall through
-          case 134: break;
-          case 44:
-            { return (new Symbol("float", Float.valueOf(yytext())));
-            }
-            // fall through
-          case 135: break;
-          case 45:
-            { return (new Symbol("long_dec",yytext()));
-            }
-            // fall through
-          case 136: break;
-          case 46:
-            { return (new Symbol("<="));
-            }
-            // fall through
-          case 137: break;
-          case 47:
-            { return (new Symbol("=="));
+          case 43: {
+            return (new Symbol("/="));
+          }
+          // fall through
+          case 134:
+            break;
+          case 44: {
+            return (new Symbol("float", Float.valueOf(yytext())));
+          }
+          // fall through
+          case 135:
+            break;
+          case 45: {
+            String temp = (String) yytext();
+            temp = temp.substring(0, temp.length() - 1);
+            return (new Symbol("long_dec", Long.valueOf(temp)));
+          }
+          // fall through
+          case 136:
+            break;
+          case 46: {
+            return (new Symbol("<="));
+          }
+          // fall through
+          case 137:
+            break;
+          case 47: {
+            return (new Symbol("=="));
             }
             // fall through
           case 138: break;
@@ -1499,8 +1510,8 @@ public class LexicalAnalyzer implements Lexical{
             }
             // fall through
           case 145: break;
-          case 55:
-            { return (new Symbol("hex", yytext()));
+          case 55: {
+            return (new Symbol("hex", Long.valueOf(yytext())));
             }
             // fall through
           case 146: break;

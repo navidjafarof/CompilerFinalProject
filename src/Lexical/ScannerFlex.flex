@@ -168,9 +168,13 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
   /* numeric literals */
 
   {DecIntegerLiteral}            {  return (new Symbol("dec", Integer.valueOf(yytext()))); }
-  {DecLongLiteral}               {  return (new Symbol("long_dec",yytext())); }
+  {DecLongLiteral}               {
+                                    String temp = (String)yytext();
+                                    temp = temp.substring(0, temp.length() - 1);
+                                    return (new Symbol("long_dec",Long.valueOf(temp)));
+                                 }
 
-  {HexIntegerLiteral}            {  return (new Symbol("hex", yytext())); }
+  {HexIntegerLiteral}            {  return (new Symbol("hex", Long.valueOf(yytext()))); }
 
   {DoubleNumber}                 {  return (new Symbol("double", Double.valueOf(yytext()))); }
   {FloatNumber}                  {  return (new Symbol("float", Float.valueOf(yytext())));  }

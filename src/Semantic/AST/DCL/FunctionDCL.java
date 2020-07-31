@@ -29,8 +29,6 @@ public class FunctionDCL implements Declaration {
     private Boolean signatureDeclared = false;
 
 
-
-
     public void addReturn(FunctionReturn inputReturn) {
         returns.add(inputReturn);
     }
@@ -159,6 +157,7 @@ public class FunctionDCL implements Declaration {
     public void setBlock(Block block) {
         this.block = block;
     }
+
     public Boolean getSignatureDeclared() {
         return signatureDeclared;
     }
