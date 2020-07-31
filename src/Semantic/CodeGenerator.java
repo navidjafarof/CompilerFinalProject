@@ -109,7 +109,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 function.setSignature();
                 FunctionDCL dupFunc = SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes());
                 if (dupFunc == null) {
-                    System.out.println("declare");
                     function.declare();
                 } else if (dupFunc.getSignatureDeclared() == false) {
                     throw new RuntimeException("Duplicate Function Declaration.");

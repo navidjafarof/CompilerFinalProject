@@ -54,12 +54,12 @@ Identifier = [:jletter:][:jletterdigit:]*
 
 
 /* Integer Numbers */
-DecIntegerLiteral = 0 | [1-9][0-9]*
+DecIntegerLiteral = ("-")?(0 | [1-9][0-9]*)
 DecLongLiteral    = {DecIntegerLiteral} [lL]
-HexIntegerLiteral = 0 [xX] 0* {HexDigit} {1,8}
+HexIntegerLiteral = ("-")?(0 [xX] 0* {HexDigit} {1,8})
 HexDigit          = [0-9a-fA-F]
 /* Real Numbers */
-DoubleNumber = [0-9]+[.][0-9]* | [.][0-9]+ | [0-9]+
+DoubleNumber = ("-")?([0-9]+[.][0-9]* | [.][0-9]+ | [0-9]+)
 FloatNumber = {DoubleNumber}[fF]
 RealNumber = {FloatNumber} | {DoubleNumber}
 ScientificNotation = {RealNumber}[e][+-]?{DecIntegerLiteral}

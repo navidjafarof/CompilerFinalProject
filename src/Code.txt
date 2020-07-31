@@ -1,22 +1,14 @@
-function int sammak(int m)
-{
- return 1;
-}
-function int sammak()
-{
-    return 2;
-}
 
 
 function void start()
 {
-    bool a = true , b = false , c = true;
-    bool d= a and b and c;
-    bool f= a or b or c;
-    float kazem = 5.6f;
-    kazem *= 20f;
-    println(d);
-    println(sammak(5));
+    int d = 3;
+    int q = -4;
+    d = q + d;
+
+//    int [] zamen = new int[6];
+  //  zamen[5] = 5;
+
     return;
 }
 
