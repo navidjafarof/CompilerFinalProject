@@ -171,6 +171,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(varDcl);
                 break;
             }
+            case "addVarDCL": {
+                String name = ((NOP) semanticStack.pop()).name;
+                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                SimpleVarDCL varDcl = new SimpleVarDCL(name, dscp.getType(), dscp.isConstant(), dscp instanceof StaticGlobalDSCP);
+                semanticStack.push(varDcl);
+                break;
+            }
             case "makeSimpleAutoVarDCL": {
                 Expression exp = (Expression) semanticStack.pop();
                 String Name = (String) semanticStack.pop();

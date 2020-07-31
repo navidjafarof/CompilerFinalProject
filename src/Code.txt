@@ -1,6 +1,10 @@
 function void start()
 {
-
+    int d;
+    d = 5;
+    d++;
+    d--;
+    d += d;
     return;
 }
 
