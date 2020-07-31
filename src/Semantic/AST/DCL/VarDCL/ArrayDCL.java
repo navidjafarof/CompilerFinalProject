@@ -10,6 +10,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -45,6 +46,7 @@ public class ArrayDCL extends VarDCL {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
+        Collections.reverse(this.dimensionsExpression);
         for (Expression dim : dimensionsExpression) {
             dim.codegen(cw, mv);
         }
@@ -72,9 +74,13 @@ public class ArrayDCL extends VarDCL {
 
     public static void declare(String name, Type type, ArrayList<Expression> dimensions, int dimNum, boolean global) {
         DSCP dscp;
-        if (!global)
+        if (!global) {
+            System.out.println(name);
+            System.out.println(type);
+            System.out.println(dimNum);
+            System.out.println(dimensions);
             dscp = new DynamicLocalArrayDSCP(type, true, SymbolTable.getInstance().getIndex(), dimNum, dimensions);
-        else
+        } else
             dscp = new StaticGlobalArrayDSCP(type, true, dimNum, dimensions);
         SymbolTable.getInstance().addVariable(name, dscp);
     }

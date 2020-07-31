@@ -154,14 +154,12 @@ public class SymbolTable {
     }
 
 
-    //declare a variable to the last symbol table
     public void addVariable(String name, DSCP dscp) {
         if (getLastScope().containsKey(name)) {
             throw new RuntimeException("Variable " + name + " Was Declared Previously.");
         }
         if (dscp instanceof DynamicLocalDSCP) {
             getLastScope().put(name, dscp);
-//            getLastScope().addIndex(dscp.getType().getSize() - 1);
             getLastScope().addIndex(1);
         } else
             scopesStack.get(0).put(name, dscp);

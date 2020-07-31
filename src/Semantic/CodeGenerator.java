@@ -53,9 +53,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
     }
 
     String lastSeenType = "";
+    Byte lastSeenFlag ;
 
     @Override
     public void doSemantic(String sem) {
+        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
@@ -96,7 +98,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "completeFunctionDCL": {
                 Block block = (Block) semanticStack.pop();
                 FunctionDCL function = (FunctionDCL) semanticStack.pop();
-                System.out.println(function.getArgumentTypes());
                 function.setBlock(block);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setBlock(block);
                 SymbolTable.getInstance().getFunction(function.getName(), function.getArgumentTypes()).setReturns(function.getReturns());
@@ -139,7 +140,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new NOP(varName));
                 break;
             }
-            case "addToBlock": { //fill function's block
+            case "addToBlock": {
                 Operation operation = (Operation) semanticStack.pop();
                 Block block = (Block) semanticStack.pop();
                 block.addOperation(operation);
@@ -206,9 +207,14 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "arrayDCLUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
-                Byte flag = (Byte) semanticStack.pop();
                 Type type = SymbolTable.getTypeFromStr(lastSeenType);
-                ArrayDCL.declare(name, type, new ArrayList<>(), flag, semanticStack.peek() instanceof GlobalBlock);
+                ArrayDCL.declare(name, type, new ArrayList<>(), lastSeenFlag, semanticStack.peek() instanceof GlobalBlock);
+                semanticStack.push(new NOP(name));
+                break;
+            }
+            case "makeArrayVarDCLWithoutNew": {
+                String name = ((NOP) semanticStack.pop()).name;
+                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
                 semanticStack.push(new NOP(name));
                 break;
             }
@@ -221,8 +227,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     i--;
                 }
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
-                String name = ((NOP) semanticStack.pop()).name;
+                String name = "";
+                if (semanticStack.peek() instanceof NOP)
+                     name = ((NOP) semanticStack.pop()).name;
+                else if (semanticStack.peek() instanceof Array)
+                    name = ((Array) semanticStack.pop()).getName();
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                System.out.println(SymbolTable.getInstance().getIndex());
                 if (!dscp.getType().equals(type))
                     throw new RuntimeException("Types don't match");
                 ArrayDCL arrDcl;
@@ -232,6 +243,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     arrDcl = new ArrayDCL(name, type, true, flag);
                     ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
                 } else {
+                    System.out.println(name);
                     if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, false, flag);
@@ -448,6 +460,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             /* -------------------------- variable ---------------------------- */
             case "pushVariable": {
                 String name = (String) lexical.currentToken().getValue();
+                System.out.println(name);
                 if (SymbolTable.getInstance().getFuncNames().contains(name)) {
                     semanticStack.push(name);
                     break;
@@ -529,24 +542,30 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     throw new RuntimeException("You can't new a simple variable");
                 if (variable.getType() != null && !type.equals(variable.getType()))
                     throw new RuntimeException("types don't match");
+                System.out.println("hi");
                 semanticStack.push(variable);
                 break;
             }
-            case "checkDimNum": {
+            case "CheckDimNum": {
+                System.out.println("hiii");
                 Byte flag = (Byte) semanticStack.pop();
                 ArrayList<Expression> expressionList = new ArrayList<>();
                 int i = flag;
+                System.out.println(flag);
                 while (i > 0) {
-                    expressionList.add((Expression) semanticStack.pop());
+                    Expression e = (Expression) semanticStack.pop();
+                    System.out.println(e);
+                    expressionList.add(e);
                     i--;
                 }
                 Array var = (Array) semanticStack.pop();
                 if (var.getDSCP() instanceof StaticGlobalArrayDSCP)
                     if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
-                if (var.getDSCP() instanceof DynamicLocalArrayDSCP)
+                if (var.getDSCP() instanceof DynamicLocalArrayDSCP){
+                    System.out.println("local");
                     if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
-                        throw new RuntimeException("Number of dimensions doesn't match");
+                        throw new RuntimeException("Number of dimensions doesn't match");}
                 var.setIndexesExpression(expressionList);
                 semanticStack.push(new NOP());
                 break;
@@ -716,6 +735,10 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "setLastSeenType": {
                 lastSeenType = (String) semanticStack.pop();
+                break;
+            }
+            case "setLastSeenFlag": {
+                lastSeenFlag = (Byte) semanticStack.pop();
                 break;
             }
             case "makeSimpleVarUsingLastType": {

@@ -1,10 +1,7 @@
 function void start()
 {
-    int d;
-    d = 5;
-    d++;
-    d--;
-    d += d;
+    int [][] a ;
+     a = new int [4][3] ;
     return;
 }
 
