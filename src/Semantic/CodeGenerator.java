@@ -603,6 +603,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             /* --------------------- loops --------------------- */
             /* --------------------- for --------------------- */
+            case "addLoopScope": {
+                SymbolTable.getInstance().addScope(Scope.LOOP);
+                break;
+            }
+
             case "changeTop": {
                 Expression exp = (Expression) semanticStack.pop();
                 Byte flag = (Byte) semanticStack.pop();
@@ -673,6 +678,15 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(ifSt);
                 break;
             }
+            case "addConditionScope": {
+                SymbolTable.getInstance().addScope(Scope.CONDITION);
+                break;
+            }
+            case "popScope": {
+                SymbolTable.getInstance().popScope();
+                break;
+            }
+
             /* --------------------- switch --------------------- */
             case "switch": {
                 Expression exp = (Expression) semanticStack.pop();
@@ -695,6 +709,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(switchSt);
                 break;
             }
+            case "addSwitchScope": {
+                SymbolTable.getInstance().addScope(Scope.SWITCH);
+                break;
+            }
+
             /* --------------------- special method calls --------------------- */
             case "printExpression": {
                 Expression expression = (Expression) semanticStack.pop();

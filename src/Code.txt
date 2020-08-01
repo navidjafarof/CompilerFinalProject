@@ -1,5 +1,69 @@
+int a = 3;
+int c = 3;
 function void start(){
+    if ( a == 3){
+    int a = 4;
+    }
+    else{
+    int a = 5;
+    }
+    switch ( c + 7) of
+    begin
+    case 2:
+    {
+        int a = 2;
+    }
+    case 3:
+        {
+            int a = 3;
+        }
+    case 4:
+        {
+            int a = 4;
+        }
+    end
+    a += 4 ;
+    for (int a = 1; 1 == 1 ;a++){
+        println(a);
+    }
 
-	int[][][] a = new int[1][2][3];
+    a++;
+    println( a );
+	println(a + c);
 	return;
 }
+/*
+int a = 3;
+int c = 3;
+function void start(){
+    if ( a == 3){
+    int a = 4;
+    }
+    else{
+    int a = 5;
+    }
+    switch ( c + 7) of
+    begin
+    case 2:
+    {
+        int a = 2;
+    }
+    case 3:
+        {
+            int a = 3;
+        }
+    case 4:
+        {
+            int a = 4;
+        }
+    end
+    a += 4 ;
+    for (int a = 1; 1 == 1 ;a++){
+        println(a);
+    }
+
+    ++a;
+    println( a );
+	println(a + c);
+	return;
+} */
