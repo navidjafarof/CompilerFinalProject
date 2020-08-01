@@ -1,7 +1,18 @@
+int a = 2;
+function int b();
+
+
 function void start()
 {
-    int [] a = new int [3] ;
-    a [0] = 2;
+    int a = 5;
+    int [] d = new int[5];
+    d[0] = 45;
+    println(b());
+    println(a);
     return;
 }
-
+function int b()
+{
+    a = 6;
+    return a;
+}

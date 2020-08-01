@@ -78,7 +78,10 @@ public class SimpleVarDCL extends VarDCL {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         try {
-            SymbolTable.getInstance().getDescriptor(name);
+            DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+            if (dscp instanceof StaticGlobalDSCP && SymbolTable.getInstance().getScopesStack().size() > 1) {
+                declare();
+            }
         } catch (Exception e) {
             declare();
         }

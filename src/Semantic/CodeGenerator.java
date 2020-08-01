@@ -57,7 +57,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
     @Override
     public void doSemantic(String sem) {
-        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
@@ -222,14 +221,12 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 }
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 String name = "";
-                System.out.println(semanticStack.peek() instanceof Array);
                 if (semanticStack.peek() instanceof Array)
                     name = ((Array) semanticStack.pop()).getName();
                 else if (semanticStack.peek() instanceof NOP)
                      name = ((NOP) semanticStack.pop()).name;
 
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-                System.out.println(dscp.getType());
                 if (!dscp.getType().equals(type))
                     throw new RuntimeException("Types don't match");
                 ArrayDCL arrDcl;
@@ -244,7 +241,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
                 }
-                System.out.println(arrDcl.getDimensionNum());
                 arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
                 break;
@@ -461,8 +457,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     break;
                 }
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-                System.out.println(name);
-                System.out.println(dscp.getType());
                 if (dscp instanceof StaticGlobalVariableDSCP || dscp instanceof DynamicLocalVariableDSCP)
                     semanticStack.push(new SimpleVariable(name, dscp.getType()));
                 else if (dscp instanceof StaticGlobalArrayDSCP || dscp instanceof DynamicLocalArrayDSCP)
@@ -776,7 +770,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             Array var = (Array) variable;
             int numberOfExp = var.getIndexesExpression().size();
             DSCP dscp = SymbolTable.getInstance().getDescriptor(var.getName());
-            System.out.println(var.getName());
             if (dscp instanceof StaticGlobalArrayDSCP) {
                 if (((StaticGlobalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
@@ -785,7 +778,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 if (((DynamicLocalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
             }
-            System.out.println("here");
         }
     }
 }

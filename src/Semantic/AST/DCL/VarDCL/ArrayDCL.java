@@ -74,6 +74,11 @@ public class ArrayDCL extends VarDCL {
             }
             mv.visitVarInsn(ASTORE, SymbolTable.getInstance().getIndex());
         }
+        try {
+            SymbolTable.getInstance().getDescriptor(name);
+        } catch (Exception e) {
+            declare(this.name, this.type, this.dimensionsExpression, this.dimensionNum, this.global);
+        }
     }
 
     public static void declare(String name, Type type, ArrayList<Expression> dimensions, int dimNum, boolean global) {
@@ -83,7 +88,6 @@ public class ArrayDCL extends VarDCL {
         } else
             dscp = new StaticGlobalArrayDSCP(type, true, dimNum, dimensions);
         SymbolTable.getInstance().addVariable(name, dscp);
-        System.out.println(SymbolTable.getInstance().getDescriptor(name));
     }
 
     public void setDimensionsExpression(ArrayList<Expression> dimensionsExpression) {
