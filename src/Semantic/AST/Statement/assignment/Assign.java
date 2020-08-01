@@ -13,8 +13,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.Collections;
 
-import static org.objectweb.asm.Opcodes.ISTORE;
-import static org.objectweb.asm.Opcodes.PUTSTATIC;
+import static org.objectweb.asm.Opcodes.*;
 
 public class Assign extends Assignment {
     public Assign(Variable variable, Expression expression) {
@@ -25,23 +24,23 @@ public class Assign extends Assignment {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         checkIsConst();
         DSCP dscp = variable.getDSCP();
-        expression.codegen(cw, mv);
         if (variable.getType() != expression.getType())
             throw new RuntimeException("Mismatching Type In Assignment.");
         if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
-            if (dscp instanceof DynamicLocalVariableDSCP)
+            if (dscp instanceof DynamicLocalVariableDSCP){
+                this.expression.codegen(cw, mv);
                 mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
+                }
             else {
-                System.out.println("array assignment");
+                mv.visitVarInsn(ALOAD,index);
                 Collections.reverse(((Array) variable).getIndexesExpression());
-//                for (Expression e : ((Array)variable).getIndexesExpression())
-//                {
-//                    e.codegen(cw, mv);
-//                    System.out.println(e.type);
-//                }
-                variable.codegen(cw, mv);
-                mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
+                for (Expression e : ((Array)variable).getIndexesExpression())
+                {
+                    e.codegen(cw, mv);
+                }
+                this.expression.codegen(cw, mv);
+                mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }
 
         } else

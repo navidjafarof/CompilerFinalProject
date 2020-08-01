@@ -1,8 +1,9 @@
 function void start()
 {
-    int [][] d = new int[5][5];
-    d[0][3] = 45;
-    int k = d[0][3];
+    int [] c ;
+    c = new int[5];
+    int [][] a = new int [1][2];
+
 
     return;
 }

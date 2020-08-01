@@ -28,7 +28,6 @@ public class Array extends Variable {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        System.out.println("olmaz olmaz");
         new SimpleVariable(name, type).codegen(cw, mv);
         Label exceptionLabel = new Label();
         Label endLabel = new Label();
