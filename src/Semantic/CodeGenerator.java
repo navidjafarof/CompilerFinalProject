@@ -242,6 +242,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
                 }
+                Collections.reverse(expressionList);
                 arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
                 break;
@@ -480,7 +481,9 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     expressionList.add((Expression) semanticStack.pop());
                     flag--;
                 }
+
                 Array var = (Array) semanticStack.pop();
+//                Collections.reverse(expressionList);
                 var.setIndexesExpression(expressionList);
                 semanticStack.push(var);
                 break;
@@ -538,25 +541,26 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(variable);
                 break;
             }
-            case "CheckDimNum": {
-                Byte flag = (Byte) semanticStack.pop();
-                ArrayList<Expression> expressionList = new ArrayList<>();
-                int i = flag;
-                while (i > 0) {
-                    expressionList.add((Expression) semanticStack.pop());
-                    i--;
-                }
-                Array var = (Array) semanticStack.pop();
-                if (var.getDSCP() instanceof StaticGlobalArrayDSCP)
-                    if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
-                        throw new RuntimeException("Number of dimensions doesn't match");
-                if (var.getDSCP() instanceof DynamicLocalArrayDSCP){
-                    if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
-                        throw new RuntimeException("Number of dimensions doesn't match");}
-                var.setIndexesExpression(expressionList);
-                semanticStack.push(new NOP());
-                break;
-            }
+//            case "CheckDimNum": {
+//                Byte flag = (Byte) semanticStack.pop();
+//                ArrayList<Expression> expressionList = new ArrayList<>();
+//                int i = flag;
+//                while (i > 0) {
+//                    expressionList.add((Expression) semanticStack.pop());
+//                    i--;
+//                }
+//                Array var = (Array) semanticStack.pop();
+//                if (var.getDSCP() instanceof StaticGlobalArrayDSCP)
+//                    if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
+//                        throw new RuntimeException("Number of dimensions doesn't match");
+//                if (var.getDSCP() instanceof DynamicLocalArrayDSCP){
+//                    if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
+//                        throw new RuntimeException("Number of dimensions doesn't match");}
+////                Collections.reverse(expressionList);
+//                var.setIndexesExpression(expressionList);
+//                semanticStack.push(new NOP());
+//                break;
+//            }
             /* ---------------------- functions ---------------------------- */
             case "voidReturn": {
                 Block block = (Block) semanticStack.pop();

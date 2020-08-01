@@ -3,6 +3,7 @@ package Semantic.AST.Expression.variable;
 import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.binary.conditional.GreaterThanOrEqualTo;
 import Semantic.SymbolTable.DSCP.DSCP;
+import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
 import Semantic.SymbolTable.DSCP.StaticGlobalArrayDSCP;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
@@ -23,41 +24,46 @@ public class Array extends Variable {
         this.name = name;
         this.type = type;
         this.indexesExpression = indexesExpression;
+
     }
 
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        new SimpleVariable(name, type).codegen(cw, mv);
-        Label exceptionLabel = new Label();
-        Label endLabel = new Label();
+        mv.visitVarInsn(ALOAD, ((DynamicLocalDSCP) SymbolTable.getInstance().getDescriptor(this.name)).getIndex());
+        indexesExpression.get(0).codegen(cw, mv);
+        mv.visitInsn(this.type.getOpcode(IALOAD));
 
-        for (int i = 0; i < indexesExpression.size() - 1; i++) {
-            indexesExpression.get(i).codegen(cw, mv);
-            DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-            if (dscp instanceof StaticGlobalArrayDSCP) {
-                GreaterThanOrEqualTo greaterThanOrEqualTo = new GreaterThanOrEqualTo(indexesExpression.get(i), ((StaticGlobalArrayDSCP) dscp).getDimensionList().get(i));
-                greaterThanOrEqualTo.codegen(cw, mv);
-                mv.visitJumpInsn(IFGE, exceptionLabel);
-            }
-            if (!indexesExpression.get(i).getType().equals(Type.INT_TYPE))
-                throw new RuntimeException("Index should be an integer number");
-            mv.visitInsn(AALOAD);
-        }
-        // must load the last index separately
-        indexesExpression.get(indexesExpression.size() - 1).codegen(cw, mv);
-        if (type.getDescriptor().endsWith(";")) // we have array of records
-            mv.visitInsn(AALOAD);
-        else
-            mv.visitInsn(type.getOpcode(IALOAD));
-
-        mv.visitJumpInsn(GOTO, endLabel);
-        mv.visitLabel(exceptionLabel);
-        mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
-        mv.visitInsn(DUP);
-        mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "()V", false);
-        mv.visitInsn(ATHROW);
-        mv.visitLabel(endLabel);
+//        new SimpleVariable(name, type).codegen(cw, mv);
+//        Label exceptionLabel = new Label();
+//        Label endLabel = new Label();
+//
+//        for (int i = 0; i < indexesExpression.size() - 1; i++) {
+//            indexesExpression.get(i).codegen(cw, mv);
+//            DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+//            if (dscp instanceof StaticGlobalArrayDSCP) {
+//                GreaterThanOrEqualTo greaterThanOrEqualTo = new GreaterThanOrEqualTo(indexesExpression.get(i), ((StaticGlobalArrayDSCP) dscp).getDimensionList().get(i));
+//                greaterThanOrEqualTo.codegen(cw, mv);
+//                mv.visitJumpInsn(IFGE, exceptionLabel);
+//            }
+//            if (!indexesExpression.get(i).getType().equals(Type.INT_TYPE))
+//                throw new RuntimeException("Index should be an integer number");
+//            mv.visitInsn(AALOAD);
+//        }
+//        // must load the last index separately
+//        indexesExpression.get(indexesExpression.size() - 1).codegen(cw, mv);
+//        if (type.getDescriptor().endsWith(";")) // we have array of records
+//            mv.visitInsn(AALOAD);
+//        else
+//            mv.visitInsn(type.getOpcode(IALOAD));
+//
+//        mv.visitJumpInsn(GOTO, endLabel);
+//        mv.visitLabel(exceptionLabel);
+//        mv.visitTypeInsn(NEW, "java/lang/RuntimeException");
+//        mv.visitInsn(DUP);
+//        mv.visitMethodInsn(INVOKESPECIAL, "java/lang/RuntimeException", "<init>", "()V", false);
+//        mv.visitInsn(ATHROW);
+//        mv.visitLabel(endLabel);
     }
 
     public void setIndexesExpression(ArrayList<Expression> indexesExpression) {

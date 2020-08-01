@@ -33,7 +33,7 @@ public class Assign extends Assignment {
                 mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
             } else {
                 mv.visitVarInsn(ALOAD, index);
-                Collections.reverse(((Array) variable).getIndexesExpression());
+//                Collections.reverse(((Array) variable).getIndexesExpression());
                 for (Expression e : ((Array)variable).getIndexesExpression())
                 {
                     e.codegen(cw, mv);

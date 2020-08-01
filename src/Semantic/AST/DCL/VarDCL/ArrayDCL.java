@@ -50,7 +50,7 @@ public class ArrayDCL extends VarDCL {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        Collections.reverse(this.dimensionsExpression);
+//        Collections.reverse(this.dimensionsExpression);
         for (Expression dim : dimensionsExpression) {
             dim.codegen(cw, mv);
         }

@@ -9,8 +9,8 @@ public class test {
     }
 
     public static void start() {
-        String var0 = "1234";
-        String var1 = "5678";
-        System.out.println(var0 + var1);
+        int[] var0 = new int[]{1, 0, 2, 0, 0};
+        int var1 = var0[2];
+        var1 += 5 + var1;
     }
 }
