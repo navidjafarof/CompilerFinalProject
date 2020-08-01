@@ -58,6 +58,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
     @Override
     public void doSemantic(String sem) {
+        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());

@@ -158,6 +158,15 @@ public class SymbolTable {
         if (getLastScope().containsKey(name)) {
             throw new RuntimeException("Variable " + name + " Was Declared Previously.");
         }
+        if (getLastScope().getScopeType() == Scope.CONDITION || getLastScope().getScopeType() == Scope.SWITCH ||getLastScope().getScopeType() == Scope.LOOP){
+            int stackIndex = scopesStack.size();
+            while (stackIndex > 0) {
+                stackIndex--;
+                Frame frame = scopesStack.get(stackIndex);
+                if (frame.containsKey(name) && frame.getScopeType() != Scope.GLOBAL )
+                    throw new RuntimeException("Variable " + name + " Was Declared Previously.");
+            }
+        }
         if (dscp instanceof DynamicLocalDSCP) {
             getLastScope().put(name, dscp);
             getLastScope().addIndex(1);

@@ -1,6 +1,6 @@
-package lexical;
+package Lexical;
 import java.util.LinkedHashSet;
-import syntax.Lexical;
+import Syntax.Lexical;
 import java.io.IOException;
 %%
 
@@ -31,6 +31,19 @@ import java.io.IOException;
         } catch (IOException e) {
             throw new RuntimeException("Unable to get next token", e);
         }
+    }
+    private Double getValueForSN(String text){
+        int index = text.indexOf("e");
+        Double value;
+        if(index > 0){
+            int base = Integer.parseInt(text.substring(0, index));
+            int exp = Integer.parseInt(text.substring(index + 1));
+            value = base * Math.pow(10, exp);
+        }else if(index < 0)
+            value = Double.parseDouble(text);
+        else
+            throw new NumberFormatException();
+        return value;
     }
 %}
 
@@ -179,7 +192,7 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
 
   {DoubleNumber}                 {  return (new Symbol("double", Double.valueOf(yytext()))); }
   {FloatNumber}                  {  return (new Symbol("float", Float.valueOf(yytext())));  }
-  {ScientificNotation}           {  return (new Symbol("sc_not", yytext())); }
+  {ScientificNotation}           {  return (new Symbol("sc_not", getValueForSN(yytext()))); }
 
   /* comments */
   {Comment}                      { /*ignore Comment*/ }
