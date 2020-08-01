@@ -44,6 +44,10 @@ public class ArrayDCL extends VarDCL {
         this.dimensionsExpression = dimensionsExpression;
     }
 
+    public int getDimensionNum() {
+        return dimensionNum;
+    }
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         Collections.reverse(this.dimensionsExpression);
@@ -75,14 +79,11 @@ public class ArrayDCL extends VarDCL {
     public static void declare(String name, Type type, ArrayList<Expression> dimensions, int dimNum, boolean global) {
         DSCP dscp;
         if (!global) {
-            System.out.println(name);
-            System.out.println(type);
-            System.out.println(dimNum);
-            System.out.println(dimensions);
             dscp = new DynamicLocalArrayDSCP(type, true, SymbolTable.getInstance().getIndex(), dimNum, dimensions);
         } else
             dscp = new StaticGlobalArrayDSCP(type, true, dimNum, dimensions);
         SymbolTable.getInstance().addVariable(name, dscp);
+        System.out.println(SymbolTable.getInstance().getDescriptor(name));
     }
 
     public void setDimensionsExpression(ArrayList<Expression> dimensionsExpression) {

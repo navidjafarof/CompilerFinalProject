@@ -212,12 +212,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new NOP(name));
                 break;
             }
-            case "makeArrayVarDCLWithoutNew": {
-                String name = ((NOP) semanticStack.pop()).name;
-                DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-                semanticStack.push(new NOP(name));
-                break;
-            }
             case "makeArrayVarDCL": {
                 Byte flag = (Byte) semanticStack.pop();
                 ArrayList<Expression> expressionList = new ArrayList<>();
@@ -228,12 +222,14 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 }
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 String name = "";
-                if (semanticStack.peek() instanceof NOP)
-                     name = ((NOP) semanticStack.pop()).name;
-                else if (semanticStack.peek() instanceof Array)
+                System.out.println(semanticStack.peek() instanceof Array);
+                if (semanticStack.peek() instanceof Array)
                     name = ((Array) semanticStack.pop()).getName();
+                else if (semanticStack.peek() instanceof NOP)
+                     name = ((NOP) semanticStack.pop()).name;
+
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
-                System.out.println(SymbolTable.getInstance().getIndex());
+                System.out.println(dscp.getType());
                 if (!dscp.getType().equals(type))
                     throw new RuntimeException("Types don't match");
                 ArrayDCL arrDcl;
@@ -243,12 +239,12 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     arrDcl = new ArrayDCL(name, type, true, flag);
                     ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
                 } else {
-                    System.out.println(name);
                     if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
                 }
+                System.out.println(arrDcl.getDimensionNum());
                 arrDcl.setDimensionsExpression(expressionList);
                 semanticStack.push(arrDcl);
                 break;
@@ -460,12 +456,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             /* -------------------------- variable ---------------------------- */
             case "pushVariable": {
                 String name = (String) lexical.currentToken().getValue();
-                System.out.println(name);
                 if (SymbolTable.getInstance().getFuncNames().contains(name)) {
                     semanticStack.push(name);
                     break;
                 }
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
+                System.out.println(name);
+                System.out.println(dscp.getType());
                 if (dscp instanceof StaticGlobalVariableDSCP || dscp instanceof DynamicLocalVariableDSCP)
                     semanticStack.push(new SimpleVariable(name, dscp.getType()));
                 else if (dscp instanceof StaticGlobalArrayDSCP || dscp instanceof DynamicLocalArrayDSCP)
@@ -542,20 +539,15 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     throw new RuntimeException("You can't new a simple variable");
                 if (variable.getType() != null && !type.equals(variable.getType()))
                     throw new RuntimeException("types don't match");
-                System.out.println("hi");
                 semanticStack.push(variable);
                 break;
             }
             case "CheckDimNum": {
-                System.out.println("hiii");
                 Byte flag = (Byte) semanticStack.pop();
                 ArrayList<Expression> expressionList = new ArrayList<>();
                 int i = flag;
-                System.out.println(flag);
                 while (i > 0) {
-                    Expression e = (Expression) semanticStack.pop();
-                    System.out.println(e);
-                    expressionList.add(e);
+                    expressionList.add((Expression) semanticStack.pop());
                     i--;
                 }
                 Array var = (Array) semanticStack.pop();
@@ -563,7 +555,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");
                 if (var.getDSCP() instanceof DynamicLocalArrayDSCP){
-                    System.out.println("local");
                     if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
                         throw new RuntimeException("Number of dimensions doesn't match");}
                 var.setIndexesExpression(expressionList);
@@ -785,6 +776,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             Array var = (Array) variable;
             int numberOfExp = var.getIndexesExpression().size();
             DSCP dscp = SymbolTable.getInstance().getDescriptor(var.getName());
+            System.out.println(var.getName());
             if (dscp instanceof StaticGlobalArrayDSCP) {
                 if (((StaticGlobalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
@@ -793,6 +785,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 if (((DynamicLocalArrayDSCP) dscp).getDimension() != numberOfExp)
                     throw new RuntimeException("you can't assign an expression to array");
             }
+            System.out.println("here");
         }
     }
 }
