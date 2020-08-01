@@ -24,16 +24,15 @@ public class Assign extends Assignment {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         checkIsConst();
         DSCP dscp = variable.getDSCP();
-        if (variable.getType() != expression.getType())
+        if (!variable.getType().equals(expression.getType()))
             throw new RuntimeException("Mismatching Type In Assignment.");
         if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
-            if (dscp instanceof DynamicLocalVariableDSCP){
+            if (dscp instanceof DynamicLocalVariableDSCP) {
                 this.expression.codegen(cw, mv);
                 mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-                }
-            else {
-                mv.visitVarInsn(ALOAD,index);
+            } else {
+                mv.visitVarInsn(ALOAD, index);
                 Collections.reverse(((Array) variable).getIndexesExpression());
                 for (Expression e : ((Array)variable).getIndexesExpression())
                 {

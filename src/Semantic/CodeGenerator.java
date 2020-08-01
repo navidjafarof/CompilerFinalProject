@@ -714,7 +714,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Len(expression));
                 break;
             }
-            case "sizeof": {
+            case "sizeOf": {
                 String baseType = (String) semanticStack.pop();
                 semanticStack.push(new SizeOf(baseType));
                 break;

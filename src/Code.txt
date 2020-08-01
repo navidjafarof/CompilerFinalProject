@@ -1,9 +1,33 @@
-function void start()
-{
-    int [] c ;
-    c = new int[5];
-    int [][] a = new int [1][2];
+// hooora first program!
+function int calc(int a, char b){
+    return a;
+}
 
+function void start(){
+    println(2);
+    int my_car = 3;
+    float f = (float) 2;
+    float f2 = (float) my_car;
+   // f++;
+   // --f;
+    input(float);
+    sizeof(int);
+    if(1 == 2){
+        // pass
+    } else {
+      string g;
+      g = "google";
+      // auto str = "salam";
 
+        println("p");
+       // println(g);
+        println(2);
+    }
+    auto c = 2;
+    auto someArr = new int[3];
+    const int z = 5;
+    int d = 2 * z;
+    const char p = 'z';
+    //const auto tyry = 3;
     return;
 }

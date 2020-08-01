@@ -114,6 +114,7 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
   "new"                         { return (new Symbol("new")); }
   "println"                         { return (new Symbol("println")); }
   "input"                        { return (new Symbol("input")); }
+  "of"                            {return new Symbol("of");}
 
 
 
