@@ -480,7 +480,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                     flag--;
                 }
                 Array var = (Array) semanticStack.pop();
-                semanticStack.push(new Array(var.getName(), expressionList, var.getType()));
+                var.setIndexesExpression(expressionList);
+                semanticStack.push(var);
                 break;
             }
             /* -------------------------- Assignment -------------------------- */

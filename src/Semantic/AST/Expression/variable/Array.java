@@ -28,6 +28,7 @@ public class Array extends Variable {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
+        System.out.println("olmaz olmaz");
         new SimpleVariable(name, type).codegen(cw, mv);
         Label exceptionLabel = new Label();
         Label endLabel = new Label();
@@ -40,7 +41,7 @@ public class Array extends Variable {
                 greaterThanOrEqualTo.codegen(cw, mv);
                 mv.visitJumpInsn(IFGE, exceptionLabel);
             }
-            if (indexesExpression.get(i).getType().equals(Type.INT_TYPE))
+            if (!indexesExpression.get(i).getType().equals(Type.INT_TYPE))
                 throw new RuntimeException("Index should be an integer number");
             mv.visitInsn(AALOAD);
         }

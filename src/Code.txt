@@ -1,18 +1,8 @@
-int a = 2;
-function int b();
-
-
 function void start()
 {
-    int a = 5;
-    int [] d = new int[5];
-    d[0] = 45;
-    println(b());
-    println(a);
+    int [][] d = new int[5][5];
+    d[0][3] = 45;
+    int k = d[0][3];
+
     return;
-}
-function int b()
-{
-    a = 6;
-    return a;
 }
