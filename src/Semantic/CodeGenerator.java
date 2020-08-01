@@ -52,6 +52,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
         return (AST) semanticStack.getFirst();
     }
 
+
     String lastSeenType = "";
     Byte lastSeenFlag ;
 

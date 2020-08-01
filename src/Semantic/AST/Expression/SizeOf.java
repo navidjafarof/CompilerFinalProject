@@ -10,8 +10,12 @@ import org.objectweb.asm.Type;
 public class SizeOf extends Expression implements Operation {
     Integer value;
 
-    public SizeOf(String type) {
-        value = SymbolTable.getSize(type);
+    public SizeOf(String id) {
+        Type t = SymbolTable.getInstance().getDescriptor(id).getType();
+        if (!t.toString().endsWith(";"))
+            value = SymbolTable.getSize(t.getClassName());
+        else
+            throw new RuntimeException("Sizeof Is Used For a Variable Without Base Type.");
         this.type = Type.INT_TYPE;
     }
 
