@@ -15,12 +15,8 @@ public class Divide extends BinaryExpression {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        expression1.codegen(cw, mv);
-        expression2.codegen(cw, mv);
-        if (expression1.getType() != expression2.getType()) {
-            throw new IllegalArgumentException("Operand Types Must Be The Same.");
-        }
-        type = expression1.getType();
+        Type type = getType();
+        codegenExpressions(type, cw, mv);
         mv.visitInsn(type.getOpcode(IDIV));
     }
 }

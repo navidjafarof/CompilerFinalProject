@@ -1,6 +1,6 @@
 import Semantic.AST.Expression.SizeOf;
 
-public class test {
+public class Test {
     static int h;
 
     public static void main(String[] var0) {

@@ -12,12 +12,16 @@ public class DoubleConstExp extends Constant {
 
     public DoubleConstExp(Double value) {
         this.value = value;
-        type = Type.DOUBLE_TYPE;
     }
 
     @Override
     public Object getValue() {
         return this.value;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.DOUBLE_TYPE;
     }
 
     @Override

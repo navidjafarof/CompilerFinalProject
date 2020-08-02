@@ -15,9 +15,15 @@ import org.objectweb.asm.Type;
 
 public class PlusMinus extends UnaryExpression implements InitialExpression, StepExpression, Operation {
     String postOrPre, operator;
+    Type type;
 
     public PlusMinus(Expression expression) {
         super(expression);
+    }
+
+    @Override
+    public int determineOp(Type resultType) {
+        return 0;
     }
 
     @Override

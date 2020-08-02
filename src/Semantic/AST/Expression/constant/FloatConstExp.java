@@ -13,7 +13,6 @@ public class FloatConstExp extends Constant {
 
     public FloatConstExp(Float value) {
         this.value = value;
-        type = Type.FLOAT_TYPE;
     }
 
     @Override
@@ -21,6 +20,10 @@ public class FloatConstExp extends Constant {
         return value;
     }
 
+    @Override
+    public Type getType() {
+        return Type.FLOAT_TYPE;
+    }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {

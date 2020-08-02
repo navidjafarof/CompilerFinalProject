@@ -16,7 +16,11 @@ public class SizeOf extends Expression implements Operation {
             value = SymbolTable.getSize(t.getClassName());
         else
             throw new RuntimeException("Sizeof Is Used For a Variable Without Base Type.");
-        this.type = Type.INT_TYPE;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.INT_TYPE;
     }
 
     public Integer getValue() {

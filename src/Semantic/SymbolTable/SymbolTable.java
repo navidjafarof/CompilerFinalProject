@@ -84,7 +84,7 @@ public class SymbolTable {
             case "Boolean":
             case "bool":
             case "Z":
-                return Type.INT_TYPE;
+                return Type.BOOLEAN_TYPE;
             case "void":
             case "V":
                 return Type.VOID_TYPE;

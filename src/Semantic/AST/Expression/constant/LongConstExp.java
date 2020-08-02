@@ -12,12 +12,16 @@ public class LongConstExp extends Constant {
 
     public LongConstExp(Long value) {
         this.value = value;
-        type = Type.LONG_TYPE;
     }
 
     @Override
     public Object getValue() {
         return this.value;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.LONG_TYPE;
     }
 
     @Override

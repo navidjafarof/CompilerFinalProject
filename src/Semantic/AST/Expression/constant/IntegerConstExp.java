@@ -10,8 +10,12 @@ public class IntegerConstExp extends Constant {
     private final Integer value;
 
     public IntegerConstExp(Integer value) {
-        type = Type.INT_TYPE;
         this.value = value;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.INT_TYPE;
     }
 
     @Override

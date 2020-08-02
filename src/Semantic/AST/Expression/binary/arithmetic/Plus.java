@@ -15,15 +15,9 @@ public class Plus extends BinaryExpression {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        expression2.codegen(cw, mv);
-        expression1.codegen(cw, mv);
-        type = expression1.getType();
-        if (!expression1.getType().equals(expression2.getType())) {
-            throw new IllegalArgumentException("Operand Types Must Be The Same.");
-        }
-        if (expression1.getType().equals(Type.getType(String.class))) {
-            mv.visitInsn(POP);
-            mv.visitInsn(POP);
+        Type type = getType();
+
+        if (type.equals(Type.getType(String.class))) {
 
             mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
             mv.visitInsn(DUP);
@@ -39,6 +33,7 @@ public class Plus extends BinaryExpression {
 
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
         } else {
+            codegenExpressions(type, cw, mv);
             mv.visitInsn(type.getOpcode(IADD));
         }
     }

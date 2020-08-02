@@ -21,9 +21,9 @@ public class Assign extends Assignment {
         if (dscp instanceof DynamicLocalDSCP) {
             int index = ((DynamicLocalDSCP) dscp).getIndex();
             if (dscp instanceof DynamicLocalVariableDSCP) {
+                this.expression.getType();
                 this.expression.codegen(cw, mv);
-                if (!variable.getType().equals(expression.getType()))
-                    throw new RuntimeException("Mismatching Type In Assignment.");
+                this.expression.castOperandType(variable.getType(), mv);
                 mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
             } else if (dscp instanceof DynamicLocalArrayDSCP) {
                 mv.visitVarInsn(ALOAD, index);
@@ -37,14 +37,16 @@ public class Assign extends Assignment {
                     }
                 }
                 ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
+                this.expression.getType();
                 this.expression.codegen(cw, mv);
-                if (!variable.getType().equals(this.expression.type))
-                    throw new RuntimeException("Mismatching Type In Assignment.");
+                this.expression.castOperandType(variable.getType(), mv);
                 mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }
         } else {
             if (dscp instanceof StaticGlobalVariableDSCP) {
-                expression.codegen(cw, mv);
+                this.expression.getType();
+                this.expression.codegen(cw, mv);
+                this.expression.castOperandType(variable.getType(), mv);
                 mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
             } else if (dscp instanceof StaticGlobalArrayDSCP) {
                 StringBuilder arrayType = new StringBuilder();
@@ -60,9 +62,9 @@ public class Assign extends Assignment {
                     }
                 }
                 ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
+                this.expression.getType();
                 this.expression.codegen(cw, mv);
-                if (!variable.getType().equals(expression.getType()))
-                    throw new RuntimeException("Mismatching Type In Assignment.");
+                this.expression.castOperandType(variable.getType(), mv);
                 mv.visitInsn(IASTORE);
             }
         }

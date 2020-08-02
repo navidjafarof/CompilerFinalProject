@@ -1,6 +1,7 @@
 package Semantic.AST.Expression.unary;
 
 import Semantic.AST.Expression.Expression;
+import Semantic.AST.Type.CheckType;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -14,12 +15,22 @@ public class BitwiseNot extends UnaryExpression {
     }
 
     @Override
+    public int determineOp(Type resultType) {
+        return 0;
+    }
+
+    @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        expression.codegen(cw, mv);
-        if (expression.getType() != Type.INT_TYPE && expression.getType() != Type.LONG_TYPE)
+        Type type = getType();
+        if (type != Type.INT_TYPE && type != Type.LONG_TYPE)
             throw new RuntimeException("Invalid Type For Not.");
+        expression.codegen(cw, mv);
         mv.visitInsn(ICONST_M1);
-        type = expression.getType();
         mv.visitInsn(type.getOpcode(IXOR));
+    }
+
+    @Override
+    public Type getType() {
+        return CheckType.unaryExprTypeCheck(expression.getType());
     }
 }

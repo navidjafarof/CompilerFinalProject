@@ -9,12 +9,16 @@ public class StringConstExp extends Constant {
 
     public StringConstExp(String value) {
         this.value = value.substring(1, value.length() - 1);
-        type = Type.getType(String.class);
     }
 
     @Override
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.getType(String.class);
     }
 
     @Override

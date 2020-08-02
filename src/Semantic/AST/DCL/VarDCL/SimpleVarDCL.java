@@ -48,10 +48,9 @@ public class SimpleVarDCL extends VarDCL {
 
     public void assign(Variable v, Expression e, ClassWriter cw, MethodVisitor mv) {
         DSCP dscp = v.getDSCP();
+        e.getType();
         e.codegen(cw, mv);
-        if (!v.getType().equals(e.getType())) {
-            throw new RuntimeException("Expression And Variable Type Mismatch.");
-        }
+        e.castOperandType(type, mv);
         if (dscp instanceof DynamicLocalDSCP) {
             int idx = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(v.getType().getOpcode(ISTORE), idx);
@@ -90,10 +89,9 @@ public class SimpleVarDCL extends VarDCL {
             }
 
         } else if (expression != null) {
-            expression.codegen(cw, mv);
-            if (!expression.getType().equals(type))
-                throw new RuntimeException("The Type Of Variable And Expression Does Not Match. " +
-                        "Type Of Variable: " + type + " Type Of Expression: " + expression.getType());
+            this.expression.getType();
+            this.expression.codegen(cw, mv);
+            this.expression.castOperandType(type, mv);
             DynamicLocalVariableDSCP dscp = (DynamicLocalVariableDSCP) SymbolTable.getInstance().getDescriptor(name);
             mv.visitVarInsn(type.getOpcode(ISTORE), dscp.getIndex());
         }

@@ -6,7 +6,8 @@ import Semantic.SymbolTable.DSCP.DSCP;
 import org.objectweb.asm.Type;
 
 public abstract class Variable extends Expression {
-    String name;
+    public String name;
+    public Type type;
 
     public String getName() {
         return name;

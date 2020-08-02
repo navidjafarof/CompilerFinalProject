@@ -5,6 +5,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import Semantic.AST.Type.CheckType;
 
 public class Cast extends UnaryExpression {
     public Cast(Expression expression, Type castType) {
@@ -22,6 +23,10 @@ public class Cast extends UnaryExpression {
 
     private Type castType;
 
+    @Override
+    public Type getType() {
+        return CheckType.unaryExprTypeCheck(castType);
+    }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
@@ -32,7 +37,6 @@ public class Cast extends UnaryExpression {
         if (castType != Type.INT_TYPE && castType != Type.LONG_TYPE && castType != Type.DOUBLE_TYPE && castType != Type.FLOAT_TYPE)
             throw new RuntimeException("Wrong Cast.");
         mv.visitInsn(getOpcode(from, castType));
-        type = castType;
     }
 
     public static int getOpcode(Type from, Type to) {
@@ -68,5 +72,10 @@ public class Cast extends UnaryExpression {
                 opcode = Opcodes.F2D;
         }
         return opcode;
+    }
+
+    @Override
+    public int determineOp(Type resultType) {
+        return 0;
     }
 }

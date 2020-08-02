@@ -10,9 +10,15 @@ import org.objectweb.asm.Type;
 import static org.objectweb.asm.Opcodes.*;
 
 public class Input extends Expression implements Operation {
+    Type type;
 
     public Input(Type t) {
         this.type = t;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.INT_TYPE;
     }
 
     @Override

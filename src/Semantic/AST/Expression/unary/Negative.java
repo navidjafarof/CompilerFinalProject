@@ -13,11 +13,16 @@ public class Negative extends UnaryExpression {
     }
 
     @Override
+    public int determineOp(Type resultType) {
+        return 0;
+    }
+
+    @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
+        Type type = getType();
         expression.codegen(cw, mv);
         if (type == Type.BOOLEAN_TYPE)
             throw new RuntimeException("Negative Operator Used For a NAN.");
-        type = expression.getType();
         mv.visitInsn(type.getOpcode(INEG));
     }
 }

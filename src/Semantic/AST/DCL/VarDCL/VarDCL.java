@@ -7,16 +7,11 @@ import Semantic.AST.Operation;
 import org.objectweb.asm.Type;
 
 public abstract class VarDCL implements Operation, InitialExpression, Declaration {
-    String name;
-
-    public Type getType() {
-        return type;
-    }
-
-    Type type;
-    boolean global = true;
-
     public String getName() {
         return name;
     }
+
+    String name;
+    Type type;
+    boolean global = true;
 }

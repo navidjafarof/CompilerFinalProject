@@ -5,6 +5,8 @@ import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.SymbolTable;
+import org.objectweb.asm.Type;
+import Semantic.AST.Type.CheckType;
 
 
 public abstract class UnaryExpression extends Expression {
@@ -30,6 +32,13 @@ public abstract class UnaryExpression extends Expression {
         }
         if (isConstant)
             throw new RuntimeException("Can Not Assign To Constant Variable.");
+    }
+
+    public abstract int determineOp(Type resultType);
+
+    @Override
+    public Type getType() {
+        return CheckType.unaryExprTypeCheck(expression.getType());
     }
 
 }

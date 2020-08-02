@@ -28,6 +28,10 @@ public class FunctionCall extends Expression implements Operation {
         arguments.add(e);
     }
 
+    @Override
+    public Type getType() {
+        return functionDCL.getType();
+    }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
@@ -39,7 +43,6 @@ public class FunctionCall extends Expression implements Operation {
         }
 
         this.functionDCL = SymbolTable.getInstance().getFunction(this.name, argumentTypes);
-        this.type = functionDCL.getType();
 
         if (arguments.size() != functionDCL.getInputArguments().size())
             throw new IllegalArgumentException("Number Of Input Arguments Does Not Match.");

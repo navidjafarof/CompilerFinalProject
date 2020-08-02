@@ -9,12 +9,16 @@ public class CharConstExp extends Constant {
 
     public CharConstExp(Character value) {
         this.value = value;
-        type = Type.CHAR_TYPE;
     }
 
     @Override
     public Object getValue() {
         return this.value;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.CHAR_TYPE;
     }
 
     @Override

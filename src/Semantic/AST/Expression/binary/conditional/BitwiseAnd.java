@@ -4,6 +4,7 @@ import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.binary.BinaryExpression;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -15,12 +16,10 @@ public class BitwiseAnd extends BinaryExpression {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        expression1.codegen(cw, mv);
-        expression2.codegen(cw, mv);
-        if (expression1.getType() != expression2.getType()) {
-            throw new IllegalArgumentException("Operand Types Must Be The Same.");
-        }
-        type = expression1.getType();
+        Type type = getType();
+        if (!(type == Type.INT_TYPE || type == Type.LONG_TYPE))
+            throw new IllegalArgumentException("BitwiseAnd Used With Non-Integer Value.");
+        codegenExpressions(type, cw, mv);
         mv.visitInsn(type.getOpcode(IAND));
     }
 }

@@ -13,7 +13,6 @@ public class BooleanConstExp extends Constant {
 
     public BooleanConstExp(Boolean value) {
         this.value = value;
-        type = Type.INT_TYPE;
     }
 
     @Override
@@ -22,7 +21,12 @@ public class BooleanConstExp extends Constant {
     }
 
     @Override
+    public Type getType() {
+        return Type.INT_TYPE;
+    }
+
+    @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        mv.visitInsn(value ? ICONST_1 : ICONST_0);
+        mv.visitInsn((Boolean) value ? ICONST_1 : ICONST_0);
     }
 }

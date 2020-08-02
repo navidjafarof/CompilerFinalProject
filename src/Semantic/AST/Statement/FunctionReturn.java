@@ -24,6 +24,7 @@ public class FunctionReturn extends Statement {
         functionDCL.addReturn(this);
     }
 
+
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         FunctionDCL functionDCL = SymbolTable.getInstance().getLastFunction();
@@ -38,12 +39,10 @@ public class FunctionReturn extends Statement {
         if (expression == null) {
             mv.visitInsn(RETURN);
         } else {
+            expression.getType();
             expression.codegen(cw, mv);
-            if (!functionDCL.getType().equals(expression.getType()))
-                throw new RuntimeException("Return Types Mismatching.");
-            if (!expression.getType().equals(functionDCL.getType()))
-                throw new RuntimeException("Return Types Mismatching.");
-            mv.visitInsn(expression.getType().getOpcode(IRETURN));
+            expression.castOperandType(functionDCL.getType(), mv);
+            mv.visitInsn(functionDCL.getType().getOpcode(IRETURN));
 
         }
     }
