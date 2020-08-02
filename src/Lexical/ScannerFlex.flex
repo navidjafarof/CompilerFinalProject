@@ -171,6 +171,7 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
   "-="                           {  return (new Symbol("-=")); }
   "*="                           {  return (new Symbol("*=")); }
   "/="                           {  return (new Symbol("/=")); }
+  "%="                           {  return (new Symbol("%=")); }
 
   /* string literal */
   \"                             { yybegin(STRING);stringBuilder.setLength(0); stringBuilder.append("\""); }

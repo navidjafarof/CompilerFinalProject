@@ -45,7 +45,6 @@ public class ArrayDCL extends VarDCL {
                 mv.visitMultiANewArrayInsn(arrayType.toString(), dimensionsExpression.size());
             }
             mv.visitFieldInsn(PUTSTATIC, "Code", name, arrayType.toString());
-//            /throw new RuntimeException("Global Array Not Supported");
         } else {
             if (this.dimensionNum == 1) {
                 if (type.getDescriptor().startsWith("L"))

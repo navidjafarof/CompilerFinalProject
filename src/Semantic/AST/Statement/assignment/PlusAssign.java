@@ -1,6 +1,7 @@
 package Semantic.AST.Statement.assignment;
 
 import Semantic.AST.Expression.Expression;
+import Semantic.AST.Expression.binary.arithmetic.Plus;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.DSCP;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
@@ -16,20 +17,6 @@ public class PlusAssign extends Assignment {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        checkIsConst();
-        DSCP dscp = variable.getDSCP();
-        variable.codegen(cw, mv);
-        expression.codegen(cw, mv);
-
-        if (variable.getType() != expression.getType())
-            throw new RuntimeException("Mismatching Type In Assignment.");
-
-        mv.visitInsn(variable.getType().getOpcode(IADD));
-
-        if (dscp instanceof DynamicLocalDSCP) {
-            int index = ((DynamicLocalDSCP) dscp).getIndex();
-            mv.visitVarInsn(variable.getType().getOpcode(ISTORE), index);
-        } else
-            mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
+        new Assign(variable, new Plus(variable, expression)).codegen(cw, mv);
     }
 }

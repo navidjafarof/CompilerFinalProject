@@ -1,39 +1,14 @@
-/*function int malek()
-{
- int a = 4;
- return 1;
-}
-int[][] fag = new int[5][6];
+int h = 4;
 function void start(){
-    int [][][][] ka = new int[4][5][6][3];
-    bool boolean = (1==2);
-    len(fag);
-    len(ka);
-    ka[2][3][1][0] = 6;
-    fag[2][1] = 4;
-    const auto vari = 6;
-    int k = fag[1][3];
-    k = k - ka[1][3][4][5];
-    println(6);
-    println(k);
-    ka[0][2][1][0] = 6;
-	return;
-}*/int g;
-   double d;
-
-
-
-
-   function int yetAnother(int a, char c){
-         println("salam");
-         println(2);
-         println(2.33);
-         return 2;
-   }
-   function void start(){
-        const auto k = 5, m = 3f;
-        int a = k + 5;
-        const double jb = 4.0;
-       yetAnother(1,'a');
-        return;
-   }
+    int[] arr = new int[5];
+    arr[0] = 3;
+    arr[0] += arr[0];
+    int b = 4;
+    b += arr[1];
+    b++;
+    h += 6;
+    h /= arr[3];
+    b %= 3;
+    arr[3] *= arr[1];
+    return;
+}

@@ -46,9 +46,10 @@ public class Assign extends Assignment {
                 mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }
         } else {
-            if (dscp instanceof StaticGlobalVariableDSCP)
+            if (dscp instanceof StaticGlobalVariableDSCP) {
+                expression.codegen(cw, mv);
                 mv.visitFieldInsn(PUTSTATIC, "Code", variable.getName(), dscp.getType().toString());
-            else if (dscp instanceof StaticGlobalArrayDSCP) {
+            } else if (dscp instanceof StaticGlobalArrayDSCP) {
                 StringBuilder arrayType = new StringBuilder();
                 arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) dscp).getDimension()))).append(variable.getType().getDescriptor());
                 mv.visitFieldInsn(GETSTATIC, "Code", this.variable.getName(), arrayType.toString());
