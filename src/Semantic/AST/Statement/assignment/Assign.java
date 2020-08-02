@@ -45,11 +45,11 @@ public class Assign extends Assignment {
         } else {
             if (dscp instanceof StaticGlobalVariableDSCP) {
                 expression.codegen(cw, mv);
-                mv.visitFieldInsn(PUTSTATIC, "Code", variable.getName(), dscp.getType().toString());
+                mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
             } else if (dscp instanceof StaticGlobalArrayDSCP) {
                 StringBuilder arrayType = new StringBuilder();
                 arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) dscp).getDimension()))).append(variable.getType().getDescriptor());
-                mv.visitFieldInsn(GETSTATIC, "Code", this.variable.getName(), arrayType.toString());
+                mv.visitFieldInsn(GETSTATIC, "Main", this.variable.getName(), arrayType.toString());
                 int dimNum = ((StaticGlobalArrayDSCP) (variable.getDSCP())).getDimension();
                 if (dimNum != (((Array) variable).getIndexesExpression()).size())
                     throw new RuntimeException("Dimension Number And Index Expressions Number Not Matching.");

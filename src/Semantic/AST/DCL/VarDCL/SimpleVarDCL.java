@@ -56,7 +56,7 @@ public class SimpleVarDCL extends VarDCL {
             int idx = ((DynamicLocalDSCP) dscp).getIndex();
             mv.visitVarInsn(v.getType().getOpcode(ISTORE), idx);
         } else {
-            mv.visitFieldInsn(PUTSTATIC, "Code", v.getName(), dscp.getType().toString());
+            mv.visitFieldInsn(PUTSTATIC, "Main", v.getName(), dscp.getType().toString());
         }
         dscp.setValid(true);
     }

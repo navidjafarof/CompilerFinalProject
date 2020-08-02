@@ -44,7 +44,7 @@ public class ArrayDCL extends VarDCL {
             } else {
                 mv.visitMultiANewArrayInsn(arrayType.toString(), dimensionsExpression.size());
             }
-            mv.visitFieldInsn(PUTSTATIC, "Code", name, arrayType.toString());
+            mv.visitFieldInsn(PUTSTATIC, "Main", name, arrayType.toString());
         } else {
             if (this.dimensionNum == 1) {
                 if (type.getDescriptor().startsWith("L"))

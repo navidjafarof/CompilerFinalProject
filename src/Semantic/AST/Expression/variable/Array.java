@@ -35,7 +35,7 @@ public class Array extends Variable {
                 dimNum = ((StaticGlobalArrayDSCP) getDSCP()).getDimension();
                 StringBuilder arrayType = new StringBuilder();
                 arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) getDSCP()).getDimension()))).append(type.getDescriptor());
-                mv.visitFieldInsn(GETSTATIC, "Code", this.name, arrayType.toString());
+                mv.visitFieldInsn(GETSTATIC, "Main", this.name, arrayType.toString());
             }
             if (dimNum != (this.getIndexesExpression()).size())
                 throw new RuntimeException("Dimension Number And Index Expressions Number Not Matching.");

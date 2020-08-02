@@ -36,7 +36,7 @@ public class Len extends Expression implements Operation {
             } else if (((Array) expression).getDSCP() instanceof StaticGlobalDSCP) {
                 StringBuilder arrayType = new StringBuilder();
                 arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) ((Array) expression).getDSCP()).getDimension()))).append(type.getDescriptor());
-                mv.visitFieldInsn(GETSTATIC, "Code", ((Array) expression).getName(), arrayType.toString());
+                mv.visitFieldInsn(GETSTATIC, "Main", ((Array) expression).getName(), arrayType.toString());
             }
             mv.visitInsn(ARRAYLENGTH);
         } else if (expression.getType().equals(Type.getType(String.class))) {
