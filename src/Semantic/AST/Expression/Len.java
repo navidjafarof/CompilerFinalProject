@@ -9,6 +9,8 @@ import Semantic.AST.Expression.variable.Variable;
 import Semantic.AST.Operation;
 
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
+import Semantic.SymbolTable.DSCP.StaticGlobalArrayDSCP;
+import Semantic.SymbolTable.DSCP.StaticGlobalDSCP;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -28,8 +30,14 @@ public class Len extends Expression implements Operation {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         type = Type.INT_TYPE;
         if (expression instanceof Array) {
-            int index = ((DynamicLocalDSCP) SymbolTable.getInstance().getDescriptor((((Array) expression).getName()))).getIndex();
-            mv.visitVarInsn(ALOAD, index);
+            if (((Array) expression).getDSCP() instanceof DynamicLocalDSCP) {
+                int index = ((DynamicLocalDSCP) SymbolTable.getInstance().getDescriptor((((Array) expression).getName()))).getIndex();
+                mv.visitVarInsn(ALOAD, index);
+            } else if (((Array) expression).getDSCP() instanceof StaticGlobalDSCP) {
+                StringBuilder arrayType = new StringBuilder();
+                arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) ((Array) expression).getDSCP()).getDimension()))).append(type.getDescriptor());
+                mv.visitFieldInsn(GETSTATIC, "Code", ((Array) expression).getName(), arrayType.toString());
+            }
             mv.visitInsn(ARRAYLENGTH);
         } else if (expression.getType().equals(Type.getType(String.class))) {
             expression.codegen(cw, mv);

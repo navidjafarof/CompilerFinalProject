@@ -13,7 +13,7 @@ public class BooleanConstExp extends Constant {
 
     public BooleanConstExp(Boolean value) {
         this.value = value;
-        type = Type.BOOLEAN_TYPE;
+        type = Type.INT_TYPE;
     }
 
     @Override
