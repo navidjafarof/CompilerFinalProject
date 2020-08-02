@@ -3,12 +3,16 @@ function int malek()
  int a = 4;
  return 1;
 }
-int[] fag = new int[5];
+int[][] fag = new int[5][6];
 function void start(){
-    fag[2] = 4;
-    int k = fag[1];
-    k = k - 2;
+    int [][][][] ka = new int[4][5][6][3];
+
+    ka[2][3][1][0] = 6;
+    fag[2][1] = 4;
+    int k = fag[1][3];
+    k = k - ka[1][3][4][5];
     println(6);
     println(k);
+    ka[0][2][1][0] = 6;
 	return;
 }
