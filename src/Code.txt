@@ -1,11 +1,29 @@
-int h = 4;
-long[] lonArr = new long[4];
 function void start(){
-    lonArr[2] = 3l;
-    string po = "12345r";
-    println(po[2]);
-    println(po);
-    char[] charArr = new char[50];
-    charArr[2] = po[2/3];
-    return;
+	
+	/** arithmetic Operations**/
+	int number1 = 432;
+	long number2 = 19e2;
+	bool cmp = number1 > number2;
+	double PI = 3.14;
+	double Area1 = PI * number1 * number1;
+	long Area2 = PI * number2 * number2;
+	println(Area1);
+	println(Area2);
+
+	/** Array and Memory Operations **/
+	auto arr = new int[5];
+	for ( int i = 0 ; i<5 ; i++ ) {
+		arr[i] = i;
+	}
+
+	int max = arr[0];
+	for ( int i = 1 ; i<5 ; i++ ) {
+		if ( arr[i]>max ){
+			max = arr[i];
+		}
+		continue;
+	}
+
+	println(max);
+	return;
 }
