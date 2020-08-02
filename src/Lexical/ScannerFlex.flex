@@ -128,6 +128,7 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
   "println"                         { return (new Symbol("println")); }
   "input"                        { return (new Symbol("input")); }
   "of"                            {return new Symbol("of");}
+  "xor"                            {return new Symbol("xor");}
 
 
 

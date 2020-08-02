@@ -34,7 +34,6 @@ public class Main {
         methodVisitor.visitInsn(Opcodes.RETURN);
         methodVisitor.visitMaxs(0, 0);
         methodVisitor.visitEnd();
-        // Generate class file
         try (FileOutputStream fos = new FileOutputStream("Main.class")) {
             fos.write(classWriter.toByteArray());
         } catch (IOException e) {
