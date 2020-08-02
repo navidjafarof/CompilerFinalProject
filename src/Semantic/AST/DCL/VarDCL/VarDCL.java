@@ -8,6 +8,11 @@ import org.objectweb.asm.Type;
 
 public abstract class VarDCL implements Operation, InitialExpression, Declaration {
     String name;
+
     Type type;
     boolean global = true;
+
+    public String getName() {
+        return name;
+    }
 }

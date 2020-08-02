@@ -1,4 +1,4 @@
-function int malek()
+/*function int malek()
 {
  int a = 4;
  return 1;
@@ -18,4 +18,22 @@ function void start(){
     println(k);
     ka[0][2][1][0] = 6;
 	return;
-}
+}*/int g;
+   double d;
+
+
+
+
+   function int yetAnother(int a, char c){
+         println("salam");
+         println(2);
+         println(2.33);
+         return 2;
+   }
+   function void start(){
+        const auto k = 5, m = 3f;
+        int a = k + 5;
+        const double jb = 4.0;
+       yetAnother(1,'a');
+        return;
+   }

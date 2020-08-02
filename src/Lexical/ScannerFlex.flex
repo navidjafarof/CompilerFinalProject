@@ -17,9 +17,7 @@ import java.io.IOException;
 %{
     StringBuilder stringBuilder = new StringBuilder();
     boolean record_dcl = false;
-    boolean record_id_dcl = false;
     LinkedHashSet<String> record_ids = new LinkedHashSet<>();
-    LinkedHashSet<String> record_types = new LinkedHashSet<>();
     private Symbol currentSymbol = null;
     public Symbol currentToken() {
             return currentSymbol;
@@ -203,24 +201,13 @@ SpecialCharacter = "\\b" | "\\t" | "\\n" | "\\f" | "\\r" | "\\\"" | "\\'" | "\\\
  {WhiteCharacter}              {/*ignore WhiteCharacter*/}
   /* identifiers */
   {Identifier}                   {   String id = yytext();
-                                     if(record_types.contains(id)){
-                                         record_dcl = false;
-                                         record_id_dcl = true;
-                                         return (new Symbol("record_type",id));
-
-                                     } if(record_dcl){
-                                         record_types.add(id);
-                                         record_dcl = false;
-                                         return (new Symbol("record_type",id));
-                                     }
+                                    if(record_dcl)
+                                        {
+                                            record_dcl = false;
+                                            record_ids.add(id);
+                                            return (new Symbol("record_id",id));
+                                        }
                                      if(record_ids.contains(id)){
-                                          record_id_dcl = false;
-                                          return (new Symbol("record_id",id));
-                                      }
-                                      if (record_id_dcl)
-                                      {
-                                          record_id_dcl = false;
-                                          record_ids.add(id);
                                           return (new Symbol("record_id",id));
                                       }
                                      return (new Symbol("id",id));}

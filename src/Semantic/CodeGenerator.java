@@ -5,6 +5,7 @@ import Semantic.AST.DCL.Declaration;
 import Semantic.AST.DCL.FunctionDCL;
 import Semantic.AST.DCL.VarDCL.ArrayDCL;
 import Semantic.AST.DCL.VarDCL.SimpleVarDCL;
+import Semantic.AST.DCL.VarDCL.VarDCL;
 import Semantic.AST.Expression.*;
 import Semantic.AST.Expression.binary.arithmetic.*;
 import Semantic.AST.Expression.binary.conditional.*;
@@ -54,7 +55,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
 
     String lastSeenType = "";
-    Byte lastSeenFlag ;
+    Byte lastSeenFlag;
 
     @Override
     public void doSemantic(String sem) {
@@ -134,10 +135,20 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 break;
             }
             case "constTrue": {
-                String varName = ((NOP) semanticStack.pop()).name;
+                Object Popped = semanticStack.pop();
+                String varName;
+                if (Popped instanceof NOP) {
+                    varName = ((NOP) Popped).name;
+                    semanticStack.push(new NOP(varName));
+                } else {
+                    varName = ((VarDCL) Popped).getName();
+                    if (Popped instanceof SimpleVarDCL) {
+                        ((SimpleVarDCL) Popped).setConstant(true);
+                    }
+                    semanticStack.push(Popped);
+                }
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(varName);
                 dscp.setConstant(true);
-                semanticStack.push(new NOP(varName));
                 break;
             }
             case "addToBlock": {
@@ -225,7 +236,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 if (semanticStack.peek() instanceof Array)
                     name = ((Array) semanticStack.pop()).getName();
                 else if (semanticStack.peek() instanceof NOP)
-                     name = ((NOP) semanticStack.pop()).name;
+                    name = ((NOP) semanticStack.pop()).name;
 
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
                 if (!dscp.getType().equals(type))
