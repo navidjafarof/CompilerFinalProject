@@ -1,14 +1,11 @@
 package Semantic.AST.Statement.assignment;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.AST.Expression.variable.Array;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.*;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
-
-import java.util.Collections;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -41,7 +38,7 @@ public class Assign extends Assignment {
                 }
                 ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
                 this.expression.codegen(cw, mv);
-                if (!variable.getType().equals(expression.getType()))
+                if (!variable.getType().equals(this.expression.type))
                     throw new RuntimeException("Mismatching Type In Assignment.");
                 mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }

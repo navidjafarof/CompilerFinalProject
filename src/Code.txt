@@ -1,14 +1,9 @@
 int h = 4;
 function void start(){
-    int[] arr = new int[5];
-    arr[0] = 3;
-    arr[0] += arr[0];
-    int b = 4;
-    b += arr[1];
-    b++;
-    h += 6;
-    h /= arr[3];
-    b %= 3;
-    arr[3] *= arr[1];
+    string po = "12345r";
+    println(po[2]);
+    println(po);
+    char[] charArr = new char[50];
+    charArr[2] = po[2];
     return;
 }

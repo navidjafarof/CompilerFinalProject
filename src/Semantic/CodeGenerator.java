@@ -70,6 +70,13 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
             case "createFlag": {
                 Byte flag = 0;
+                if (semanticStack.peek() instanceof SimpleVariable) {
+                    SimpleVariable popped = (SimpleVariable) semanticStack.pop();
+                    if (popped.getType().equals(Type.getType(String.class)))
+                        semanticStack.push(new Array(popped.getName(), new ArrayList<>(), Type.CHAR_TYPE));
+                    else
+                        semanticStack.push(popped);
+                }
                 semanticStack.push(flag);
                 break;
             }
