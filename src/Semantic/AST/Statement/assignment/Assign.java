@@ -4,10 +4,7 @@ import Semantic.AST.Expression.Expression;
 import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.AST.Expression.variable.Array;
 import Semantic.AST.Expression.variable.Variable;
-import Semantic.SymbolTable.DSCP.DSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalArrayDSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
-import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
+import Semantic.SymbolTable.DSCP.*;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
@@ -42,8 +39,20 @@ public class Assign extends Assignment {
                 mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }
 
-        } else
-            mv.visitFieldInsn(PUTSTATIC, "Main", variable.getName(), dscp.getType().toString());
+        } else {
+            if (dscp instanceof StaticGlobalVariableDSCP)
+                mv.visitFieldInsn(PUTSTATIC, "Code", variable.getName(), dscp.getType().toString());
+            else if (dscp instanceof StaticGlobalArrayDSCP) {
+                StringBuilder arrayType = new StringBuilder();
+                arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) dscp).getDimension()))).append(variable.getType().getDescriptor());
+                mv.visitFieldInsn(GETSTATIC, "Code", this.variable.getName(), arrayType.toString());
+                for (Expression e : ((Array) variable).getIndexesExpression()) {
+                    e.codegen(cw, mv);
+                }
+                this.expression.codegen(cw, mv);
+                mv.visitInsn(IASTORE);
+            }
+        }
         dscp.setValid(true);
     }
 }

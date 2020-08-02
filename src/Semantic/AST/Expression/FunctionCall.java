@@ -42,7 +42,7 @@ public class FunctionCall extends Expression implements Operation {
         this.type = functionDCL.getType();
 
         if (arguments.size() != functionDCL.getInputArguments().size())
-            throw new RuntimeException("Number Of Input Arguments Not Matching.");
+            throw new IllegalArgumentException("Number Of Input Arguments Does Not Match.");
         mv.visitMethodInsn(INVOKESTATIC, "Main", this.name, this.functionDCL.getSignature(), false);
     }
 }

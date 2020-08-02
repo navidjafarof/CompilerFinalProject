@@ -58,7 +58,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
     @Override
     public void doSemantic(String sem) {
-        System.out.println(sem);
         switch (sem) {
             case "push": {
                 semanticStack.push(lexical.currentToken().getValue());
@@ -230,16 +229,16 @@ public class CodeGenerator implements Syntax.CodeGenerator {
 
                 DSCP dscp = SymbolTable.getInstance().getDescriptor(name);
                 if (!dscp.getType().equals(type))
-                    throw new RuntimeException("Types don't match");
+                    throw new RuntimeException("Mismatching Types.");
                 ArrayDCL arrDcl;
                 if (semanticStack.peek() instanceof GlobalBlock) {
                     if (((StaticGlobalArrayDSCP) dscp).getDimension() != flag)
-                        throw new RuntimeException("Number of dimensions doesn't match");
+                        throw new RuntimeException("Number Of Dimensions Does Not Match.");
                     arrDcl = new ArrayDCL(name, type, true, flag);
                     ((StaticGlobalArrayDSCP) dscp).setDimensionList(expressionList);
                 } else {
                     if (((DynamicLocalArrayDSCP) dscp).getDimension() != flag)
-                        throw new RuntimeException("Number of dimensions doesn't match");
+                        throw new RuntimeException("Number Of Dimensions Does Not Match.");
                     arrDcl = new ArrayDCL(name, type, false, flag);
                     ((DynamicLocalArrayDSCP) dscp).setDimensionList(expressionList);
                 }
@@ -393,7 +392,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "postMinusMinus": {
                 Variable var = (Variable) semanticStack.pop();
                 if (var instanceof Record)
-                    throw new RuntimeException("Undefined operand for record type");
+                    throw new RuntimeException("Undefined Operand For Record Type.");
                 checkAssign(var);
                 semanticStack.push(new PostMinusMinus(var));
                 break;
@@ -401,7 +400,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "postPlusPlus": {
                 Variable var = (Variable) semanticStack.pop();
                 if (var instanceof Record)
-                    throw new RuntimeException("Undefined operand for record type");
+                    throw new RuntimeException("Undefined Operand For Record Type.");
                 checkAssign(var);
                 semanticStack.push(new PostPlusPlus(var));
                 break;
@@ -409,7 +408,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "preMinusMinus": {
                 Variable var = (Variable) semanticStack.pop();
                 if (var instanceof Record)
-                    throw new RuntimeException("Undefined operand for record type");
+                    throw new RuntimeException("Undefined Operand For Record Type.");
                 checkAssign(var);
                 semanticStack.push(new PreMinusMinus(var));
                 break;
@@ -417,7 +416,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "prePlusPlus": {
                 Variable var = (Variable) semanticStack.pop();
                 if (var instanceof Record)
-                    throw new RuntimeException("Undefined operand for record type");
+                    throw new RuntimeException("Undefined Operand For Record Type.");
                 checkAssign(var);
                 semanticStack.push(new PrePlusPlus(var));
                 break;
@@ -536,32 +535,12 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 Variable variable = (Variable) semanticStack.pop();
                 if (!(variable instanceof Array))
-                    throw new RuntimeException("You can't new a simple variable");
+                    throw new RuntimeException("New Is Used For Non Array Variable");
                 if (variable.getType() != null && !type.equals(variable.getType()))
-                    throw new RuntimeException("types don't match");
+                    throw new RuntimeException("Mismatching Types.");
                 semanticStack.push(variable);
                 break;
             }
-//            case "CheckDimNum": {
-//                Byte flag = (Byte) semanticStack.pop();
-//                ArrayList<Expression> expressionList = new ArrayList<>();
-//                int i = flag;
-//                while (i > 0) {
-//                    expressionList.add((Expression) semanticStack.pop());
-//                    i--;
-//                }
-//                Array var = (Array) semanticStack.pop();
-//                if (var.getDSCP() instanceof StaticGlobalArrayDSCP)
-//                    if (((StaticGlobalArrayDSCP) var.getDSCP()).getDimension() != flag)
-//                        throw new RuntimeException("Number of dimensions doesn't match");
-//                if (var.getDSCP() instanceof DynamicLocalArrayDSCP){
-//                    if (((DynamicLocalArrayDSCP) var.getDSCP()).getDimension() != flag)
-//                        throw new RuntimeException("Number of dimensions doesn't match");}
-////                Collections.reverse(expressionList);
-//                var.setIndexesExpression(expressionList);
-//                semanticStack.push(new NOP());
-//                break;
-//            }
             /* ---------------------- functions ---------------------------- */
             case "voidReturn": {
                 Block block = (Block) semanticStack.pop();
@@ -767,11 +746,8 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             }
 
             default:
-                throw new RuntimeException("Illegal semantic function: " + sem);
-
+                throw new RuntimeException("Illegal Semantic Function: " + sem);
         }
-
-
     }
 
     private void addFuncToGlobalBlock(FunctionDCL function) {
@@ -783,7 +759,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 GlobalBlock.getInstance().addDeclaration(function);
             } else if (lastFunc.getBlock() != null && lastFunc.getBlock() == null) {
             } else
-                throw new RuntimeException("the function is duplicate!!!");
+                throw new RuntimeException("Duplicate Function Declaration.");
         } else {
 
             GlobalBlock.getInstance().addDeclaration(function);
@@ -798,11 +774,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             DSCP dscp = SymbolTable.getInstance().getDescriptor(var.getName());
             if (dscp instanceof StaticGlobalArrayDSCP) {
                 if (((StaticGlobalArrayDSCP) dscp).getDimension() != numberOfExp)
-                    throw new RuntimeException("you can't assign an expression to array");
+                    throw new RuntimeException("Can Not Assign Expression To Array.");
             }
             if (dscp instanceof DynamicLocalArrayDSCP) {
                 if (((DynamicLocalArrayDSCP) dscp).getDimension() != numberOfExp)
-                    throw new RuntimeException("you can't assign an expression to array");
+                    throw new RuntimeException("Can Not Assign Expression To Array.");
             }
         }
     }

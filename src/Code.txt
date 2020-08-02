@@ -1,8 +1,14 @@
+function int malek()
+{
+ int a = 4;
+ return 1;
+}
+int[] fag = new int[5];
 function void start(){
-    int a = 2;
-    int k = a++;
+    fag[2] = 4;
+    int k = fag[1];
     k = k - 2;
-    println(a);
+    println(6);
     println(k);
 	return;
 }

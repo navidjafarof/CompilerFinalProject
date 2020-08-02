@@ -16,7 +16,7 @@ public class Negative extends UnaryExpression {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         expression.codegen(cw, mv);
         if (type == Type.BOOLEAN_TYPE)
-            throw new RuntimeException("It's not number!");
+            throw new RuntimeException("Negative Operator Used For a NAN.");
         type = expression.getType();
         mv.visitInsn(type.getOpcode(INEG));
     }

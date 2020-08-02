@@ -43,13 +43,6 @@ public class Main {
 
         System.out.println("Code compiled successfully");
 
-//        Symbol nt = lexicalAnalyzer.next_token();
-//        while (nt.getToken()!="$"){
-//            System.out.println(nt.getToken() +" "+nt.getValue());
-//            nt = lexicalAnalyzer.next_token();
-//        }
-
-
     }
 }
 

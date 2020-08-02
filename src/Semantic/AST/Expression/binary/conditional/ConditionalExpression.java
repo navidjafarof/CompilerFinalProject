@@ -17,7 +17,7 @@ public abstract class ConditionalExpression extends BinaryExpression {
         expression2.codegen(cw, mv);
 
         if (expression1.getType() != expression2.getType()) {
-            throw new IllegalArgumentException("Two Operands must be of the same type");
+            throw new IllegalArgumentException("Operand Types Must Be The Same.");
         }
         type = expression1.getType();
         int opcode;

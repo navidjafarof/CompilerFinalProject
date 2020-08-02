@@ -41,7 +41,6 @@ public class FunctionReturn extends Statement {
             expression.codegen(cw, mv);
             if (!functionDCL.getType().equals(expression.getType()))
                 throw new RuntimeException("Return Types Mismatching.");
-            //mv.visitInsn(Cast.getOpcode(expression.getType(),functionDCL.getType()));
             if (!expression.getType().equals(functionDCL.getType()))
                 throw new RuntimeException("Return Types Mismatching.");
             mv.visitInsn(expression.getType().getOpcode(IRETURN));

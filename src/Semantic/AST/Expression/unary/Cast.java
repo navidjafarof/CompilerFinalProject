@@ -30,7 +30,7 @@ public class Cast extends UnaryExpression {
         if (from == castType)
             return;
         if (castType != Type.INT_TYPE && castType != Type.LONG_TYPE && castType != Type.DOUBLE_TYPE && castType != Type.FLOAT_TYPE)
-            throw new RuntimeException("the cast is wrong!!");
+            throw new RuntimeException("Wrong Cast.");
         mv.visitInsn(getOpcode(from, castType));
         type = castType;
     }

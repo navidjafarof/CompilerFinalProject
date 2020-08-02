@@ -31,8 +31,21 @@ public class ArrayDCL extends VarDCL {
         for (Expression dim : this.dimensionsExpression) {
             dim.codegen(cw, mv);
         }
+        StringBuilder arrayType = new StringBuilder();
+        arrayType.append("[".repeat(Math.max(0, dimensionNum))).append(type.getDescriptor());
+
         if (this.global) {
-            throw new RuntimeException("Global Array Not Supported");
+            cw.visitField(ACC_STATIC, this.name, arrayType.toString(), null, null).visitEnd();
+            if (this.dimensionNum == 1) {
+                if (type.getDescriptor().startsWith("L"))
+                    mv.visitTypeInsn(ANEWARRAY, this.type.getDescriptor());
+                else
+                    mv.visitIntInsn(NEWARRAY, SymbolTable.getTType(this.type));
+            } else {
+                mv.visitMultiANewArrayInsn(arrayType.toString(), dimensionsExpression.size());
+            }
+            mv.visitFieldInsn(PUTSTATIC, "Code", name, arrayType.toString());
+//            /throw new RuntimeException("Global Array Not Supported");
         } else {
             if (this.dimensionNum == 1) {
                 if (type.getDescriptor().startsWith("L"))
@@ -40,8 +53,6 @@ public class ArrayDCL extends VarDCL {
                 else
                     mv.visitIntInsn(NEWARRAY, SymbolTable.getTType(this.type));
             } else {
-                StringBuilder arrayType = new StringBuilder();
-                arrayType.append("[".repeat(Math.max(0, dimensionNum))).append(type.getDescriptor());
                 mv.visitMultiANewArrayInsn(arrayType.toString(), dimensionsExpression.size());
             }
             mv.visitVarInsn(ASTORE, SymbolTable.getInstance().getIndex());

@@ -26,7 +26,6 @@ public class Block implements AST {
         if (operations == null)
             throw new RuntimeException("This Block Has No Expression.");
         for (Operation op : operations) {
-            System.out.println(op);
             op.codegen(cw, mv);
         }
     }
