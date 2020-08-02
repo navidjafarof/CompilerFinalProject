@@ -3,12 +3,14 @@ package Semantic.AST.Block;
 
 import Semantic.AST.AST;
 import Semantic.AST.Operation;
+
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
 
 public class Block implements AST {
+
     private ArrayList<Operation> operations;
 
     public Block(ArrayList<Operation> operations) {
@@ -24,6 +26,7 @@ public class Block implements AST {
         if (operations == null)
             throw new RuntimeException("This Block Has No Expression.");
         for (Operation op : operations) {
+            System.out.println(op);
             op.codegen(cw, mv);
         }
     }

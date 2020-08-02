@@ -10,6 +10,7 @@ import Semantic.AST.DCL.RecordDCL;
 import Semantic.AST.Statement.condition.Switch;
 import Semantic.AST.Statement.Loop.Loop;
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
@@ -153,17 +154,16 @@ public class SymbolTable {
         return null;
     }
 
-
     public void addVariable(String name, DSCP dscp) {
         if (getLastScope().containsKey(name)) {
             throw new RuntimeException("Variable " + name + " Was Declared Previously.");
         }
-        if (getLastScope().getScopeType() == Scope.CONDITION || getLastScope().getScopeType() == Scope.SWITCH ||getLastScope().getScopeType() == Scope.LOOP){
+        if (getLastScope().getScopeType() == Scope.CONDITION || getLastScope().getScopeType() == Scope.SWITCH || getLastScope().getScopeType() == Scope.LOOP) {
             int stackIndex = scopesStack.size();
             while (stackIndex > 0) {
                 stackIndex--;
                 Frame frame = scopesStack.get(stackIndex);
-                if (frame.containsKey(name) && frame.getScopeType() != Scope.GLOBAL )
+                if (frame.containsKey(name) && frame.getScopeType() != Scope.GLOBAL)
                     throw new RuntimeException("Variable " + name + " Was Declared Previously.");
             }
         }
@@ -194,30 +194,6 @@ public class SymbolTable {
 
     public boolean canHaveBreak() {
         return getLastScope().getScopeType() == Scope.LOOP || getLastScope().getScopeType() == Scope.SWITCH;
-//        return (lastSwitch != null || innerLoop != null);
-    }
-
-    public void addRecord(RecordDCL record) {
-        if (recordDCLs.containsKey(record.getName()))
-            throw new RuntimeException("The record was declared early!");
-        recordDCLs.put(record.getName(), record);
-    }
-
-
-    private RecordDCL getRecord(String name) {
-        if (recordDCLs.containsKey(name))
-            throw new RuntimeException("Record not Found");
-
-        return recordDCLs.get(name);
-    }
-
-    public boolean isRecordDefined(String name) {
-        try {
-            getRecord(name);
-            return true;
-        } catch (RuntimeException e) {
-            return false;
-        }
     }
 
     public int getIndex() {

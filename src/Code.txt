@@ -1,42 +1,8 @@
-int a = 5;
-int c = 3;
 function void start(){
-    int a = 5;
-    double d = 3e4;
-    println(d);
-    if ( a == 3){
-         a = 4;
-    }
-    else{
-     a = 5;
-    }
-    switch ( c + 7) of
-    begin
-    case 2:
-    {
-        a = 2;
-        println(a);
-    }
-    case 3:
-        {
-            a = 3;
-            println(a);
-        }
-    case 4:
-        {
-            a = 4;
-            println(a);
-        }
-    end
-    a += 4 ;
-    for (int i = 1; 1 == 1 ;i++){
-        for (int j = 1 ; 1 == 1 ; j ++){
-                     println(a);
-        }
-    }
-
-    a++;
-    println( a );
-	println(a + c);
+    int a = 2;
+    int k = a++;
+    k = k - 2;
+    println(a);
+    println(k);
 	return;
 }

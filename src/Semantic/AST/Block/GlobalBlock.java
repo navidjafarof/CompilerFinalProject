@@ -14,6 +14,7 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 public class GlobalBlock implements AST {
 
     private ArrayList<AST> declarations;
+
     private static GlobalBlock instance = new GlobalBlock();
 
     private GlobalBlock() {
@@ -28,12 +29,12 @@ public class GlobalBlock implements AST {
         return instance;
     }
 
-    public ArrayList<AST> getDeclarations() {
-        return declarations;
-    }
-
     public void addDeclaration(Declaration declaration) {
         declarations.add(declaration);
+    }
+
+    public ArrayList<AST> getDeclarations() {
+        return declarations;
     }
 
     @Override
@@ -41,9 +42,11 @@ public class GlobalBlock implements AST {
         new FunctionCall("start", new ArrayList<>()).codegen(cw, mv);
         mv = cw.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
         mv.visitCode();
+
         for (AST declaration : declarations) {
             declaration.codegen(cw, mv);
         }
+
         mv.visitMaxs(1, 1);
         mv.visitEnd();
     }

@@ -12,6 +12,5 @@ public class And extends ConditionalExpression {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         AndOr(true, cw, mv);
-
     }
 }

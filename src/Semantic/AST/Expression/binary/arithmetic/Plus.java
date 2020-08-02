@@ -18,6 +18,7 @@ public class Plus extends BinaryExpression {
         expression2.codegen(cw, mv);
         expression1.codegen(cw, mv);
         type = expression1.getType();
+        System.out.println(type);
         if (!expression1.getType().equals(expression2.getType())) {
             throw new IllegalArgumentException("Operand Types Must Be The Same.");
         }

@@ -12,19 +12,15 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-public class PreMinusMinus extends UnaryExpression implements InitialExpression, StepExpression, Operation {
+public class PreMinusMinus extends PlusMinus {
     public PreMinusMinus(Expression expression) {
         super(expression);
     }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        type = expression.getType();
-        if (!(expression instanceof Variable) || (type != Type.INT_TYPE && type != Type.DOUBLE_TYPE && type != Type.LONG_TYPE && type != Type.FLOAT_TYPE))
-            throw new RuntimeException("the operand is wrong");
-        Variable var = (Variable) expression;
-        checkIsConstant(var);
-        new MinusAssign(var, new IntegerConstExp(1)).codegen(cw, mv);
-        new SimpleVariable(var.getName(), var.getType()).codegen(cw, mv);
+        this.postOrPre = "pre";
+        this.operator = "minus";
+        super.codegen(cw, mv);
     }
 }

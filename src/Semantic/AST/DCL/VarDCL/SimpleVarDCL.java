@@ -5,6 +5,7 @@ import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
 import Semantic.SymbolTable.DSCP.*;
 import Semantic.SymbolTable.SymbolTable;
+
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -71,10 +72,6 @@ public class SimpleVarDCL extends VarDCL {
         SymbolTable.getInstance().addVariable(name, dscp);
     }
 
-    public void globalExpressionExecution(ClassWriter cw, MethodVisitor mv) {
-        assign(new SimpleVariable(this.name, this.type), this.expression, cw, mv);
-    }
-
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         try {
@@ -89,14 +86,14 @@ public class SimpleVarDCL extends VarDCL {
             int access = ACC_STATIC + (constant ? ACC_FINAL : 0);
             cw.visitField(access, this.name, this.type.getDescriptor(), null, null).visitEnd();
             if (expression != null) {
-                globalExpressionExecution(cw, mv);
+                assign(new SimpleVariable(this.name, this.type), this.expression, cw, mv);
             }
 
         } else if (expression != null) {
             expression.codegen(cw, mv);
             if (!expression.getType().equals(type))
-                throw new RuntimeException("The Type Of Variable And Expression Does Not Match" +
-                        "  " + "Type Of Variable: " + type + " Type Of Expression: " + expression.getType());
+                throw new RuntimeException("The Type Of Variable And Expression Does Not Match. " +
+                        "Type Of Variable: " + type + " Type Of Expression: " + expression.getType());
             DynamicLocalVariableDSCP dscp = (DynamicLocalVariableDSCP) SymbolTable.getInstance().getDescriptor(name);
             mv.visitVarInsn(type.getOpcode(ISTORE), dscp.getIndex());
         }
