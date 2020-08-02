@@ -23,6 +23,7 @@ public class SymbolTable {
     private final ArrayList<Frame> scopesStack = new ArrayList<>();
     private final HashMap<String, ArrayList<FunctionDCL>> funcDCLs = new HashMap<>();
     private final HashMap<String, RecordDCL> recordDCLs = new HashMap<>();
+    int numForTempId;
 
     private SymbolTable() {
         Frame mainFrame = new Frame();
@@ -194,6 +195,11 @@ public class SymbolTable {
 
     public boolean canHaveBreak() {
         return getLastScope().getScopeType() == Scope.LOOP || getLastScope().getScopeType() == Scope.SWITCH;
+    }
+    public String getTempId() {
+        String tempName = "temp$" + numForTempId;
+        numForTempId++;
+        return tempName;
     }
 
     public int getIndex() {

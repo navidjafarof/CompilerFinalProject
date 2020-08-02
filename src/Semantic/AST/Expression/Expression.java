@@ -6,7 +6,6 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 public abstract class Expression implements AST {
-//    public Type type;
 
     public abstract Type getType();
 

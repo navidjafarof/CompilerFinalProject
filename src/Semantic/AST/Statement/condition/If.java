@@ -32,8 +32,7 @@ public class If extends Statement {
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         SymbolTable.getInstance().addScope(Scope.CONDITION);
-        NotEqual notEqual = new NotEqual(expression, new IntegerConstExp(0));
-        notEqual.codegen(cw, mv);
+        expression.codegen(cw, mv);
         mv.visitJumpInsn(IFEQ, startElse);
         ifBlock.codegen(cw, mv);
         mv.visitJumpInsn(GOTO, endElse);

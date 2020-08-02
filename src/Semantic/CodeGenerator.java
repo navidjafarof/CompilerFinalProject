@@ -661,6 +661,12 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Repeat(block, exp));
                 break;
             }
+            case "foreach": {
+                Block block = (Block) semanticStack.pop();
+                Expression exp = (Expression) semanticStack.pop();
+                semanticStack.push(new Repeat(block, exp));
+                break;
+            }
             /* --------------------- conditions --------------------- */
             /* --------------------- if --------------------- */
             case "if": {
