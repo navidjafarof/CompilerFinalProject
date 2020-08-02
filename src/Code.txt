@@ -1,10 +1,73 @@
+float gl;
+int[][] ar = new int[32 /4 + 6][41];
+function char hae()
+{
+    return hae();
+}
 function void start(){
+    auto tiz = new double[2][3];
+    hae();
+    ar[6][7] = 43.5;
+    ar[5][0] = 3l;
+	double number1 = 432.0;
+	double number2 = 192.0;
+	if(number1 >= number2)
+	{
+	    println(3);
+	}
 
-	/** arithmetic Operations**/
-	int number1 = 432;
-	double number2 = 19e2;
-	bool a=true, b = false;
-    if (x <number2){
-    println("ah");}
+    int a = number1 + number2;
+    float b = a + number2;
+    b /= 4;
+    long c = b - a;
+    --c;
+    c++;
+    float c2 = c;
+    c2 %= 4;
+    gl = number1;
+
+        for(int i =0; i < 10; i++){
+            println("salam");
+            i--;
+            break;
+        }
+
+        switch(1 + 2) of
+            begin
+                case 2: { //pass
+                }
+
+                case 3: {
+                    println("salam");
+                }
+
+                default:{ println("golabi");
+
+                }
+
+            end
+        int i = 0;
+        repeat {
+            i++;
+            println("im coming..");
+            //continue;
+            //break;
+            //continue;
+        } until (1==1);
+
+        auto a1 =1, b1 = 2.f , c1 = new int[1];
+
+
+
+    //char h = 'a';
 	return;
+}
+
+function int fact(int i)
+{
+    if(i==1)
+    {
+        return 1;
+    }
+        return fact(i - 1) * i;
 }

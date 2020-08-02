@@ -30,6 +30,11 @@ public class FunctionCall extends Expression implements Operation {
 
     @Override
     public Type getType() {
+        ArrayList<Type> argumentTypes = new ArrayList<>();
+        for (Expression a : arguments) {
+            argumentTypes.add(a.getType());
+        }
+        this.functionDCL = SymbolTable.getInstance().getFunction(this.name, argumentTypes);
         return functionDCL.getType();
     }
 
