@@ -17,7 +17,6 @@ public class SimpleVarDCL extends VarDCL {
 
     private boolean constant;
     private Expression expression;
-    private String strType;
 
     public SimpleVarDCL(String name, Type type, boolean constant, boolean global) {
         this.name = name;
@@ -28,7 +27,6 @@ public class SimpleVarDCL extends VarDCL {
 
     public SimpleVarDCL(String name, String strType, boolean constant, boolean global, Expression expression) {
         this.name = name;
-        this.strType = strType;
         this.constant = constant;
         this.global = global;
         this.expression = expression;

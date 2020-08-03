@@ -25,11 +25,11 @@ public class LexicalAnalyzer implements Lexical{
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
    * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l
-   *                  at the beginning of a line
+   * at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
-  private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1,  1,  2, 2
+  private static final int[] ZZ_LEXSTATE = {
+          0, 0, 1, 1, 2, 2
   };
 
   /**
@@ -703,10 +703,10 @@ public class LexicalAnalyzer implements Lexical{
    * Error messages for {@link #ZZ_UNKNOWN_ERROR}, {@link #ZZ_NO_MATCH}, and
    * {@link #ZZ_PUSHBACK_2BIG} respectively.
    */
-  private static final String ZZ_ERROR_MSG[] = {
-    "Unknown internal scanner error",
-    "Error: could not match input",
-    "Error: pushback value was too large"
+  private static final String[] ZZ_ERROR_MSG = {
+          "Unknown internal scanner error",
+          "Error: could not match input",
+          "Error: pushback value was too large"
   };
 
   /**
@@ -754,7 +754,7 @@ public class LexicalAnalyzer implements Lexical{
    * This buffer contains the current text to be matched and is the source of the {@link #yytext()}
    * string.
    */
-  private char zzBuffer[] = new char[ZZ_BUFFERSIZE];
+  private char[] zzBuffer = new char[ZZ_BUFFERSIZE];
 
   /** Text position at the last accepting state. */
   private int zzMarkedPos;
@@ -874,7 +874,7 @@ public class LexicalAnalyzer implements Lexical{
     /* is the buffer big enough? */
     if (zzCurrentPos >= zzBuffer.length - zzFinalHighSurrogate) {
       /* if not: blow it up */
-      char newBuffer[] = new char[zzBuffer.length * 2];
+      char[] newBuffer = new char[zzBuffer.length * 2];
       System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.length);
       zzBuffer = newBuffer;
       zzEndRead += zzFinalHighSurrogate;
@@ -1511,7 +1511,7 @@ public class LexicalAnalyzer implements Lexical{
           case 139:
             break;
           case 46: {
-            String temp = (String) yytext();
+            String temp = yytext();
             temp = temp.substring(0, temp.length() - 1);
             return (new Symbol("long_dec", Long.valueOf(temp)));
           }

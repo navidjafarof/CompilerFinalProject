@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Block implements AST {
 
-    private ArrayList<Operation> operations;
+    private final ArrayList<Operation> operations;
 
     public Block(ArrayList<Operation> operations) {
         this.operations = operations;

@@ -6,9 +6,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.IF_ICMPEQ;
-
 public class NotEqual extends ConditionalExpression {
     public NotEqual(Expression expression1, Expression expression2) {
         super(expression1, expression2);

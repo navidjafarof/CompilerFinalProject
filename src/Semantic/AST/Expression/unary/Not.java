@@ -1,11 +1,7 @@
 package Semantic.AST.Expression.unary;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.constant.Constant;
 import org.objectweb.asm.*;
-
-import static org.objectweb.asm.Opcodes.ICONST_0;
-import static org.objectweb.asm.Opcodes.ICONST_1;
 
 public class Not extends UnaryExpression {
     public Not(Expression expression) {

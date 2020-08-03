@@ -13,7 +13,7 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 public class GlobalBlock implements AST {
 
-    private ArrayList<AST> declarations;
+    private final ArrayList<AST> declarations;
 
     private static GlobalBlock instance = new GlobalBlock();
 

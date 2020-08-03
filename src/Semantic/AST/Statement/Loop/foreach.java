@@ -1,17 +1,13 @@
 package Semantic.AST.Statement.Loop;
 
 import Semantic.AST.Block.Block;
-import Semantic.AST.Expression.variable.SimpleVariable;
 import Semantic.AST.Expression.variable.Variable;
-import Semantic.SymbolTable.DSCP.DynamicLocalVariableDSCP;
-import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class foreach extends Loop{
-    private String id;
-    private Variable variable;
+public class foreach extends Loop {
+    private final String id;
+    private final Variable variable;
 
     foreach(Block block, String id, Variable variable) {
         super(block);

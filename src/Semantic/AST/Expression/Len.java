@@ -1,11 +1,6 @@
 package Semantic.AST.Expression;
 
-import Semantic.AST.Expression.constant.Constant;
-import Semantic.AST.Expression.constant.IntegerConstExp;
-import Semantic.AST.Expression.constant.StringConstExp;
 import Semantic.AST.Expression.variable.Array;
-import Semantic.AST.Expression.variable.SimpleVariable;
-import Semantic.AST.Expression.variable.Variable;
 import Semantic.AST.Operation;
 
 import Semantic.SymbolTable.DSCP.DynamicLocalDSCP;

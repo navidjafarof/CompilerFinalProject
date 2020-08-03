@@ -16,7 +16,7 @@ import static org.objectweb.asm.Opcodes.*;
 
 public class ArrayDCL extends VarDCL {
     private ArrayList<Expression> dimensionsExpression;
-    private int dimensionNum;
+    private final int dimensionNum;
 
     public ArrayDCL(String name, Type type, boolean global, int dimensionNum) {
         this.name = name;

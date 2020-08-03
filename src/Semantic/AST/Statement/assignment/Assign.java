@@ -28,18 +28,7 @@ public class Assign extends Assignment {
             } else if (dscp instanceof DynamicLocalArrayDSCP) {
                 mv.visitVarInsn(ALOAD, index);
                 int dimNum = ((DynamicLocalArrayDSCP) (variable.getDSCP())).getDimension();
-                if (dimNum != (((Array) variable).getIndexesExpression()).size())
-                    throw new RuntimeException("Dimension Number And Index Expressions Number Not Matching.");
-                if (dimNum > 1) {
-                    for (int i = dimNum - 1; i > 0; i--) {
-                        ((Array) variable).getIndexesExpression().get(i).codegen(cw, mv);
-                        mv.visitInsn(AALOAD);
-                    }
-                }
-                ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
-                this.expression.getType();
-                this.expression.codegen(cw, mv);
-                this.expression.castOperandType(variable.getType(), mv);
+                doArrayStuff(cw, mv, dimNum);
                 mv.visitInsn(variable.getType().getOpcode(IASTORE));
             }
         } else {
@@ -53,21 +42,25 @@ public class Assign extends Assignment {
                 arrayType.append("[".repeat(Math.max(0, ((StaticGlobalArrayDSCP) dscp).getDimension()))).append(variable.getType().getDescriptor());
                 mv.visitFieldInsn(GETSTATIC, "Main", this.variable.getName(), arrayType.toString());
                 int dimNum = ((StaticGlobalArrayDSCP) (variable.getDSCP())).getDimension();
-                if (dimNum != (((Array) variable).getIndexesExpression()).size())
-                    throw new RuntimeException("Dimension Number And Index Expressions Number Not Matching.");
-                if (dimNum > 1) {
-                    for (int i = dimNum - 1; i > 0; i--) {
-                        ((Array) variable).getIndexesExpression().get(i).codegen(cw, mv);
-                        mv.visitInsn(AALOAD);
-                    }
-                }
-                ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
-                this.expression.getType();
-                this.expression.codegen(cw, mv);
-                this.expression.castOperandType(variable.getType(), mv);
+                doArrayStuff(cw, mv, dimNum);
                 mv.visitInsn(IASTORE);
             }
         }
         dscp.setValid(true);
+    }
+
+    private void doArrayStuff(ClassWriter cw, MethodVisitor mv, int dimNum) {
+        if (dimNum != (((Array) variable).getIndexesExpression()).size())
+            throw new RuntimeException("Dimension Number And Index Expressions Number Not Matching.");
+        if (dimNum > 1) {
+            for (int i = dimNum - 1; i > 0; i--) {
+                ((Array) variable).getIndexesExpression().get(i).codegen(cw, mv);
+                mv.visitInsn(AALOAD);
+            }
+        }
+        ((Array) variable).getIndexesExpression().get(0).codegen(cw, mv);
+        this.expression.getType();
+        this.expression.codegen(cw, mv);
+        this.expression.castOperandType(variable.getType(), mv);
     }
 }

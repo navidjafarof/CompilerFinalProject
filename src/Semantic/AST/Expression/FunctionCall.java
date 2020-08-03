@@ -26,37 +26,37 @@ public class FunctionCall extends Expression implements Operation {
     }
 
     public void addArgument(Expression e) {
-        if (arguments == null) {
-            arguments = new ArrayList<>();
+        if (this.arguments == null) {
+            this.arguments = new ArrayList<>();
         }
-        arguments.add(e);
+        this.arguments.add(e);
     }
 
     @Override
     public Type getType() {
-        if (argumentTypes.size() == 0)
-            for (Expression e : arguments) {
+        if (this.argumentTypes.size() == 0)
+            for (Expression e : this.arguments) {
                 if (!(e instanceof Array))
-                    argumentTypes.add(e.getType());
+                    this.argumentTypes.add(e.getType());
                 else {
                     StringBuilder numOfDim = new StringBuilder();
                     numOfDim.append("[".repeat(Math.max(0, ((Array) e).getIndexesExpression().size())));
-                    argumentTypes.add(Type.getType(numOfDim.toString() + (e).getType()));
+                    this.argumentTypes.add(Type.getType(numOfDim.toString() + (e).getType()));
                 }
             }
-        this.functionDCL = SymbolTable.getInstance().getFunction(this.name, argumentTypes);
-        if (functionDCL == null) {
+        this.functionDCL = SymbolTable.getInstance().getFunction(this.name, this.argumentTypes);
+        if (this.functionDCL == null) {
             throw new RuntimeException("No Such Function Found");
         }
-        return functionDCL.getType();
+        return this.functionDCL.getType();
     }
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         this.argumentTypes = new ArrayList<>();
-        for (Expression e : arguments) {
+        for (Expression e : this.arguments) {
             if (!(e instanceof Array)) {
-                argumentTypes.add(e.getType());
+                this.argumentTypes.add(e.getType());
                 e.codegen(cw, mv);
             } else {
                 int dimNum = 0;
@@ -69,7 +69,7 @@ public class FunctionCall extends Expression implements Operation {
                 StringBuilder numOfDim = new StringBuilder();
                 numOfDim.append("[".repeat(Math.max(0, dimNum)));
                 Type t = Type.getType(numOfDim.toString() + (e).getType());
-                argumentTypes.add(t);
+                this.argumentTypes.add(t);
                 if (dscp instanceof DynamicLocalDSCP) {
                     mv.visitVarInsn(ALOAD, ((DynamicLocalDSCP) dscp).getIndex());
                 } else if (dscp instanceof StaticGlobalDSCP) {
@@ -77,11 +77,11 @@ public class FunctionCall extends Expression implements Operation {
                 }
             }
         }
-        this.functionDCL = SymbolTable.getInstance().getFunction(this.name, argumentTypes);
-        if (functionDCL == null) {
+        this.functionDCL = SymbolTable.getInstance().getFunction(this.name, this.argumentTypes);
+        if (this.functionDCL == null) {
             throw new RuntimeException("No Such Function Found");
         }
-        if (arguments.size() != functionDCL.getInputArguments().size())
+        if (this.arguments.size() != this.functionDCL.getInputArguments().size())
             throw new IllegalArgumentException("Number Of Input Arguments Does Not Match.");
         mv.visitMethodInsn(INVOKESTATIC, "Main", this.name, this.functionDCL.getSignature(), false);
     }

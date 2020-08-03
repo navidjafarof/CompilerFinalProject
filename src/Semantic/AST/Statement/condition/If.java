@@ -2,8 +2,6 @@ package Semantic.AST.Statement.condition;
 
 import Semantic.AST.Block.Block;
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.binary.conditional.NotEqual;
-import Semantic.AST.Expression.constant.IntegerConstExp;
 import Semantic.AST.Statement.Statement;
 import Semantic.SymbolTable.Scope;
 import Semantic.SymbolTable.SymbolTable;

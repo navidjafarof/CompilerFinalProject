@@ -1,16 +1,13 @@
 package Semantic.AST.Expression.variable;
 
 import Semantic.AST.Expression.Expression;
-import Semantic.AST.Expression.binary.conditional.GreaterThanOrEqualTo;
 import Semantic.SymbolTable.DSCP.*;
 import Semantic.SymbolTable.SymbolTable;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import static org.objectweb.asm.Opcodes.*;
 

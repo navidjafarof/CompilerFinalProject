@@ -1,7 +1,6 @@
 package Semantic.SymbolTable;
 
 import Semantic.SymbolTable.DSCP.DSCP;
-import org.objectweb.asm.Label;
 
 import java.util.HashMap;
 

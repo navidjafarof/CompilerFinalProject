@@ -21,8 +21,8 @@ public class FunctionDCL implements Declaration {
     private Type type;
     private String name;
     private String signature;
-    private HashMap<String, DSCP> inputArguments;
-    private ArrayList<Type> argumentTypes = new ArrayList<>();
+    private final HashMap<String, DSCP> inputArguments;
+    private final ArrayList<Type> argumentTypes = new ArrayList<>();
     private ArrayList<FunctionReturn> returns = new ArrayList<>();
     private Block block;
     private Boolean signatureDeclared = false;

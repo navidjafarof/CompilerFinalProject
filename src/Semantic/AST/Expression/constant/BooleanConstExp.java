@@ -27,6 +27,6 @@ public class BooleanConstExp extends Constant {
 
     @Override
     public void codegen(ClassWriter cw, MethodVisitor mv) {
-        mv.visitInsn((Boolean) value ? ICONST_1 : ICONST_0);
+        mv.visitInsn(value ? ICONST_1 : ICONST_0);
     }
 }

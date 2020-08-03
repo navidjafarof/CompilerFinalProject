@@ -6,7 +6,7 @@ import Semantic.AST.Expression.Expression;
 import java.util.List;
 
 public class StaticGlobalArrayDSCP extends StaticGlobalDSCP {
-    private int dimension;
+    private final int dimension;
 
     private List<Expression> dimensionList;
 

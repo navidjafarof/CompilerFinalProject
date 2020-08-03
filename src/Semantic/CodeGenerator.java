@@ -130,15 +130,7 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "makeSimpleVarDCL": {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
-                if (semanticStack.peek() instanceof GlobalBlock)
-                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
-                else {
-
-                    SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
-                            SymbolTable.getInstance().getIndex(), false));
-
-                }
-                semanticStack.push(new NOP(name));
+                addAndPush(name, type);
                 break;
             }
             case "constTrue": {
@@ -758,20 +750,25 @@ public class CodeGenerator implements Syntax.CodeGenerator {
             case "makeSimpleVarUsingLastType": {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromStr(lastSeenType);
-                if (semanticStack.peek() instanceof GlobalBlock) {
-                    SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
-                } else {
-                    SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
-                            SymbolTable.getInstance().getIndex(), false));
-
-                }
-                semanticStack.push(new NOP(name));
-                break;
+                addAndPush(name, type);
             }
 
             default:
                 throw new RuntimeException("Illegal Semantic Function: " + sem);
         }
+    }
+
+    private void addAndPush(String name, Type type) {
+        if (semanticStack.peek() instanceof GlobalBlock)
+            SymbolTable.getInstance().addVariable(name, new StaticGlobalVariableDSCP(type, false, false));
+        else {
+
+            SymbolTable.getInstance().addVariable(name, new DynamicLocalVariableDSCP(type, false,
+                    SymbolTable.getInstance().getIndex(), false));
+
+        }
+        semanticStack.push(new NOP(name));
+        return;
     }
 
     private void addFuncToGlobalBlock(FunctionDCL function) {
