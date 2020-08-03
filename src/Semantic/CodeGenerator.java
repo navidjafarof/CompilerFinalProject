@@ -485,7 +485,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 }
 
                 Array var = (Array) semanticStack.pop();
-//                Collections.reverse(expressionList);
                 var.setIndexesExpression(expressionList);
                 semanticStack.push(var);
                 break;
