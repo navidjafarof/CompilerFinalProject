@@ -84,8 +84,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Block(new ArrayList<>()));
                 break;
             }
-
-            /* --------------------- declarations --------------------- */
             case "makeFunctionDCL": {
                 Type type = SymbolTable.getTypeFromStr((String) semanticStack.pop());
                 FunctionDCL functionDCL = new FunctionDCL(type, (String) lexical.currentToken().getValue(), new HashMap<>(), null);
@@ -278,8 +276,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(arrDcl);
                 break;
             }
-            /* --------------------- binary expressions --------------------- */
-            /* ---------------------- Arithmetic ------------------------ */
             case "divide": {
                 Expression second = (Expression) semanticStack.pop();
                 Expression first = (Expression) semanticStack.pop();
@@ -310,7 +306,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new Plus(first, second));
                 break;
             }
-            /* ---------------------- conditional ------------------------- */
             case "and": {
                 Expression second = (Expression) semanticStack.pop();
                 Expression first = (Expression) semanticStack.pop();
@@ -377,7 +372,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new BitwiseXor(first, second));
                 break;
             }
-            /* -------------------------- Unary   ---------------------------- */
             case "bitwiseNot": {
                 Expression exp = (Expression) semanticStack.pop();
                 semanticStack.push(new BitwiseNot(exp));
@@ -431,7 +425,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new PrePlusPlus(var));
                 break;
             }
-            /* -------------------------- Const ---------------------------- */
             case "pushReal": {
                 Object realNum = lexical.currentToken().getValue();
                 if (realNum instanceof Float)
@@ -461,7 +454,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new StringConstExp((String) lexical.currentToken().getValue()));
                 break;
             }
-            /* -------------------------- variable ---------------------------- */
             case "pushVariable": {
                 String name = (String) lexical.currentToken().getValue();
                 if (SymbolTable.getInstance().getFuncNames().contains(name)) {
@@ -498,7 +490,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(var);
                 break;
             }
-            /* -------------------------- Assignment -------------------------- */
             case "assign": {
                 Expression exp = (Expression) semanticStack.pop();
                 Variable var = (Variable) semanticStack.pop();
@@ -551,7 +542,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(variable);
                 break;
             }
-            /* ---------------------- functions ---------------------------- */
             case "voidReturn": {
                 Block block = (Block) semanticStack.pop();
                 FunctionDCL functionDcl = SymbolTable.getInstance().getLastFunction();
@@ -591,8 +581,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(funcCall);
                 break;
             }
-            /* --------------------- loops --------------------- */
-            /* --------------------- for --------------------- */
             case "addLoopScope": {
                 SymbolTable.getInstance().addScope(Scope.LOOP);
                 break;
@@ -646,7 +634,6 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 semanticStack.push(new For(block, initExp, exp, stepExp));
                 break;
             }
-            /* --------------------- repeat --------------------- */
             case "repeat": {
                 Expression exp = (Expression) semanticStack.pop();
                 Block block = (Block) semanticStack.pop();
