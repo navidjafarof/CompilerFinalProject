@@ -1,12 +1,12 @@
 float gl;
-int[][] ar = new int[32 /4 + 6][41];
-function char hae()
+double[][] ar = new double[32 /4 + 6][41];
+function char hae(double[][] inp)
 {
-    return hae();
+    return '1';
 }
 function void start(){
     auto tiz = new double[2][3];
-    hae();
+    hae(ar);
     ar[6][7] = 43.5;
     ar[5][0] = 3l;
 	double number1 = 432.0;
