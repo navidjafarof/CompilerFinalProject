@@ -39,24 +39,19 @@ public class For extends Loop {
     public void codegen(ClassWriter cw, MethodVisitor mv) {
         SymbolTable.getInstance().addScope(Scope.LOOP);
         SymbolTable.getInstance().setInnerLoop(this);
-        // ST init
         if (init != null) {
             init.codegen(cw, mv);
             if (init instanceof PostPlusPlus || init instanceof PrePlusPlus
                     || init instanceof PostMinusMinus || init instanceof PreMinusMinus)
                 mv.visitInsn(POP);
         }
-        // Boolean Expression
         mv.visitLabel(expLabel);
 
-        // jz, BE, end
-        // jnz, BE, blockLabel
         NotEqual notEqual = new NotEqual(expression, new IntegerConstExp(0));
         notEqual.codegen(cw, mv);
         mv.visitJumpInsn(IFEQ, end);
         mv.visitJumpInsn(GOTO, blockLabel);
 
-        // ST step
         mv.visitLabel(stepLabel);
         mv.visitLabel(startLoop);
         if (step != null) {
@@ -68,7 +63,6 @@ public class For extends Loop {
 
         mv.visitJumpInsn(GOTO, expLabel);
 
-        // ST body
         mv.visitLabel(blockLabel);
         block.codegen(cw, mv);
         mv.visitJumpInsn(GOTO, stepLabel);
