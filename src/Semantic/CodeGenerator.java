@@ -751,10 +751,11 @@ public class CodeGenerator implements Syntax.CodeGenerator {
                 String name = (String) lexical.currentToken().getValue();
                 Type type = SymbolTable.getTypeFromStr(lastSeenType);
                 addAndPush(name, type);
+                break;
             }
 
             default:
-                throw new RuntimeException("Illegal Semantic Function: " + sem);
+                throw new RuntimeException("Illegal Semantic : " + sem);
         }
     }
 
